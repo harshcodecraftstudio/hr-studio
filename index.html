@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HR STUDIO - Official App</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #0b0b0e; color: #fff; overflow-x: hidden; }
+
+    /* Opening Animation (HRS) */
+    #splash-screen {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+      background: #000; display: flex; justify-content: center; align-items: center;
+      z-index: 9999; animation: fadeOut 0.8s ease 2.2s forwards;
+    }
+    .splash-logo {
+      font-size: 64px; font-weight: 900; letter-spacing: 5px; text-align: center;
+      background: linear-gradient(135deg, #ff0055 0%, #7a00ff 50%, #00e5ff 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 20px rgba(255, 0, 85, 0.4));
+      animation: zoomPulse 1.5s ease-in-out infinite alternate;
+    }
+    @keyframes zoomPulse { 0% { transform: scale(0.85); opacity: 0.6; } 100% { transform: scale(1.1); opacity: 1; } }
+    @keyframes fadeOut { 100% { opacity: 0; visibility: hidden; } }
+
+    /* Header (HR STUDIO in Center) */
+    header {
+      position: sticky; top: 0; background: rgba(11, 11, 14, 0.85);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      z-index: 100; border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .nav-top { display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; padding: 12px 20px; }
+    .empty-space { width: 40px; }
+    .brand-logo {
+      font-size: 20px; font-weight: 900; letter-spacing: 1.5px; text-align: center;
+      background: linear-gradient(135deg, #ff0055 0%, #9e00ff 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 12px rgba(255, 0, 85, 0.35));
+    }
+    .search-btn-icon {
+      background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff; width: 40px; height: 40px; border-radius: 50%;
+      display: flex; justify-content: center; align-items: center; cursor: pointer; justify-self: end;
+    }
+
+    /* Search Bar */
+    .search-container { display: none; opacity: 0; transition: all 0.3s ease; padding: 0 20px 14px 20px; }
+    .search-container.active { display: block; opacity: 1; }
+    .search-box-wrapper { position: relative; width: 100%; }
+    .search-box-wrapper input {
+      width: 100%; padding: 11px 16px 11px 42px; background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; color: #fff; outline: none;
+    }
+    .search-input-icon { position: absolute; left: 14px; top: 12px; color: #888; }
+
+    /* Shows Grid (2 Columns) */
+    .container { padding: 20px 16px; max-width: 800px; margin: 0 auto; }
+    .grid-layout { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .show-card {
+      background: #141419; border-radius: 14px; overflow: hidden;
+      cursor: pointer; border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.2s ease;
+    }
+    .show-card:active { transform: scale(0.96); }
+    .show-card img { width: 100%; height: 220px; object-fit: cover; display: block; }
+    .show-details { padding: 12px; }
+    .show-title { font-size: 15px; font-weight: 700; color: #f0f0f5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .show-episodes { font-size: 12px; color: #ff0055; margin-top: 4px; font-weight: 600; }
+
+    .coming-soon-box {
+      text-align: center; padding: 50px 20px; grid-column: span 2;
+      background: #141419; border-radius: 16px; border: 1px dashed rgba(255,255,255,0.15);
+    }
+    .coming-soon-box h2 { font-size: 24px; color: #ff0055; margin-bottom: 8px; }
+    .coming-soon-box p { color: #888; font-size: 13px; }
+  </style>
+</head>
+<body>
+
+  <!-- 1. Opening Animation (HRS) -->
+  <div id="splash-screen">
+    <div class="splash-logo">HRS</div>
+  </div>
+
+  <!-- 2. Header (HR STUDIO) -->
+  <header>
+    <div class="nav-top">
+      <div class="empty-space"></div>
+      <div class="brand-logo">HR STUDIO</div>
+      <button class="search-btn-icon" onclick="toggleSearch()">🔍</button>
+    </div>
+    <div class="search-container" id="search-bar">
+      <div class="search-box-wrapper">
+        <span class="search-input-icon">🔍</span>
+        <input type="text" id="search-input" onkeyup="searchShows()" placeholder="Search shows by name...">
+      </div>
+    </div>
+  </header>
+
+  <!-- 3. Shows Grid -->
+  <div class="container">
+    <div class="grid-layout" id="shows-container"></div>
+  </div>
+
+  <script>
+    // Aapka Google Sheet Published CSV Link:
+    const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTXtzbDoOjeXakc4hA_OS2wtQTSP3iS4TVfEDNsRM8lZUoVqnktOrjOxvjl02zSOba4R4Uehf9OaONb/pub?gid=0&single=true&output=csv";
+    
+    let allShowsData = [];
+
+    function toggleSearch() {
+      const searchBar = document.getElementById('search-bar');
+      const searchInput = document.getElementById('search-input');
+      searchBar.classList.toggle('active');
+      if (searchBar.classList.contains('active')) searchInput.focus();
+    }
+
+    async function fetchShowsFromSheet() {
+      try {
+        const response = await fetch(GOOGLE_SHEET_CSV_URL);
+        const data = await response.text();
+        const rows = data.split('\n').map(row => row.trim()).filter(row => row.length > 0);
+        
+        allShowsData = rows.slice(1).map(row => {
+          const cols = row.split(',').map(col => col.replace(/"/g, '').trim());
+          
+          let episodesList = [];
+          for (let i = 2; i < cols.length; i += 2) {
+            if (cols[i]) {
+              episodesList.push({
+                youtube_id: cols[i],
+                ad: cols[i+1] || ""
+              });
+            }
+          }
+
+          return {
+            show_name: cols[0] || "",
+            thumbnail: cols[1] || "",
+            episodes: episodesList
+          };
+        });
+
+        renderShows(allShowsData);
+      } catch (error) {
+        showComingSoon();
+      }
+    }
+
+    function renderShows(shows) {
+      const container = document.getElementById('shows-container');
+      container.innerHTML = "";
+
+      if (!shows || shows.length === 0) {
+        showComingSoon();
+        return;
+      }
+
+      shows.forEach(show => {
+        if (!show.show_name) return;
+        
+        const card = document.createElement('div');
+        card.className = 'show-card';
+        card.innerHTML = `
+          <img src="${show.thumbnail}" alt="${show.show_name}" onerror="this.src='https://via.placeholder.com/300x400?text=No+Image'">
+          <div class="show-details">
+            <div class="show-title">${show.show_name}</div>
+            <div class="show-episodes">${show.episodes.length} Episodes</div>
+          </div>
+        `;
+        card.onclick = () => {
+          alert(`Opening ${show.show_name} with ${show.episodes.length} Episodes`);
+        };
+        container.appendChild(card);
+      });
+    }
+
+    function showComingSoon() {
+      document.getElementById('shows-container').innerHTML = `
+        <div class="coming-soon-box">
+          <h2>🎬 Coming Soon</h2>
+          <p>Naye shows jaldi hi add kiye ja rahe hain!<br>Bane rahein HR STUDIO par.</p>
+        </div>
+      `;
+    }
+
+    function searchShows() {
+      const query = document.getElementById('search-input').value.toLowerCase();
+      const filtered = allShowsData.filter(show => show.show_name.toLowerCase().includes(query));
+      
+      if (filtered.length > 0) {
+        renderShows(filtered);
+      } else {
+        document.getElementById('shows-container').innerHTML = `
+          <div class="coming-soon-box">
+            <h2>Search Not Found</h2>
+            <p>Aapke dwara khoja gaya show nahi mila.</p>
+          </div>
+        `;
+      }
+    }
+
+    window.onload = fetchShowsFromSheet;
+  </script>
+</body>
+</html>
