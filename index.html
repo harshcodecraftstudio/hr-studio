@@ -4,144 +4,325 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HR STUDIO - Official App</title>
+  <meta name="description" content="HR STUDIO - Watch your favorite shows and episodes.">
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ff0055">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="HR STUDIO">
+  <link rel="icon" type="image/png" href="icon.png">
+  <link rel="apple-touch-icon" href="icon.png">
+
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #0b0b0e; color: #fff; overflow-x: hidden; }
+    body { background-color: #0b0b0e; color: #fff; overflow-x: hidden; padding-bottom: 70px; }
 
-    /* Opening Splash */
+    /* Splash Screen */
     #splash-screen {
       position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
       background: #000; display: flex; justify-content: center; align-items: center;
       z-index: 9999; animation: fadeOut 0.8s ease 2.2s forwards;
     }
-    .splash-logo {
-      font-size: 64px; font-weight: 900; letter-spacing: 5px; text-align: center;
-      background: linear-gradient(135deg, #ff0055 0%, #7a00ff 50%, #00e5ff 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    .splash-logo-box {
+      width: 120px; height: 120px; border-radius: 24px; overflow: hidden;
+      box-shadow: 0 10px 35px rgba(255, 0, 85, 0.5);
       animation: zoomPulse 1.5s ease-in-out infinite alternate;
     }
-    @keyframes zoomPulse { 0% { transform: scale(0.85); opacity: 0.6; } 100% { transform: scale(1.1); opacity: 1; } }
+    .splash-logo-box img { width: 100%; height: 100%; object-fit: cover; }
+    @keyframes zoomPulse { 0% { transform: scale(0.85); } 100% { transform: scale(1.05); } }
     @keyframes fadeOut { 100% { opacity: 0; visibility: hidden; } }
 
     /* Header */
     header {
-      position: sticky; top: 0; background: rgba(11, 11, 14, 0.85);
-      backdrop-filter: blur(16px); z-index: 100; border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      position: sticky; top: 0; background: rgba(11, 11, 14, 0.95);
+      backdrop-filter: blur(16px); z-index: 100; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 12px 16px;
     }
-    .nav-top { display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; padding: 12px 20px; }
-    .brand-logo {
-      font-size: 20px; font-weight: 900; letter-spacing: 1.5px; text-align: center;
-      background: linear-gradient(135deg, #ff0055 0%, #9e00ff 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
+    .nav-top { display: flex; align-items: center; justify-content: space-between; max-width: 800px; margin: 0 auto; }
+    .brand-left { display: flex; align-items: center; gap: 10px; }
+    .brand-logo-img { width: 36px; height: 36px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,0,85,0.4); }
+    .brand-logo-img img { width: 100%; height: 100%; object-fit: cover; }
+    .brand-title { font-size: 18px; font-weight: 900; background: linear-gradient(135deg, #ff0055, #00e5ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    
     .search-btn-icon {
-      background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #fff; width: 40px; height: 40px; border-radius: 50%; display: flex;
-      justify-content: center; align-items: center; cursor: pointer; justify-self: end;
+      background: #141419; border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #aaa; width: 38px; height: 38px; border-radius: 50%; display: flex;
+      justify-content: center; align-items: center; cursor: pointer; font-size: 15px;
+      transition: all 0.2s ease;
     }
+    .search-btn-icon:hover { border-color: #ff0055; color: #fff; }
 
-    .search-container { display: none; opacity: 0; transition: all 0.3s ease; padding: 0 20px 14px 20px; }
-    .search-container.active { display: block; opacity: 1; }
+    .search-container { display: none; padding: 12px 0 0 0; max-width: 800px; margin: 0 auto; }
+    .search-container.active { display: block; }
     .search-box-wrapper input {
-      width: 100%; padding: 11px 16px 11px 42px; background: rgba(255, 255, 255, 0.06);
+      width: 100%; padding: 12px 16px; background: #141419;
       border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; color: #fff; outline: none;
+      font-size: 14px; transition: border-color 0.2s;
+    }
+    .search-box-wrapper input:focus { border-color: #ff0055; }
+
+    /* Fullscreen Reels Modal */
+    .shorts-modal {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+      background: #000; z-index: 1000;
+    }
+    .shorts-modal.active { display: block; }
+    
+    .shorts-container {
+      height: 100vh; width: 100%; overflow-y: scroll;
+      scroll-snap-type: y mandatory; -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+    }
+    .shorts-container.locked { overflow-y: hidden; }
+
+    .short-item {
+      height: 100vh; width: 100%; scroll-snap-align: start; scroll-snap-stop: always;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      position: relative; background: #000; padding: 0;
     }
 
-    /* Grid */
+    /* Video Player Area */
+    .video-wrapper {
+      position: relative; width: 100%; height: 75vh;
+      display: flex; justify-content: center; align-items: center;
+      overflow: hidden; background: #000;
+    }
+    .video-wrapper iframe {
+      width: 100%; height: 100%; border: none; object-fit: cover; pointer-events: none;
+    }
+    .swipe-overlay {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10;
+    }
+
+    /* Floating Heart Animation on Double Tap */
+    .floating-heart-anim {
+      position: absolute; font-size: 60px; color: #ff0055; z-index: 40;
+      animation: heartPop 0.8s ease-out forwards; pointer-events: none;
+      text-shadow: 0 0 20px rgba(255,0,85,0.8);
+    }
+    @keyframes heartPop {
+      0% { transform: scale(0.3); opacity: 0; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1) translateY(-60px); opacity: 0; }
+    }
+
+    /* Right Side Floating Actions */
+    .floating-actions {
+      position: absolute; right: 16px; bottom: 90px; z-index: 50;
+      display: flex; flex-direction: column; gap: 16px; align-items: center;
+    }
+    .action-btn {
+      background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.15);
+      width: 45px; height: 45px; border-radius: 50%; display: flex; flex-direction: column;
+      justify-content: center; align-items: center; color: #fff; cursor: pointer;
+      backdrop-filter: blur(4px); transition: transform 0.2s, background 0.2s;
+    }
+    .action-btn:active { transform: scale(0.9); }
+    .action-btn span { font-size: 10px; margin-top: 2px; font-weight: 600; }
+    .action-btn.active { color: #ff0055; border-color: #ff0055; background: rgba(255, 0, 85, 0.15); }
+
+    /* Skip Ad Box */
+    .ad-skip-box {
+      position: absolute; bottom: 25px; right: 15px; z-index: 50;
+      background: rgba(0, 0, 0, 0.85); border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 700;
+      color: #fff; backdrop-filter: blur(5px); cursor: pointer;
+      display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+    }
+    .ad-skip-box.hidden { display: none !important; }
+    .ad-skip-box.disabled { opacity: 0.8; cursor: not-allowed; border-color: rgba(255, 0, 85, 0.6); }
+    .ad-badge-tag { background: #ff0055; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 800; }
+
+    /* Video Info Section */
+    .video-info-box { 
+      width: 100%; padding: 16px 20px; background: #0b0b0e;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .info-left { display: flex; flex-direction: column; }
+    .show-name-text { font-size: 16px; font-weight: 800; color: #fff; }
+    .episode-name-text { font-size: 13px; color: #ff0055; font-weight: 700; margin-top: 2px; }
+
+    /* Grid Layout */
     .container { padding: 20px 16px; max-width: 800px; margin: 0 auto; }
     .grid-layout { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-    .show-card {
-      background: #141419; border-radius: 14px; overflow: hidden;
-      cursor: pointer; border: 1px solid rgba(255, 255, 255, 0.05);
-    }
+    .show-card { background: #141419; border-radius: 14px; overflow: hidden; cursor: pointer; border: 1px solid rgba(255,255,255,0.06); }
     .show-card img { width: 100%; height: 220px; object-fit: cover; display: block; }
     .show-details { padding: 12px; }
-    .show-title { font-size: 15px; font-weight: 700; color: #f0f0f5; }
+    .show-title { font-size: 15px; font-weight: 700; color: #fff; }
     .show-episodes { font-size: 12px; color: #ff0055; margin-top: 4px; font-weight: 600; }
 
-    /* Player Popup */
-    .player-modal {
+    /* Professional History Separate Window */
+    .history-page-view {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-      background: rgba(0, 0, 0, 0.95); z-index: 1000; overflow-y: auto; padding: 20px 16px;
+      background: #0b0b0e; z-index: 1500; overflow-y: auto; padding: 20px 16px 80px 16px;
     }
-    .player-modal.active { display: block; }
-    .close-btn { position: absolute; top: 15px; right: 20px; font-size: 28px; color: #fff; cursor: pointer; }
+    .history-page-view.active { display: block; }
     
-    .video-container {
-      width: 100%; max-width: 800px; margin: 40px auto 20px auto;
-      aspect-ratio: 16/9; background: #000; border-radius: 12px; overflow: hidden; position: relative;
+    .history-header-bar {
+      display: flex; align-items: center; justify-content: space-between; max-width: 800px; margin: 0 auto 20px auto;
+      border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 12px; position: relative;
     }
-    .video-container iframe { width: 100%; height: 100%; border: none; }
+    .history-back-btn { font-size: 20px; font-weight: 700; color: #ff0055; cursor: pointer; }
+    .history-page-title { font-size: 18px; font-weight: 900; color: #fff; position: absolute; left: 50%; transform: translateX(-50%); }
+    
+    .history-content-container { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+    .history-section-box { background: #141419; border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 16px; }
+    .history-sec-heading { font-size: 14px; font-weight: 800; color: #ff0055; text-transform: uppercase; margin-bottom: 14px; letter-spacing: 0.5px; }
 
-    /* 3-Sec Ad Overlay Screen */
-    .ad-overlay {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      background: #111; display: none; flex-direction: column;
-      justify-content: center; align-items: center; z-index: 10; text-align: center;
+    /* Horizontal Left-to-Right Scroll Cards */
+    .horizontal-scroll-row {
+      display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px;
+      scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
     }
-    .ad-overlay.active { display: flex; }
-    .ad-timer-text { font-size: 18px; font-weight: bold; color: #ff0055; margin-bottom: 10px; }
+    .horizontal-scroll-row::-webkit-scrollbar { height: 4px; }
+    .horizontal-scroll-row::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
 
-    .episodes-section { max-width: 800px; margin: 0 auto; }
-    .episodes-title { font-size: 18px; font-weight: 700; margin-bottom: 12px; color: #ff0055; }
-    .episodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
-    .ep-btn {
-      background: #1f1f27; border: 1px solid rgba(255,255,255,0.1); color: #fff;
-      padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px;
+    .h-card-item {
+      flex: 0 0 130px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px; overflow: hidden; cursor: pointer; scroll-snap-align: start;
+      transition: transform 0.2s, border-color 0.2s;
     }
-    .ep-btn.active { background: #ff0055; border-color: #ff0055; }
+    .h-card-item:hover { border-color: #ff0055; transform: translateY(-2px); }
+    .h-card-thumb { width: 100%; height: 160px; object-fit: cover; display: block; background: #000; }
+    .h-card-info { padding: 8px; }
+    .h-card-title { font-size: 13px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .h-card-subtitle { font-size: 11px; color: #ff0055; font-weight: 600; margin-top: 2px; }
+
+    /* Footer App Navigation */
+    .app-footer {
+      position: fixed; bottom: 0; left: 0; width: 100%; background: #111115;
+      border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex;
+      justify-content: space-around; align-items: center; padding: 12px 0; z-index: 90;
+    }
+    .footer-item {
+      display: flex; flex-direction: column; align-items: center; color: rgba(255, 255, 255, 0.6);
+      font-size: 12px; cursor: pointer; text-decoration: none; gap: 4px; font-weight: 600;
+    }
+    .footer-item.active, .footer-item:hover { color: #ff0055; }
+    .footer-item svg { width: 20px; height: 20px; fill: currentColor; }
+
+    .state-message {
+      grid-column: 1 / -1; text-align: center; color: rgba(255,255,255,0.6);
+      font-size: 14px; padding: 40px 10px;
+    }
+    .state-message.error-message { color: #ff0055; }
+    .retry-btn {
+      margin-top: 12px; background: rgba(255,0,85,0.15); border: 1px solid rgba(255,0,85,0.5);
+      color: #fff; padding: 8px 18px; border-radius: 20px; cursor: pointer; font-weight: 700; font-size: 13px;
+    }
   </style>
 </head>
 <body>
 
-  <div id="splash-screen"><div class="splash-logo">HRS</div></div>
+  <!-- Splash Screen -->
+  <div id="splash-screen">
+    <div class="splash-logo-box">
+      <img src="icon.png" alt="HRS Logo">
+    </div>
+  </div>
 
+  <!-- Header -->
   <header>
     <div class="nav-top">
-      <div></div>
-      <div class="brand-logo">HR STUDIO</div>
+      <div class="brand-left">
+        <div class="brand-logo-img"><img src="icon.png" alt="HRS"></div>
+        <div class="brand-title">HR STUDIO</div>
+      </div>
       <button class="search-btn-icon" onclick="toggleSearch()">🔍</button>
     </div>
     <div class="search-container" id="search-bar">
       <div class="search-box-wrapper">
-        <input type="text" id="search-input" onkeyup="searchShows()" placeholder="Search shows...">
+        <input type="text" id="search-input" onkeyup="searchShows()" placeholder="🔍 Search shows...">
       </div>
     </div>
   </header>
 
-  <div class="container"><div class="grid-layout" id="shows-container"></div></div>
+  <!-- Main Content Grid -->
+  <div class="container">
+    <div class="grid-layout" id="shows-container"></div>
+  </div>
 
-  <!-- Player Popup -->
-  <div class="player-modal" id="playerModal">
-    <span class="close-btn" onclick="closePlayer()">&times;</span>
-    <div class="video-container">
-      <div class="ad-overlay" id="adOverlay">
-        <div class="ad-timer-text" id="adTimerText">Loading Ad... (3s)</div>
-        <p style="font-size:12px; color:#888;">Video will start automatically after ad</p>
-      </div>
-      <iframe id="videoPlayer" src="" allowfullscreen allow="autoplay"></iframe>
+  <!-- Fullscreen Reels Modal -->
+  <div class="shorts-modal" id="shortsModal">
+    <div class="shorts-container" id="shortsContainer"></div>
+  </div>
+
+  <!-- Professional History Separate Window -->
+  <div class="history-page-view" id="historyPageView">
+    <div class="history-header-bar">
+      <div class="history-back-btn" onclick="closeHistoryWindow()">←</div>
+      <div class="history-page-title">History</div>
+      <div style="width: 20px;"></div>
     </div>
-    <div class="episodes-section">
-      <div class="episodes-title" id="modalShowTitle">Episodes</div>
-      <div class="episodes-grid" id="episodesList"></div>
+    <div class="history-content-container" id="historyContentBody"></div>
+  </div>
+
+  <!-- Footer Navigation -->
+  <div class="app-footer">
+    <div class="footer-item active" onclick="goHomeTab()">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      Home
+    </div>
+    <div class="footer-item" onclick="handleAppShareOrInstall()">
+      <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z"/></svg>
+      Share
+    </div>
+    <div class="footer-item" onclick="openHistoryWindow()">
+      <svg viewBox="0 0 24 24"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+      History
     </div>
   </div>
 
   <script>
     const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTXtzbDoOjeXakc4hA_OS2wtQTSP3iS4TVfEDNsRM8lZUoVqnktOrjOxvjl02zSOba4R4Uehf9OaONb/pub?gid=0&single=true&output=csv";
-    
+
     let allShowsData = [];
+    let savedScrollPosition = 0;
+    let activeAdCountdown = null;
+    let currentObservedIndex = -1;
+    let currentShowEpisodes = [];
+    let currentShowName = "";
+    let unlockedEpisodes = new Set();
+    let lastTapTime = 0;
+    let isVideoPlayingState = true;
+
+    function escapeHtml(str) {
+      return String(str ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function extractYouTubeId(url) {
+      if (!url) return "";
+      if (url.length === 11 && !url.includes('/') && !url.includes('http')) return url;
+      const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+      return match ? match[1] : url.trim();
+    }
 
     function toggleSearch() {
-      const searchBar = document.getElementById('search-bar');
-      searchBar.classList.toggle('active');
+      const searchContainer = document.getElementById('search-bar');
+      searchContainer.classList.toggle('active');
+      if (searchContainer.classList.contains('active')) {
+        setTimeout(() => {
+          document.getElementById('search-input').focus();
+        }, 100);
+      }
+    }
+
+    function searchShows() {
+      const query = document.getElementById('search-input').value.toLowerCase().trim();
+      const filtered = allShowsData.filter(show => show.show_name.toLowerCase().includes(query));
+      renderShows(filtered);
     }
 
     function parseCSVLine(line) {
       let delimiter = line.includes('\t') ? '\t' : ',';
-      let result = [];
-      let current = '';
-      let inQuotes = false;
+      let result = [], current = '', inQuotes = false;
       for (let i = 0; i < line.length; i++) {
         let char = line[i];
         if (char === '"') inQuotes = !inQuotes;
@@ -155,117 +336,448 @@
     }
 
     async function fetchShowsFromSheet() {
+      const container = document.getElementById('shows-container');
+      container.innerHTML = `<div class="state-message">Loading shows...</div>`;
+
       try {
         const response = await fetch(GOOGLE_SHEET_CSV_URL + '&t=' + new Date().getTime());
+        if (!response.ok) throw new Error(`Sheet fetch failed with status ${response.status}`);
         const data = await response.text();
         const rows = data.split(/\r?\n/).map(r => r.trim()).filter(r => r.length > 0);
-        
+
         allShowsData = rows.map(row => {
           const cols = parseCSVLine(row);
-          
           let episodesList = [];
-          // Col 0: No, Col 1: Show Name, Col 2: Thumbnail, Col 3: Ep1, Col 4: Ad1, Col 5: Ep2, Col 6: Ad2...
+
           for (let i = 3; i < cols.length; i += 2) {
             if (cols[i]) {
-              episodesList.push({
-                youtube_id: cols[i],
-                ad: cols[i+1] || ""
+              episodesList.push({ 
+                youtube_id: extractYouTubeId(cols[i]), 
+                ad_link: cols[i+1] ? cols[i+1].trim() : "" 
               });
             }
           }
-
-          return {
-            show_name: cols[1] || "",
-            thumbnail: cols[2] || "",
-            episodes: episodesList
-          };
+          return { show_name: cols[1] || "", thumbnail: cols[2] || "", episodes: episodesList };
         }).filter(s => s.show_name && s.show_name.toLowerCase() !== 'show name');
 
+        if (allShowsData.length === 0) {
+          container.innerHTML = `<div class="state-message">No shows found right now. Please check back later.</div>`;
+          return;
+        }
+
         renderShows(allShowsData);
-      } catch (error) { console.log(error); }
+      } catch (error) {
+        console.log(error);
+        container.innerHTML = `
+          <div class="state-message error-message">
+            Couldn't load shows. Please check your internet connection.<br>
+            <button class="retry-btn" onclick="fetchShowsFromSheet()">Retry</button>
+          </div>`;
+      }
     }
 
     function renderShows(shows) {
       const container = document.getElementById('shows-container');
       container.innerHTML = "";
-      shows.forEach((show, index) => {
+
+      if (shows.length === 0) {
+        container.innerHTML = `<div class="state-message">No shows match your search.</div>`;
+        return;
+      }
+
+      shows.forEach((show) => {
         const card = document.createElement('div');
         card.className = 'show-card';
         card.innerHTML = `
-          <img src="${show.thumbnail}" alt="${show.show_name}">
+          <img src="${escapeHtml(show.thumbnail)}" alt="${escapeHtml(show.show_name)}" loading="lazy" decoding="async">
           <div class="show-details">
-            <div class="show-title">${show.show_name}</div>
-            <div class="show-episodes">${show.episodes.length} Episodes</div>
+            <div class="show-title">${escapeHtml(show.show_name)}</div>
+            <div class="show-episodes">${show.episodes.length} Episode(s)</div>
           </div>
         `;
-        card.onclick = () => openShowPlayer(index);
+        let realIndex = allShowsData.findIndex(s => s.show_name === show.show_name);
+        // ALWAYS start from Episode 0 (Episode 1) when clicked from home grid
+        card.onclick = () => openShortsPlayer(realIndex, 0);
         container.appendChild(card);
       });
     }
 
-    function openShowPlayer(showIndex) {
+    function openShortsPlayer(showIndex, startEpisodeIndex = 0) {
       const show = allShowsData[showIndex];
       if (!show || show.episodes.length === 0) return;
 
-      document.getElementById('modalShowTitle').innerText = show.show_name + " - Episodes";
-      const epListContainer = document.getElementById('episodesList');
-      epListContainer.innerHTML = "";
+      currentShowEpisodes = show.episodes;
+      currentShowName = show.show_name;
+      savedScrollPosition = window.scrollY;
+      const container = document.getElementById('shortsContainer');
+      container.innerHTML = "";
+      container.scrollTop = 0;
+      container.classList.remove('locked');
+
+      if (activeAdCountdown) clearInterval(activeAdCountdown);
+      currentObservedIndex = -1;
+      
+      unlockedEpisodes = new Set();
+      for(let i=0; i<=startEpisodeIndex; i++) {
+        unlockedEpisodes.add(i);
+      }
 
       show.episodes.forEach((ep, i) => {
-        const btn = document.createElement('button');
-        btn.className = 'ep-btn' + (i === 0 ? ' active' : '');
-        btn.innerText = `Episode ${i + 1}`;
-        btn.onclick = () => startEpisodeWithAd(ep.youtube_id, ep.ad, btn);
-        epListContainer.appendChild(btn);
+        const item = document.createElement('div');
+        item.className = 'short-item';
+        item.setAttribute('data-index', i);
+        
+        const isLiked = localStorage.getItem(`like_${currentShowName}_${i}`) === 'true';
+        const isSaved = localStorage.getItem(`save_${currentShowName}_${i}`) === 'true';
+
+        item.innerHTML = `
+          <div class="video-wrapper" id="videoWrapper_${i}">
+            <div class="swipe-overlay" onclick="handleVideoTap(${i})" id="swipeOverlay_${i}"></div>
+            <div id="playerBox_${i}" style="width:100%; height:100%;"></div>
+
+            <div class="floating-actions">
+              <button class="action-btn ${isLiked ? 'active' : ''}" onclick="toggleLike('${escapeHtml(currentShowName)}', ${i}, this)">
+                ❤️<span>Like</span>
+              </button>
+              <button class="action-btn ${isSaved ? 'active' : ''}" onclick="toggleSave('${escapeHtml(currentShowName)}', ${i}, this)">
+                💾<span>Save</span>
+              </button>
+              <button class="action-btn" onclick="shareEpisode('${escapeHtml(currentShowName)}', ${i})">
+                🔗<span>Share</span>
+              </button>
+            </div>
+
+            <div class="ad-skip-box hidden" id="adSkipBox_${i}" data-index="${i}" data-youtube-id="${escapeHtml(ep.youtube_id)}" data-ad-link="${escapeHtml(ep.ad_link)}">
+              <span class="ad-badge-tag">AD</span>
+              <span id="adBtnText_${i}">3</span>
+            </div>
+          </div>
+
+          <div class="video-info-box">
+            <div class="info-left">
+              <div class="show-name-text">${escapeHtml(show.show_name)}</div>
+              <div class="episode-name-text">Episode ${i + 1}</div>
+            </div>
+          </div>
+        `;
+        item.querySelector('.ad-skip-box').addEventListener('click', function () {
+          handleSkipClick(Number(this.dataset.index), this.dataset.youtubeId, this.dataset.adLink);
+        });
+        container.appendChild(item);
       });
 
-      startEpisodeWithAd(show.episodes[0].youtube_id, show.episodes[0].ad, epListContainer.children[0]);
-      document.getElementById('playerModal').classList.add('active');
-    }
+      document.getElementById('shortsModal').classList.add('active');
+      history.pushState({ modalOpen: true }, "");
 
-    function startEpisodeWithAd(youtubeId, adUrl, btnElement) {
-      document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
-      if (btnElement) btnElement.classList.add('active');
+      setupScrollObserver();
 
-      const iframe = document.getElementById('videoPlayer');
-      iframe.src = ""; // Stop current video
-
-      if (adUrl && adUrl.startsWith('http')) {
-        // Open Ad Link
-        window.open(adUrl, '_blank');
-
-        // Show 3-Sec Timer Overlay
-        const overlay = document.getElementById('adOverlay');
-        const timerText = document.getElementById('adTimerText');
-        overlay.classList.add('active');
-
-        let count = 3;
-        timerText.innerText = `Playing Ad... (${count}s)`;
-
-        let interval = setInterval(() => {
-          count--;
-          if (count > 0) {
-            timerText.innerText = `Playing Ad... (${count}s)`;
-          } else {
-            clearInterval(interval);
-            overlay.classList.remove('active');
-            iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1`;
+      if (startEpisodeIndex > 0) {
+        setTimeout(() => {
+          const targetItem = container.querySelector(`[data-index="${startEpisodeIndex}"]`);
+          if (targetItem) {
+            targetItem.scrollIntoView({ behavior: 'auto' });
           }
-        }, 1000);
-      } else {
-        // Play directly if no ad
-        iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1`;
+        }, 50);
       }
     }
 
-    function closePlayer() {
-      document.getElementById('playerModal').classList.remove('active');
-      document.getElementById('videoPlayer').src = "";
+    function handleVideoTap(index) {
+      const currentTime = new Date().getTime();
+      const tapLength = currentTime - lastTapTime;
+      
+      if (tapLength < 300 && tapLength > 0) {
+        // Double Tap -> Like (Only add like, never remove on double tap)
+        const likeBtn = document.querySelectorAll('.short-item')[index].querySelector('.action-btn');
+        forceLike(currentShowName, index, likeBtn);
+        
+        // Show floating heart animation
+        showFloatingHeart(index);
+        lastTapTime = 0;
+      } else {
+        // Single Tap -> Play / Pause Toggle
+        lastTapTime = currentTime;
+        setTimeout(() => {
+          if (lastTapTime === currentTime) {
+            togglePlayPause(index);
+          }
+        }, 300);
+      }
     }
 
-    function searchShows() {
-      const query = document.getElementById('search-input').value.toLowerCase();
-      renderShows(allShowsData.filter(s => s.show_name.toLowerCase().includes(query)));
+    function showFloatingHeart(index) {
+      const wrapper = document.getElementById(`videoWrapper_${index}`);
+      const heart = document.createElement('div');
+      heart.className = 'floating-heart-anim';
+      heart.innerHTML = '❤️';
+      heart.style.left = `${Math.random() * 60 + 20}%`;
+      heart.style.top = `${Math.random() * 40 + 30}%`;
+      wrapper.appendChild(heart);
+      setTimeout(() => heart.remove(), 800);
+    }
+
+    function togglePlayPause(index) {
+      const iframe = document.querySelector(`#playerBox_${index} iframe`);
+      if (!iframe) return;
+      
+      const command = isVideoPlayingState ? '{"event":"command","func":"pauseVideo","args":""}' : '{"event":"command","func":"playVideo","args":""}';
+      iframe.contentWindow.postMessage(command, '*');
+      isVideoPlayingState = !isVideoPlayingState;
+    }
+
+    function setupScrollObserver() {
+      const items = document.querySelectorAll('.short-item');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const index = parseInt(entry.target.getAttribute('data-index'));
+            if (index !== currentObservedIndex) {
+              currentObservedIndex = index;
+              playEpisode(index);
+            }
+          }
+        });
+      }, { threshold: 0.6 });
+
+      items.forEach(item => observer.observe(item));
+    }
+
+    function playEpisode(index) {
+      if (activeAdCountdown) clearInterval(activeAdCountdown);
+      const epData = currentShowEpisodes[index];
+      if (!epData) return;
+
+      document.querySelectorAll('[id^="playerBox_"]').forEach((box, i) => {
+        if (i !== index) box.innerHTML = ""; 
+        document.getElementById(`adSkipBox_${i}`).classList.add("hidden");
+      });
+
+      const container = document.getElementById('shortsContainer');
+      isVideoPlayingState = true;
+
+      if (index === 0 || unlockedEpisodes.has(index)) {
+        container.classList.remove('locked');
+        loadIframe(index, epData.youtube_id, false);
+        saveHistory(currentShowName, index);
+      } else {
+        container.classList.add('locked');
+        let sheetAdId = epData.ad_link ? extractYouTubeId(epData.ad_link) : "M7lc1UVf-VE";
+        loadIframe(index, sheetAdId, true);
+        startAdCountdown(index, epData);
+      }
+    }
+
+    function loadIframe(index, videoId, isAd) {
+      const box = document.getElementById(`playerBox_${index}`);
+      const loopParam = isAd ? `&loop=1&playlist=${videoId}` : '';
+      box.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1${loopParam}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+    }
+
+    function startAdCountdown(index, epData) {
+      const skipBox = document.getElementById(`adSkipBox_${index}`);
+      const btnText = document.getElementById(`adBtnText_${index}`);
+
+      skipBox.classList.remove('hidden');
+      skipBox.classList.add('disabled');
+      
+      let count = 3;
+      btnText.innerText = `${count}`;
+
+      activeAdCountdown = setInterval(() => {
+        count--;
+        if (count > 0) {
+          btnText.innerText = `${count}`;
+        } else {
+          clearInterval(activeAdCountdown);
+          btnText.innerText = `Skip Ad \u279D`;
+          skipBox.classList.remove('disabled');
+          document.getElementById('shortsContainer').classList.remove('locked');
+        }
+      }, 1000);
+    }
+
+    function handleSkipClick(index, youtubeId, adLink) {
+      const skipBox = document.getElementById(`adSkipBox_${index}`);
+      if (skipBox.classList.contains('disabled')) return;
+
+      skipBox.classList.add('hidden');
+      unlockedEpisodes.add(index);
+      document.getElementById('shortsContainer').classList.remove('locked');
+      loadIframe(index, youtubeId, false);
+      saveHistory(currentShowName, index);
+    }
+
+    function closeShortsPlayer() {
+      if (activeAdCountdown) clearInterval(activeAdCountdown);
+      document.getElementById('shortsModal').classList.remove('active');
+      document.getElementById('shortsContainer').innerHTML = "";
+      currentObservedIndex = -1;
+      window.scrollTo(0, savedScrollPosition);
+    }
+
+    window.onpopstate = function () {
+      if (document.getElementById('shortsModal').classList.contains('active')) {
+        closeShortsPlayer();
+      } else if (document.getElementById('historyPageView').classList.contains('active')) {
+        closeHistoryWindow();
+      }
+    };
+
+    function handleAppShareOrInstall() {
+      const shareData = {
+        title: 'HR STUDIO',
+        text: 'Watch your favorite shows and episodes on HR STUDIO!',
+        url: window.location.href
+      };
+      if (navigator.share) {
+        navigator.share(shareData).catch(() => {});
+      } else {
+        alert("HR STUDIO App Link copied!");
+      }
+    }
+
+    function toggleLike(showName, epIndex, btn) {
+      const key = `like_${showName}_${epIndex}`;
+      const current = localStorage.getItem(key) === 'true';
+      localStorage.setItem(key, !current);
+      
+      if(btn) btn.classList.toggle('active', !current);
+      updateHistoryStorageArray('likes', showName, epIndex, !current);
+    }
+
+    function forceLike(showName, epIndex, btn) {
+      const key = `like_${showName}_${epIndex}`;
+      localStorage.setItem(key, 'true');
+      if(btn) btn.classList.add('active');
+      updateHistoryStorageArray('likes', showName, epIndex, true);
+    }
+
+    function toggleSave(showName, epIndex, btn) {
+      const key = `save_${showName}_${epIndex}`;
+      const current = localStorage.getItem(key) === 'true';
+      localStorage.setItem(key, !current);
+      
+      if(btn) btn.classList.toggle('active', !current);
+      updateHistoryStorageArray('saves', showName, epIndex, !current);
+    }
+
+    function shareEpisode(showName, epIndex) {
+      const shareText = `Check out ${showName} - Episode ${epIndex + 1} on HR STUDIO!`;
+      if (navigator.share) {
+        navigator.share({ title: showName, text: shareText, url: window.location.href }).catch(() => {});
+      } else {
+        alert(shareText);
+      }
+    }
+
+    function saveHistory(showName, epIndex) {
+      let historyList = JSON.parse(localStorage.getItem('hr_watch_history') || '[]');
+      historyList = historyList.filter(item => !(item.showName === showName && item.epIndex === epIndex));
+      historyList.unshift({ showName, epIndex, timestamp: Date.now() });
+      localStorage.setItem('hr_watch_history', JSON.stringify(historyList));
+    }
+
+    function updateHistoryStorageArray(type, showName, epIndex, add) {
+      let key = type === 'likes' ? 'hr_liked_items' : 'hr_saved_items';
+      let list = JSON.parse(localStorage.getItem(key) || '[]');
+      list = list.filter(item => !(item.showName === showName && item.epIndex === epIndex));
+      if (add) {
+        list.unshift({ showName, epIndex });
+      }
+      localStorage.setItem(key, JSON.stringify(list));
+    }
+
+    function goHomeTab() {
+      closeShortsPlayer();
+      closeHistoryWindow();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function playFromHistory(showName, epIndex) {
+      closeHistoryWindow();
+      let showIdx = allShowsData.findIndex(s => s.show_name === showName);
+      if (showIdx !== -1) {
+        openShortsPlayer(showIdx, epIndex);
+      } else {
+        alert("Show data not found currently.");
+      }
+    }
+
+    function openHistoryWindow() {
+      const pageView = document.getElementById('historyPageView');
+      const body = document.getElementById('historyContentBody');
+      
+      let historyList = JSON.parse(localStorage.getItem('hr_watch_history') || '[]');
+      let watchHTML = "";
+      historyList.forEach(item => {
+        let showObj = allShowsData.find(s => s.show_name === item.showName);
+        let thumb = showObj ? showObj.thumbnail : 'icon.png';
+        watchHTML += `
+          <div class="h-card-item" onclick="playFromHistory('${escapeHtml(item.showName)}', ${item.epIndex})">
+            <img class="h-card-thumb" src="${escapeHtml(thumb)}" alt="" loading="lazy">
+            <div class="h-card-info">
+              <div class="h-card-title">${escapeHtml(item.showName)}</div>
+              <div class="h-card-subtitle">Ep ${item.epIndex + 1}</div>
+            </div>
+          </div>`;
+      });
+
+      let savedList = JSON.parse(localStorage.getItem('hr_saved_items') || '[]');
+      let savedHTML = "";
+      savedList.forEach(item => {
+        let showObj = allShowsData.find(s => s.show_name === item.showName);
+        let thumb = showObj ? showObj.thumbnail : 'icon.png';
+        savedHTML += `
+          <div class="h-card-item" onclick="playFromHistory('${escapeHtml(item.showName)}', ${item.epIndex})">
+            <img class="h-card-thumb" src="${escapeHtml(thumb)}" alt="" loading="lazy">
+            <div class="h-card-info">
+              <div class="h-card-title">${escapeHtml(item.showName)}</div>
+              <div class="h-card-subtitle">Ep ${item.epIndex + 1}</div>
+            </div>
+          </div>`;
+      });
+
+      let likedList = JSON.parse(localStorage.getItem('hr_liked_items') || '[]');
+      let likedHTML = "";
+      likedList.forEach(item => {
+        let showObj = allShowsData.find(s => s.show_name === item.showName);
+        let thumb = showObj ? showObj.thumbnail : 'icon.png';
+        likedHTML += `
+          <div class="h-card-item" onclick="playFromHistory('${escapeHtml(item.showName)}', ${item.epIndex})">
+            <img class="h-card-thumb" src="${escapeHtml(thumb)}" alt="" loading="lazy">
+            <div class="h-card-info">
+              <div class="h-card-title">${escapeHtml(item.showName)}</div>
+              <div class="h-card-subtitle">Ep ${item.epIndex + 1}</div>
+            </div>
+          </div>`;
+      });
+
+      body.innerHTML = `
+        <div class="history-section-box">
+          <div class="history-sec-heading">&#128337; Watch History</div>
+          <div class="horizontal-scroll-row">
+            ${watchHTML || '<div style="font-size:12px; color:rgba(255,255,255,0.4); padding:10px 0;">No watch history yet.</div>'}
+          </div>
+        </div>
+        <div class="history-section-box">
+          <div class="history-sec-heading">&#128190; Saved Episodes</div>
+          <div class="horizontal-scroll-row">
+            ${savedHTML || '<div style="font-size:12px; color:rgba(255,255,255,0.4); padding:10px 0;">No saved episodes found.</div>'}
+          </div>
+        </div>
+        <div class="history-section-box">
+          <div class="history-sec-heading">&#10084;&#65039; Liked Episodes</div>
+          <div class="horizontal-scroll-row">
+            ${likedHTML || '<div style="font-size:12px; color:rgba(255,255,255,0.4); padding:10px 0;">No liked episodes found.</div>'}
+          </div>
+        </div>
+      `;
+
+      pageView.classList.add('active');
+      history.pushState({ historyOpen: true }, "");
+    }
+
+    function closeHistoryWindow() {
+      document.getElementById('historyPageView').classList.remove('active');
     }
 
     window.onload = fetchShowsFromSheet;
