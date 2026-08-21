@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HR STUDIO - Official App</title>
   <meta name="description" content="HR STUDIO - Watch your favorite shows and episodes.">
+
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#ff0055">
-  
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -135,7 +135,6 @@
     }
     .action-btn:active { transform: scale(0.9); }
     .action-btn span { font-size: 10px; margin-top: 2px; font-weight: 600; }
-    .action-btn .icon-emoji { font-size: 19px; line-height: 1; margin-top: 0; }
     .action-btn.active { color: #ff0055; border-color: #ff0055; background: rgba(255, 0, 85, 0.15); }
 
     /* Ad Overlay & Skip & Learn More */
@@ -161,21 +160,43 @@
     }
     .ad-learn-more-btn.active { display: flex; }
 
-    /* Custom video progress - anchored at the very bottom of each reel item */
-    .custom-progress { width:100%; padding:0 20px 16px 20px; background:#0b0b0e; }
-    .progress-times { display:flex; justify-content:space-between; align-items:center; font-size:11px; font-weight:700; color:#fff; margin-bottom:6px; }
+    /* Custom video progress */
+    .custom-progress { width:100%; margin-top:9px; pointer-events:none; }
+    .progress-times { display:flex; justify-content:space-between; align-items:center; font-size:11px; font-weight:700; color:#fff; text-shadow:0 1px 4px #000; margin-bottom:5px; }
     .progress-track { width:100%; height:3px; background:rgba(255,255,255,.28); border-radius:99px; overflow:hidden; }
-    .progress-fill { width:0%; height:100%; background:#ff0055; border-radius:99px; transition:width .15s linear; }
+    .progress-fill { width:0%; height:100%; background:#fff; border-radius:99px; transition:width .15s linear; }
     .ad-frame { width:100%; height:100%; border:0; background:#000; }
     .ad-fallback { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; background:#111; color:#fff; text-align:center; padding:20px; }
     .ad-open-btn { display:inline-block; padding:10px 16px; border-radius:8px; background:#00e5ff; color:#000; font-weight:800; text-decoration:none; }
 
+    /* Direct / Smart Link Ad Card (e.g. CPM network links that refuse to iframe) */
+    .direct-ad-card {
+      width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;
+      gap:14px; background: linear-gradient(135deg, #141419, #0b0b0e); text-align:center; padding:24px;
+    }
+    .direct-ad-badge { background:#ff0055; color:#fff; font-size:11px; font-weight:800; padding:4px 10px; border-radius:20px; letter-spacing:0.5px; }
+    .direct-ad-title { font-size:17px; font-weight:800; color:#fff; }
+    .direct-ad-sub { font-size:12px; color:rgba(255,255,255,0.55); max-width:260px; }
+    .direct-ad-tap-btn {
+      margin-top:6px; display:inline-flex; align-items:center; gap:6px; padding:12px 22px; border-radius:30px;
+      background:#00e5ff; color:#000; font-weight:800; font-size:14px; text-decoration:none;
+      box-shadow:0 6px 20px rgba(0,229,255,0.35);
+    }
+
+    /* Banner Script Ad (e.g. atOptions / invoke.js style networks) */
+    .banner-ad-wrapper {
+      width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;
+      background:#0b0b0e; gap:12px;
+    }
+    .banner-ad-tag { font-size:11px; font-weight:800; color:rgba(255,255,255,0.4); letter-spacing:1px; text-transform:uppercase; }
+    .banner-ad-frame { border:0; background:#000; max-width:94%; }
+
     /* Video Info Section */
     .video-info-box { 
-      width: 100%; padding: 16px 20px; background: #0b0b0e;
+      width: 100%; padding: 12px 20px 16px; background: #0b0b0e;
       display: flex; justify-content: space-between; align-items: center;
     }
-    .info-left { display: flex; flex-direction: column; }
+    .info-left { display: flex; flex-direction: column; width: 100%; }
     .show-name-text { font-size: 16px; font-weight: 800; color: #fff; }
     .episode-name-text { font-size: 13px; color: #ff0055; font-weight: 700; margin-top: 2px; }
 
@@ -202,25 +223,36 @@
     .history-back-btn { font-size: 20px; font-weight: 700; color: #ff0055; cursor: pointer; }
     .history-page-title { font-size: 18px; font-weight: 900; color: #fff; position: absolute; left: 50%; transform: translateX(-50%); }
     
-    .history-content-container { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
-    .history-section-box { background: #141419; border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 16px; }
-    .history-sec-heading { font-size: 14px; font-weight: 800; color: #ff0055; text-transform: uppercase; margin-bottom: 14px; letter-spacing: 0.5px; }
+    .history-content-container { max-width: 800px; margin: 0 auto; }
 
-    /* Horizontal Scroll Cards */
-    .horizontal-scroll-row {
-      display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px;
-      scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+    /* History Tabs (replaces old top-to-bottom stacked sections) */
+    .history-tabs-row {
+      display: flex; gap: 8px; background: #141419; border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px; padding: 5px; margin-bottom: 18px;
     }
-    .horizontal-scroll-row::-webkit-scrollbar { height: 4px; }
-    .horizontal-scroll-row::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+    .history-tab-btn {
+      flex: 1; text-align: center; padding: 10px 8px; border-radius: 10px; cursor: pointer;
+      font-size: 13px; font-weight: 800; color: rgba(255,255,255,0.55); transition: all 0.2s ease;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .history-tab-btn.active { background: linear-gradient(135deg, #ff0055, #ff3377); color: #fff; box-shadow: 0 4px 14px rgba(255,0,85,0.35); }
+    .history-tab-count { font-size: 10px; opacity: 0.8; }
 
+    .history-tab-panel { display: none; }
+    .history-tab-panel.active { display: block; }
+
+    /* Grid of cards within a tab (was: horizontal-scroll-row) */
+    .history-grid-row {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+    }
     .h-card-item {
-      flex: 0 0 130px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 10px; overflow: hidden; cursor: pointer; scroll-snap-align: start;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px; overflow: hidden; cursor: pointer;
       transition: transform 0.2s, border-color 0.2s; position: relative;
     }
     .h-card-item:hover { border-color: #ff0055; transform: translateY(-2px); }
-    .h-card-thumb-wrapper { position: relative; width: 100%; height: 160px; background: #000; }
+    .h-card-thumb-wrapper { position: relative; width: 100%; height: 130px; background: #000; }
+    .history-empty-msg { grid-column: 1 / -1; font-size: 12px; color: rgba(255,255,255,0.4); padding: 30px 0; text-align: center; }
     .h-card-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
     .h-card-time-tag {
       position: absolute; bottom: 6px; left: 6px; background: rgba(0, 0, 0, 0.75);
@@ -297,7 +329,14 @@
       <div class="history-page-title">History</div>
       <div style="width: 20px;"></div>
     </div>
-    <div class="history-content-container" id="historyContentBody"></div>
+    <div class="history-content-container">
+      <div class="history-tabs-row" id="historyTabsRow">
+        <div class="history-tab-btn active" data-tab="watch" onclick="switchHistoryTab('watch')">&#128337; History</div>
+        <div class="history-tab-btn" data-tab="saved" onclick="switchHistoryTab('saved')">&#128190; Saved</div>
+        <div class="history-tab-btn" data-tab="liked" onclick="switchHistoryTab('liked')">&#10084;&#65039; Liked</div>
+      </div>
+      <div id="historyContentBody"></div>
+    </div>
   </div>
 
   <!-- Footer Navigation -->
@@ -364,7 +403,7 @@
       return /^[A-Za-z0-9_-]{11}$/.test(v) ? v : "";
     }
 
-    function formatVideoTime(seconds) {
+     function formatVideoTime(seconds) {
       if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
       seconds = Math.floor(seconds);
       const h = Math.floor(seconds / 3600);
@@ -417,7 +456,7 @@
         
         let showsMap = {};
 
-          // Column 1 (B) se aage ke saare shows ke liye loop
+        // Column 1 (B) se aage ke saare shows ke liye loop
         for (let col = 1; col < numCols; col++) {
           // Row index 1 = Show Name ('zbhs', 'hzhzh')
           let showName = parsedMatrix[1] && parsedMatrix[1][col] ? parsedMatrix[1][col].trim() : "";
@@ -511,7 +550,10 @@
         const isLiked = localStorage.getItem(`like_${currentShowName}_${i}`) === 'true';
         const isSaved = localStorage.getItem(`save_${currentShowName}_${i}`) === 'true';
         
-        let directAdSite = ep.ad_link && (ep.ad_link.startsWith('http://') || ep.ad_link.startsWith('https://')) ? ep.ad_link : '#';
+        const adTypeInfo = detectAdType(ep.ad_link);
+        let directAdSite = '#';
+        if (adTypeInfo.type === 'youtube') directAdSite = `https://www.youtube.com/watch?v=${adTypeInfo.id}`;
+        else if (adTypeInfo.type === 'instagram' || adTypeInfo.type === 'direct-link') directAdSite = ep.ad_link.trim();
 
         item.innerHTML = `
           <div class="video-wrapper" id="videoWrapper_${i}">
@@ -520,18 +562,18 @@
 
             <div class="floating-actions">
               <button class="action-btn ${isLiked ? 'active' : ''}" onclick="toggleLike('${escapeHtml(currentShowName)}', ${i}, this)">
-                <span class="icon-emoji">${isLiked ? '❤️' : '🤍'}</span><span>Like</span>
+                ❤️<span>Like</span>
               </button>
               <button class="action-btn ${isSaved ? 'active' : ''}" onclick="toggleSave('${escapeHtml(currentShowName)}', ${i}, this)">
-                <span class="icon-emoji">${isSaved ? '🔖' : '📑'}</span><span>Save</span>
+                💾<span>Save</span>
               </button>
               <button class="action-btn" onclick="shareEpisode('${escapeHtml(currentShowName)}', ${i})">
-                <span class="icon-emoji">📤</span><span>Share</span>
+                🔗<span>Share</span>
               </button>
             </div>
 
             <div class="ad-overlay-container">
-              <a href="${escapeHtml(directAdSite)}" target="_blank" class="ad-learn-more-btn" id="adLearnMore_${i}">Learn More ➔</a>
+              <a href="${escapeHtml(directAdSite)}" target="_blank" rel="noopener noreferrer" class="ad-learn-more-btn" id="adLearnMore_${i}">Learn More ➔</a>
               <div class="ad-skip-box hidden" id="adSkipBox_${i}" data-index="${i}" data-epid="${escapeHtml(ep.episode_id)}">
                 <span class="ad-badge-tag">AD</span>
                 <span id="adBtnText_${i}">3</span>
@@ -543,12 +585,11 @@
             <div class="info-left">
               <div class="show-name-text">${escapeHtml(show.show_name)}</div>
               <div class="episode-name-text">Episode ${i + 1}</div>
+              <div class="custom-progress">
+                <div class="progress-times"><span id="currentTime_${i}">0:00</span><span id="totalTime_${i}">0:00</span></div>
+                <div class="progress-track"><div class="progress-fill" id="progressFill_${i}"></div></div>
+              </div>
             </div>
-          </div>
-
-          <div class="custom-progress" id="customProgress_${i}">
-            <div class="progress-times"><span id="currentTime_${i}">0:00</span><span id="totalTime_${i}">0:00</span></div>
-            <div class="progress-track"><div class="progress-fill" id="progressFill_${i}"></div></div>
           </div>
         `;
         item.querySelector('.ad-skip-box').addEventListener('click', function () {
@@ -662,30 +703,115 @@
       }
     }
 
+    function getYouTubeIdFromUrl(value) {
+      if (!value) return "";
+      const v = value.trim();
+      if (/^[A-Za-z0-9_-]{11}$/.test(v)) return v;
+      const patterns = [
+        /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/|v\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/i,
+        /[?&]v=([A-Za-z0-9_-]{11})/i
+      ];
+      for (const re of patterns) {
+        const m = v.match(re);
+        if (m) return m[1];
+      }
+      return "";
+    }
+
+    function getAdEmbedUrl(url) {
+      if (!url) return "";
+      const clean = url.trim();
+      const ytId = getYouTubeIdFromUrl(clean);
+      if (ytId) {
+        // mute=1 is required by browsers to allow iframe autoplay without a user gesture.
+        return `https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&iv_load_policy=3&fs=0&disablekb=1`;
+      }
+      // Instagram Reel/Post full URL -> embeddable URL when Instagram permits it.
+      const ig = clean.match(/^https?:\/\/(?:www\.)?instagram\.com\/(reel|p|tv)\/([^/?#]+)/i);
+      if (ig) return `https://www.instagram.com/${ig[1]}/${ig[2]}/embed/`;
+      // Other URLs are attempted directly. Some websites intentionally block iframe embedding.
+      return clean;
+    }
+
+    // Identify which kind of ad the sheet cell contains, so each type renders correctly.
+    function detectAdType(raw) {
+      if (!raw) return { type: 'none' };
+      const val = raw.trim();
+      if (!val) return { type: 'none' };
+
+      // Banner-style ad networks (e.g. atOptions + invoke.js script tags) are pasted as full <script> blocks.
+      if (/<script/i.test(val)) {
+        let width = 728, height = 90;
+        const wMatch = val.match(/['"]?width['"]?\s*:\s*(\d+)/i);
+        const hMatch = val.match(/['"]?height['"]?\s*:\s*(\d+)/i);
+        if (wMatch) width = parseInt(wMatch[1], 10);
+        if (hMatch) height = parseInt(hMatch[1], 10);
+        return { type: 'banner-script', content: val, width, height };
+      }
+
+      const ytId = getYouTubeIdFromUrl(val);
+      if (ytId) return { type: 'youtube', id: ytId };
+
+      const ig = val.match(/^https?:\/\/(?:www\.)?instagram\.com\/(reel|p|tv)\/([^/?#]+)/i);
+      if (ig) return { type: 'instagram', url: `https://www.instagram.com/${ig[1]}/${ig[2]}/embed/` };
+
+      // Any other plain http(s) link is treated as a direct / smart-link ad (CPM networks, offer walls, etc).
+      // These commonly block iframing (X-Frame-Options/CSP), so they are shown as a tap-through card instead.
+      if (/^https?:\/\//i.test(val)) return { type: 'direct-link', url: val };
+
+      return { type: 'invalid' };
+    }
+
     function loadPlayerContent(index, idOrUrl, isAd) {
       const box = document.getElementById(`playerBox_${index}`);
       if (!box) return;
 
       if (isAd) {
-        const url = idOrUrl && /^https?:\/\//i.test(idOrUrl.trim()) ? idOrUrl.trim() : "";
-        if (!url) { loadWelcomeBanner(index); return; }
-        box.innerHTML = `
-          <iframe class="ad-frame" src="${escapeHtml(url)}" referrerpolicy="no-referrer-when-downgrade" allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>
-          <div class="ad-fallback" style="display:none" id="adFallback_${index}">
-            <div>Ad page cannot be embedded by this website.</div>
-            <a class="ad-open-btn" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Open Ad</a>
-          </div>`;
-        const frame = box.querySelector('.ad-frame');
-        frame.addEventListener('load', () => { /* Many sites allow embedding. */ });
-        frame.addEventListener('error', () => {
-          frame.style.display = 'none';
-          const fb = document.getElementById(`adFallback_${index}`);
-          if (fb) fb.style.display = 'flex';
-        });
-        return;
-      }
+        const adInfo = detectAdType(idOrUrl);
 
-      const videoId = getYouTubeVideoId(idOrUrl);
+        if (adInfo.type === 'youtube') {
+          const url = getAdEmbedUrl(idOrUrl);
+          box.innerHTML = `<iframe class="ad-frame" src="${escapeHtml(url)}" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+          return;
+        }
+
+        if (adInfo.type === 'instagram') {
+          box.innerHTML = `<iframe class="ad-frame" id="igAdFrame_${index}" src="${escapeHtml(adInfo.url)}" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
+          // Instagram embeds frequently fail to autoplay/load inside an iframe. If it hasn't shown
+          // anything usable shortly after loading, fall back to the welcome banner instead of a blank screen.
+          setTimeout(() => {
+            const stillOnAd = document.getElementById(`igAdFrame_${index}`);
+            if (stillOnAd) loadWelcomeBanner(index);
+          }, 3500);
+          return;
+        }
+
+        if (adInfo.type === 'banner-script') {
+          const srcdocHtml = `<!DOCTYPE html><html><head><style>html,body{margin:0;height:100%;display:flex;align-items:center;justify-content:center;background:#0b0b0e;overflow:hidden;}</style></head><body>${adInfo.content}</body></html>`;
+          box.innerHTML = `
+            <div class="banner-ad-wrapper">
+              <div class="banner-ad-tag">Advertisement</div>
+              <iframe class="banner-ad-frame" style="width:${adInfo.width}px;height:${adInfo.height}px;" srcdoc="${escapeHtml(srcdocHtml)}" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox" scrolling="no"></iframe>
+            </div>`;
+          return;
+        }
+
+        if (adInfo.type === 'direct-link') {
+          box.innerHTML = `
+            <div class="direct-ad-card">
+              <div class="direct-ad-badge">SPONSORED</div>
+              <div class="direct-ad-title">Your episode unlocks after this</div>
+              <div class="direct-ad-sub">Tap below to view the sponsor's page, then come back to continue watching.</div>
+              <a class="direct-ad-tap-btn" href="${escapeHtml(adInfo.url)}" target="_blank" rel="noopener noreferrer">View Ad ➔</a>
+            </div>`;
+          return;
+        }
+
+        // Invalid / unrecognised ad value.
+        loadWelcomeBanner(index);
+        return;
+          }
+ const videoId = getYouTubeVideoId(idOrUrl);
       if (!videoId) {
         box.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100%;color:#aaa;font-size:14px;text-align:center;padding:20px">Invalid YouTube video ID.<br>Episode cell must contain only the 11-character YouTube ID.</div>';
         return;
@@ -698,9 +824,14 @@
         if (ytPlayers[index] && ytPlayers[index].destroy) { try { ytPlayers[index].destroy(); } catch(e) {} }
         ytPlayers[index] = new YT.Player(`ytPlayer_${index}`, {
           videoId,
-          playerVars: { autoplay: 1, controls: 0, rel: 0, modestbranding: 1, playsinline: 1, iv_load_policy: 3, fs: 0 },
+          playerVars: {
+            autoplay: 1, controls: 0, rel: 0, modestbranding: 1,
+            playsinline: 1, iv_load_policy: 3, fs: 0, disablekb: 1,
+            cc_load_policy: 0, showinfo: 0
+          },
           events: {
             onReady: (event) => {
+              try { event.target.setOption && event.target.setOption('captions', 'track', {}); } catch(e) {}
               try { event.target.playVideo(); } catch(e) {}
               startProgressTracking(index);
             },
@@ -749,7 +880,10 @@
       skipBox.classList.add('disabled');
       
       const currentEpObj = currentShowEpisodes[index];
-      if (currentEpObj && currentEpObj.ad_link && currentEpObj.ad_link.startsWith('http')) {
+      const adInfo = currentEpObj ? detectAdType(currentEpObj.ad_link) : { type: 'none' };
+      // Only show Learn More for ad types that actually have a clickable destination URL
+      // (a banner-script ad is clickable inside its own iframe, so no separate link is needed).
+      if (adInfo.type === 'youtube' || adInfo.type === 'instagram' || adInfo.type === 'direct-link') {
         learnMoreBtn.classList.add('active');
       }
       
@@ -834,38 +968,24 @@
     function toggleLike(showName, epIndex, btn) {
       const key = `like_${showName}_${epIndex}`;
       const current = localStorage.getItem(key) === 'true';
-      const next = !current;
-      localStorage.setItem(key, next);
-      if(btn) {
-        btn.classList.toggle('active', next);
-        const icon = btn.querySelector('.icon-emoji');
-        if(icon) icon.textContent = next ? '❤️' : '🤍';
-      }
-      updateHistoryStorageArray('likes', showName, epIndex, next);
+      localStorage.setItem(key, !current);
+      if(btn) btn.classList.toggle('active', !current);
+      updateHistoryStorageArray('likes', showName, epIndex, !current);
     }
 
     function forceLike(showName, epIndex, btn) {
       const key = `like_${showName}_${epIndex}`;
       localStorage.setItem(key, 'true');
-      if(btn) {
-        btn.classList.add('active');
-        const icon = btn.querySelector('.icon-emoji');
-        if(icon) icon.textContent = '❤️';
-      }
+      if(btn) btn.classList.add('active');
       updateHistoryStorageArray('likes', showName, epIndex, true);
     }
 
     function toggleSave(showName, epIndex, btn) {
       const key = `save_${showName}_${epIndex}`;
       const current = localStorage.getItem(key) === 'true';
-      const next = !current;
-      localStorage.setItem(key, next);
-      if(btn) {
-        btn.classList.toggle('active', next);
-        const icon = btn.querySelector('.icon-emoji');
-        if(icon) icon.textContent = next ? '🔖' : '📑';
-      }
-      updateHistoryStorageArray('saves', showName, epIndex, next);
+      localStorage.setItem(key, !current);
+      if(btn) btn.classList.toggle('active', !current);
+      updateHistoryStorageArray('saves', showName, epIndex, !current);
     }
 
     function shareEpisode(showName, epIndex) {
@@ -902,90 +1022,57 @@
       }
     }
 
+    function buildHCard(item) {
+      let showObj = allShowsData.find(s => s.show_name === item.showName);
+      let thumb = showObj ? showObj.thumbnail : 'icon.png';
+      let formattedTime = formatTimestamp(item.timestamp);
+      return `
+        <div class="h-card-item" onclick="playFromHistory('${escapeHtml(item.showName)}', ${item.epIndex})">
+          <div class="h-card-thumb-wrapper">
+            <img class="h-card-thumb" src="${escapeHtml(thumb)}" alt="" loading="lazy">
+            ${formattedTime ? `<div class="h-card-time-tag">${escapeHtml(formattedTime)}</div>` : ''}
+          </div>
+          <div class="h-card-info">
+            <div class="h-card-title">${escapeHtml(item.showName)}</div>
+            <div class="h-card-subtitle">Ep ${item.epIndex + 1}</div>
+          </div>
+        </div>`;
+    }
+
     function openHistoryWindow() {
       const pageView = document.getElementById('historyPageView');
       const body = document.getElementById('historyContentBody');
-      
+
       let historyList = JSON.parse(localStorage.getItem('hr_watch_history') || '[]');
-      let watchHTML = "";
-      historyList.forEach(item => {
-       let showObj = allShowsData.find(s => s.show_name === item.showName);
-        let thumb = showObj ? showObj.thumbnail : 'icon.png';
-        let formattedTime = formatTimestamp(item.timestamp);
-        watchHTML += `
-          <div class="h-card-item" onclick="playFromHistory('${escapeHtml(item.showName)}', ${item.epIndex})">
-            <div class="h-card-thumb-wrapper">
-              <img class="h-card-thumb" src="${escapeHtml(thumb)}" alt="" loading="lazy">
-              ${formattedTime ? `<div class="h-card-time-tag">${escapeHtml(formattedTime)}</div>` : ''}
-            </div>
-            <div class="h-card-info">
-              <div class="h-card-title">${escapeHtml(item.showName)}</div>
-              <div class="h-card-subtitle">Ep ${item.epIndex + 1}</div>
-            </div>
-          </div>`;
-      });
-
       let savedList = JSON.parse(localStorage.getItem('hr_saved_items') || '[]');
-      let savedHTML = "";
-      savedList.forEach(item => {
-        let showObj = allShowsData.find(s => s.show_name === item.showName);
-        let thumb = showObj ? showObj.thumbnail : 'icon.png';
-        let formattedTime = formatTimestamp(item.timestamp);
-        savedHTML += `
-          <div class="h-card-item" onclick="playFromHistory('${escapeHtml(item.showName)}', ${item.epIndex})">
-            <div class="h-card-thumb-wrapper">
-              <img class="h-card-thumb" src="${escapeHtml(thumb)}" alt="" loading="lazy">
-              ${formattedTime ? `<div class="h-card-time-tag">${escapeHtml(formattedTime)}</div>` : ''}
-            </div>
-            <div class="h-card-info">
-              <div class="h-card-title">${escapeHtml(item.showName)}</div>
-              <div class="h-card-subtitle">Ep ${item.epIndex + 1}</div>
-            </div>
-          </div>`;
-      });
-
       let likedList = JSON.parse(localStorage.getItem('hr_liked_items') || '[]');
-      let likedHTML = "";
-      likedList.forEach(item => {
-        let showObj = allShowsData.find(s => s.show_name === item.showName);
-        let thumb = showObj ? showObj.thumbnail : 'icon.png';
-        let formattedTime = formatTimestamp(item.timestamp);
-        likedHTML += `
-          <div class="h-card-item" onclick="playFromHistory('${escapeHtml(item.showName)}', ${item.epIndex})">
-            <div class="h-card-thumb-wrapper">
-              <img class="h-card-thumb" src="${escapeHtml(thumb)}" alt="" loading="lazy">
-              ${formattedTime ? `<div class="h-card-time-tag">${escapeHtml(formattedTime)}</div>` : ''}
-            </div>
-            <div class="h-card-info">
-              <div class="h-card-title">${escapeHtml(item.showName)}</div>
-              <div class="h-card-subtitle">Ep ${item.epIndex + 1}</div>
-            </div>
-          </div>`;
-      });
+
+      const watchHTML = historyList.map(buildHCard).join('') || '<div class="history-empty-msg">No watch history yet.</div>';
+      const savedHTML = savedList.map(buildHCard).join('') || '<div class="history-empty-msg">No saved episodes found.</div>';
+      const likedHTML = likedList.map(buildHCard).join('') || '<div class="history-empty-msg">No liked episodes found.</div>';
 
       body.innerHTML = `
-        <div class="history-section-box">
-          <div class="history-sec-heading">&#128337; Watch History</div>
-          <div class="horizontal-scroll-row">
-            ${watchHTML || '<div style="font-size:12px; color:rgba(255,255,255,0.4); padding:10px 0;">No watch history yet.</div>'}
-          </div>
+        <div class="history-tab-panel active" data-panel="watch">
+          <div class="history-grid-row">${watchHTML}</div>
         </div>
-        <div class="history-section-box">
-          <div class="history-sec-heading">&#128190; Saved Episodes</div>
-          <div class="horizontal-scroll-row">
-            ${savedHTML || '<div style="font-size:12px; color:rgba(255,255,255,0.4); padding:10px 0;">No saved episodes found.</div>'}
-          </div>
+        <div class="history-tab-panel" data-panel="saved">
+          <div class="history-grid-row">${savedHTML}</div>
         </div>
-        <div class="history-section-box">
-          <div class="history-sec-heading">&#10084;&#65039; Liked Episodes</div>
-          <div class="horizontal-scroll-row">
-            ${likedHTML || '<div style="font-size:12px; color:rgba(255,255,255,0.4); padding:10px 0;">No liked episodes found.</div>'}
-          </div>
+        <div class="history-tab-panel" data-panel="liked">
+          <div class="history-grid-row">${likedHTML}</div>
         </div>
       `;
 
+      document.querySelectorAll('.history-tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelector('.history-tab-btn[data-tab="watch"]').classList.add('active');
+
       pageView.classList.add('active');
       history.pushState({ historyOpen: true }, "");
+    }
+
+    function switchHistoryTab(tab) {
+      document.querySelectorAll('.history-tab-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tab));
+      document.querySelectorAll('.history-tab-panel').forEach(panel => panel.classList.toggle('active', panel.dataset.panel === tab));
     }
 
     function closeHistoryWindow() {
@@ -998,3 +1085,4 @@
   </script>
 </body>
 </html>
+    
