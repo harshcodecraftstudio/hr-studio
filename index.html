@@ -798,14 +798,13 @@
         }
 
         if (adInfo.type === 'direct-link') {
-          box.innerHTML = `
-            <div class="direct-ad-card">
-              <div class="direct-ad-badge">SPONSORED</div>
-              <div class="direct-ad-title">Your episode unlocks after this</div>
-              <div class="direct-ad-sub">Tap below to view the sponsor's page, then come back to continue watching.</div>
-              <a class="direct-ad-tap-btn" href="${escapeHtml(adInfo.url)}" target="_blank" rel="noopener noreferrer">View Ad ➔</a>
-            </div>`;
-          return;
+    box.innerHTML = `
+      <div class="direct-ad-card" style="position: relative; z-index: 25;">
+        <div class="direct-ad-badge">SPONSORED</div>
+        <div class="direct-ad-title">Watch sponsor to unlock this episode</div>
+        <div class="direct-ad-sub">Please click on the <b>'Learn More'</b> button below to view the sponsor's page and unlock your content.</div>
+      </div>`;
+    return;
         }
 
         // Invalid / unrecognised ad value.
