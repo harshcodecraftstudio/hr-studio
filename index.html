@@ -97,20 +97,6 @@
       position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10;
     }
 
-    /* Welcome Screen Placeholder for Blank Ad */
-    .welcome-ad-banner {
-      width: 100%; height: 100%; background: linear-gradient(135deg, #141419, #0b0b0e);
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      text-align: center; padding: 20px; z-index: 5;
-    }
-    .welcome-logo-box {
-      width: 75px; height: 75px; border-radius: 18px; overflow: hidden; margin-bottom: 16px;
-      border: 2px solid #ff0055; box-shadow: 0 0 25px rgba(255,0,85,0.5);
-    }
-    .welcome-logo-box img { width: 100%; height: 100%; object-fit: cover; }
-    .welcome-title { font-size: 21px; font-weight: 900; color: #fff; margin-bottom: 6px; letter-spacing: 0.5px; }
-    .welcome-sub { font-size: 13px; color: #ff0055; font-weight: 600; }
-
     /* Floating Heart Animation on Double Tap */
     .floating-heart-anim {
       position: absolute; font-size: 60px; color: #ff0055; z-index: 40;
@@ -123,22 +109,38 @@
       100% { transform: scale(1) translateY(-60px); opacity: 0; }
     }
 
-    /* Right Side Floating Actions */
-    .floating-actions {
-      position: absolute; right: 16px; bottom: 90px; z-index: 50;
-      display: flex; flex-direction: column; gap: 16px; align-items: center;
+    /* Instagram Style Floating Action Buttons */
+    .insta-actions {
+      position: absolute; right: 15px; bottom: 120px;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 18px; z-index: 40;
     }
-    .action-btn {
-      background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.15);
-      width: 45px; height: 45px; border-radius: 50%; display: flex; flex-direction: column;
-      justify-content: center; align-items: center; color: #fff; cursor: pointer;
-      backdrop-filter: blur(4px); transition: transform 0.2s, background 0.2s;
-    }
-    .action-btn:active { transform: scale(0.9); }
-    .action-btn span { font-size: 10px; margin-top: 2px; font-weight: 600; }
-    .action-btn.active { color: #ff0055; border-color: #ff0055; background: rgba(255, 0, 85, 0.15); }
 
-    /* Ad Overlay & Skip & Learn More */
+    .insta-action-btn {
+      background: none; border: none; color: #fff;
+      display: flex; flex-direction: column; align-items: center;
+      cursor: pointer; padding: 0;
+    }
+
+    .insta-action-btn .icon {
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+      transition: transform 0.2s ease, fill 0.2s, stroke 0.2s;
+    }
+
+    .action-count, .action-text {
+      font-size: 12px; font-weight: 600; margin-top: 4px;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+    }
+
+    .insta-action-btn.liked svg {
+      fill: #ff3040; stroke: #ff3040; transform: scale(1.15);
+    }
+
+    .insta-action-btn.saved svg {
+      fill: #fff; stroke: #fff; transform: scale(1.15);
+    }
+
+    /* Ad Overlay & Skip */
     .ad-overlay-container {
       position: absolute; bottom: 25px; right: 15px; z-index: 50;
       display: flex; gap: 8px; align-items: center;
@@ -154,10 +156,10 @@
     .ad-badge-tag { background: #ff0055; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 800; }
 
     .ad-learn-more-btn {
-      background: #00e5ff; color: #000; border: none; padding: 9px 14px;
-      border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer;
-      text-decoration: none; box-shadow: 0 4px 15px rgba(0,229,255,0.4);
-      display: none; align-items: center; gap: 4px;
+      background: linear-gradient(135deg, #0070f3, #00c6ff); color: #fff; border: none; padding: 10px 16px;
+      border-radius: 8px; font-size: 13px; font-weight: 800; cursor: pointer;
+      text-decoration: none; box-shadow: 0 4px 15px rgba(0, 112, 243, 0.4);
+      display: none; align-items: center; gap: 4px; backdrop-filter: blur(5px);
     }
     .ad-learn-more-btn.active { display: flex; }
 
@@ -166,31 +168,29 @@
     .progress-times { display:flex; justify-content:space-between; align-items:center; font-size:11px; font-weight:700; color:#fff; text-shadow:0 1px 4px #000; margin-bottom:5px; }
     .progress-track { width:100%; height:3px; background:rgba(255,255,255,.28); border-radius:99px; overflow:hidden; }
     .progress-fill { width:0%; height:100%; background:#fff; border-radius:99px; transition:width .15s linear; }
-    .ad-frame { width:100%; height:100%; border:0; background:#000; }
-    .ad-fallback { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; background:#111; color:#fff; text-align:center; padding:20px; }
-    .ad-open-btn { display:inline-block; padding:10px 16px; border-radius:8px; background:#00e5ff; color:#000; font-weight:800; text-decoration:none; }
 
-    /* Direct / Smart Link Ad Card (e.g. CPM network links that refuse to iframe) */
+    /* Sponsor Direct Link Card - Only Tap Here Button */
     .direct-ad-card {
-      width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;
-      gap:14px; background: linear-gradient(135deg, #141419, #0b0b0e); text-align:center; padding:24px;
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      z-index: 25; background: #111; padding: 30px 20px;
+      border-radius: 16px; text-align: center; max-width: 320px; width: 85%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.1);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
     }
-    .direct-ad-badge { background:#ff0055; color:#fff; font-size:11px; font-weight:800; padding:4px 10px; border-radius:20px; letter-spacing:0.5px; }
-    .direct-ad-title { font-size:17px; font-weight:800; color:#fff; }
-    .direct-ad-sub { font-size:12px; color:rgba(255,255,255,0.55); max-width:260px; }
-    .direct-ad-tap-btn {
-      margin-top:6px; display:inline-flex; align-items:center; gap:6px; padding:12px 22px; border-radius:30px;
-      background:#00e5ff; color:#000; font-weight:800; font-size:14px; text-decoration:none;
-      box-shadow:0 6px 20px rgba(0,229,255,0.35);
+    .direct-ad-badge { 
+      background: #ff0055; color: #fff; padding: 4px 12px; font-size: 11px; 
+      font-weight: bold; border-radius: 20px; display: inline-block; margin-bottom: 12px; letter-spacing: 1px; 
     }
+    .direct-ad-title { font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #fff; }
+    .direct-ad-sub { font-size: 13px; color: #aaa; line-height: 1.4; margin-bottom: 20px; }
 
-    /* Banner Script Ad (e.g. atOptions / invoke.js style networks) */
-    .banner-ad-wrapper {
-      width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;
-      background:#0b0b0e; gap:12px;
+    .direct-ad-btn {
+      display: inline-block; background: linear-gradient(135deg, #0070f3, #00c6ff);
+      color: #fff; text-decoration: none; padding: 12px 24px; font-size: 14px;
+      font-weight: bold; border-radius: 30px; box-shadow: 0 4px 15px rgba(0, 112, 243, 0.4);
+      transition: transform 0.2s ease; text-align: center; width: 100%;
     }
-    .banner-ad-tag { font-size:11px; font-weight:800; color:rgba(255,255,255,0.4); letter-spacing:1px; text-transform:uppercase; }
-    .banner-ad-frame { border:0; background:#000; max-width:94%; }
+    .direct-ad-btn:active { transform: scale(0.95); }
 
     /* Video Info Section */
     .video-info-box { 
@@ -223,10 +223,8 @@
     }
     .history-back-btn { font-size: 20px; font-weight: 700; color: #ff0055; cursor: pointer; }
     .history-page-title { font-size: 18px; font-weight: 900; color: #fff; position: absolute; left: 50%; transform: translateX(-50%); }
-    
     .history-content-container { max-width: 800px; margin: 0 auto; }
 
-    /* History Tabs (replaces old top-to-bottom stacked sections) */
     .history-tabs-row {
       display: flex; gap: 8px; background: #141419; border: 1px solid rgba(255,255,255,0.06);
       border-radius: 14px; padding: 5px; margin-bottom: 18px;
@@ -237,15 +235,10 @@
       display: flex; align-items: center; justify-content: center; gap: 6px;
     }
     .history-tab-btn.active { background: linear-gradient(135deg, #ff0055, #ff3377); color: #fff; box-shadow: 0 4px 14px rgba(255,0,85,0.35); }
-    .history-tab-count { font-size: 10px; opacity: 0.8; }
-
     .history-tab-panel { display: none; }
     .history-tab-panel.active { display: block; }
 
-    /* Grid of cards within a tab (was: horizontal-scroll-row) */
-    .history-grid-row {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-    }
+    .history-grid-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
     .h-card-item {
       background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
       border-radius: 10px; overflow: hidden; cursor: pointer;
@@ -286,9 +279,30 @@
       margin-top: 12px; background: rgba(255,0,85,0.15); border: 1px solid rgba(255,0,85,0.5);
       color: #fff; padding: 8px 18px; border-radius: 20px; cursor: pointer; font-weight: 700; font-size: 13px;
     }
+
+    /* Toast Notification */
+    #toastNotification {
+      visibility: hidden; min-width: 250px; background-color: rgba(28, 28, 30, 0.95);
+      color: #fff; text-align: center; border-radius: 30px; padding: 12px 20px;
+      position: fixed; z-index: 9999; left: 50%; top: 30px;
+      transform: translateX(-50%) translateY(-20px); font-size: 14px; font-weight: 500;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1); display: flex; align-items: center;
+      justify-content: center; gap: 10px; opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    }
+    #toastNotification.show { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(0); }
+    #toastNotification svg { fill: #4cd964; flex-shrink: 0; }
   </style>
 </head>
 <body>
+
+  <div id="toastNotification">
+    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+    <span id="toastMessage">Link copied to clipboard!</span>
+  </div>
 
   <!-- Splash Screen -->
   <div id="splash-screen">
@@ -368,7 +382,6 @@
     let currentShowName = "";
     let unlockedEpisodes = new Set();
     let lastTapTime = 0;
-    let isVideoPlayingState = true;
     let ytPlayers = {};
     let progressTimers = {};
 
@@ -389,18 +402,15 @@
       const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
       const ampm = hours >= 12 ? 'PM' : 'AM';
       const formattedHours = hours % 12 || 12;
-      
       const day = date.getDate();
       const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
       const month = monthNames[date.getMonth()];
-      
       return `${day} ${month}, ${formattedHours}:${formattedMinutes} ${ampm}`;
     }
 
     function getYouTubeVideoId(value) {
       if (!value) return "";
       const v = value.trim();
-      // Episodes must contain ONLY the YouTube video ID.
       return /^[A-Za-z0-9_-]{11}$/.test(v) ? v : "";
     }
 
@@ -454,21 +464,15 @@
 
         let parsedMatrix = rows.map(r => parseCSVLine(r));
         let numCols = Math.max(...parsedMatrix.map(r => r.length));
-        
         let showsMap = {};
 
-        // Column 1 (B) se aage ke saare shows ke liye loop
         for (let col = 1; col < numCols; col++) {
-          // Row index 1 = Show Name ('zbhs', 'hzhzh')
           let showName = parsedMatrix[1] && parsedMatrix[1][col] ? parsedMatrix[1][col].trim() : "";
           if (!showName) continue;
 
-          // Row index 2 = Thumbnail Link
           let thumbnail = parsedMatrix[2] && parsedMatrix[2][col] ? parsedMatrix[2][col].trim() : "";
           let episodesList = [];
 
-          // Sheet pattern: Row 4 = Episode 1 ID, Row 5 = Ad URL,
-          // Row 6 = Episode 2 ID, Row 7 = Ad URL, ...
           for (let row = 3; row < parsedMatrix.length; row += 2) {
             const epVal = parsedMatrix[row] && parsedMatrix[row][col] ? parsedMatrix[row][col].trim() : "";
             const adVal = parsedMatrix[row + 1] && parsedMatrix[row + 1][col] ? parsedMatrix[row + 1][col].trim() : "";
@@ -523,6 +527,21 @@
       });
     }
 
+    function getEpisodeLikesCount(showName, epIndex) {
+      let hash = 0;
+      let str = showName + "_" + epIndex;
+      for (let i = 0; i < str.length; i++) {
+        hash = (hash << 5) - hash + str.charCodeAt(i);
+        hash |= 0;
+      }
+      let randomNum = Math.abs(hash) % 9900000 + 100000;
+      if (randomNum >= 1000000) {
+        return (randomNum / 1000000).toFixed(1) + 'M';
+      } else {
+        return (randomNum / 1000).toFixed(0) + 'K';
+      }
+    }
+
     function openShortsPlayer(showIndex, startEpisodeIndex = 0) {
       const show = allShowsData[showIndex];
       if (!show || show.episodes.length === 0) return;
@@ -550,31 +569,39 @@
         
         const isLiked = localStorage.getItem(`like_${currentShowName}_${i}`) === 'true';
         const isSaved = localStorage.getItem(`save_${currentShowName}_${i}`) === 'true';
-        
-        const adTypeInfo = detectAdType(ep.ad_link);
-        let directAdSite = '#';
-        if (adTypeInfo.type === 'youtube') directAdSite = `https://www.youtube.com/watch?v=${adTypeInfo.id}`;
-        else if (adTypeInfo.type === 'instagram' || adTypeInfo.type === 'direct-link') directAdSite = ep.ad_link.trim();
+        let formattedLikes = getEpisodeLikesCount(currentShowName, i);
 
         item.innerHTML = `
           <div class="video-wrapper" id="videoWrapper_${i}">
             <div class="swipe-overlay" onclick="handleVideoTap(${i})" id="swipeOverlay_${i}"></div>
             <div id="playerBox_${i}" style="width:100%; height:100%;"></div>
 
-            <div class="floating-actions">
-              <button class="action-btn ${isLiked ? 'active' : ''}" onclick="toggleLike('${escapeHtml(currentShowName)}', ${i}, this)">
-                ❤️<span>Like</span>
+            <!-- Instagram Style Floating Action Buttons -->
+            <div class="insta-actions">
+              <button class="insta-action-btn ${isLiked ? 'liked' : ''}" id="likeBtn_${i}" onclick="toggleLike('${escapeHtml(currentShowName)}', ${i})">
+                <svg class="icon" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                <span class="action-count">${formattedLikes}</span>
               </button>
-              <button class="action-btn ${isSaved ? 'active' : ''}" onclick="toggleSave('${escapeHtml(currentShowName)}', ${i}, this)">
-                💾<span>Save</span>
+
+              <button class="insta-action-btn ${isSaved ? 'saved' : ''}" id="saveBtn_${i}" onclick="toggleSave('${escapeHtml(currentShowName)}', ${i})">
+                <svg class="icon" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                </svg>
+                <span class="action-text">Save</span>
               </button>
-              <button class="action-btn" onclick="shareEpisode('${escapeHtml(currentShowName)}', ${i})">
-                🔗<span>Share</span>
+
+              <button class="insta-action-btn" onclick="shareEpisode('${escapeHtml(currentShowName)}', ${i})">
+                <svg class="icon" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                </svg>
+                <span class="action-text">Share</span>
               </button>
             </div>
 
             <div class="ad-overlay-container">
-              <a href="${escapeHtml(directAdSite)}" target="_blank" rel="noopener noreferrer" class="ad-learn-more-btn" id="adLearnMore_${i}">Learn More ➔</a>
+              <a class="ad-learn-more-btn" id="adLearnMore_${i}" href="#" target="_blank" rel="noopener noreferrer">Learn More</a>
               <div class="ad-skip-box hidden" id="adSkipBox_${i}" data-index="${i}" data-epid="${escapeHtml(ep.episode_id)}">
                 <span class="ad-badge-tag">AD</span>
                 <span id="adBtnText_${i}">3</span>
@@ -617,8 +644,7 @@
       const tapLength = currentTime - lastTapTime;
       
       if (tapLength < 300 && tapLength > 0) {
-        const likeBtn = document.querySelectorAll('.short-item')[index].querySelector('.action-btn');
-        forceLike(currentShowName, index, likeBtn);
+        forceLike(currentShowName, index);
         showFloatingHeart(index);
         lastTapTime = 0;
       } else {
@@ -680,12 +706,11 @@
           box.innerHTML = "";
         }
         document.getElementById(`adSkipBox_${i}`).classList.add("hidden");
-        document.getElementById(`adLearnMore_${i}`).classList.remove("active");
+        const lmBtn = document.getElementById(`adLearnMore_${i}`);
+        if (lmBtn) lmBtn.classList.remove('active');
       });
 
       const container = document.getElementById('shortsContainer');
-      isVideoPlayingState = true;
-
       saveHistory(currentShowName, index);
 
       if (index === 0 || unlockedEpisodes.has(index)) {
@@ -693,13 +718,7 @@
         loadPlayerContent(index, epData.episode_id, false);
       } else {
         container.classList.add('locked');
-        
-        if (epData.ad_link && epData.ad_link.trim() !== "") {
-          loadPlayerContent(index, epData.ad_link, true);
-        } else {
-          loadWelcomeBanner(index);
-        }
-        
+        loadPlayerContent(index, epData.ad_link, true);
         startAdCountdown(index, epData.episode_id);
       }
     }
@@ -719,48 +738,20 @@
       return "";
     }
 
-    function getAdEmbedUrl(url) {
-      if (!url) return "";
-      const clean = url.trim();
-      const ytId = getYouTubeIdFromUrl(clean);
-      if (ytId) {
-        // mute=1 is required by browsers to allow iframe autoplay without a user gesture.
-        return `https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&controls=0&rel=0&playsinline=1&iv_load_policy=3&fs=0&disablekb=1`;
-      }
-      // Instagram Reel/Post full URL -> embeddable URL when Instagram permits it.
-      const ig = clean.match(/^https?:\/\/(?:www\.)?instagram\.com\/(reel|p|tv)\/([^/?#]+)/i);
-      if (ig) return `https://www.instagram.com/${ig[1]}/${ig[2]}/embed/`;
-      // Other URLs are attempted directly. Some websites intentionally block iframe embedding.
-      return clean;
-    }
-
-    // Identify which kind of ad the sheet cell contains, so each type renders correctly.
     function detectAdType(raw) {
       if (!raw) return { type: 'none' };
       const val = raw.trim();
       if (!val) return { type: 'none' };
 
-      // Banner-style ad networks (e.g. atOptions + invoke.js script tags) are pasted as full <script> blocks.
-      if (/<script/i.test(val)) {
-        let width = 728, height = 90;
-        const wMatch = val.match(/['"]?width['"]?\s*:\s*(\d+)/i);
-        const hMatch = val.match(/['"]?height['"]?\s*:\s*(\d+)/i);
-        if (wMatch) width = parseInt(wMatch[1], 10);
-        if (hMatch) height = parseInt(hMatch[1], 10);
-        return { type: 'banner-script', content: val, width, height };
-      }
-
       const ytId = getYouTubeIdFromUrl(val);
-      if (ytId) return { type: 'youtube', id: ytId };
+      if (ytId) return { type: 'youtube', id: ytId, url: `https://www.youtube.com/watch?v=${ytId}` };
 
       const ig = val.match(/^https?:\/\/(?:www\.)?instagram\.com\/(reel|p|tv)\/([^/?#]+)/i);
-      if (ig) return { type: 'instagram', url: `https://www.instagram.com/${ig[1]}/${ig[2]}/embed/` };
+      if (ig) return { type: 'instagram', url: val, embedUrl: `https://www.instagram.com/${ig[1]}/${ig[2]}/embed/` };
 
-      // Any other plain http(s) link is treated as a direct / smart-link ad (CPM networks, offer walls, etc).
-      // These commonly block iframing (X-Frame-Options/CSP), so they are shown as a tap-through card instead.
       if (/^https?:\/\//i.test(val)) return { type: 'direct-link', url: val };
 
-      return { type: 'invalid' };
+      return { type: 'sponsor-card', url: "#" };
     }
 
     function loadPlayerContent(index, idOrUrl, isAd) {
@@ -770,50 +761,33 @@
       if (isAd) {
         const adInfo = detectAdType(idOrUrl);
 
+        // अगर स्पॉन्सर कार्ड है या डायरेक्ट लिंक है (जो वीडियो नहीं है)
+        if (adInfo.type === 'direct-link' || adInfo.type === 'sponsor-card') {
+          loadSponsorBanner(index, adInfo.url);
+          return;
+        }
+
+        // अगर यूट्यूब वीडियो एड है
         if (adInfo.type === 'youtube') {
-          const url = getAdEmbedUrl(idOrUrl);
-          box.innerHTML = `<iframe class="ad-frame" src="${escapeHtml(url)}" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+          box.innerHTML = `<iframe class="ad-frame" src="${escapeHtml(`https://www.youtube.com/embed/${adInfo.id}?autoplay=1&mute=1&controls=0&rel=0&playsinline=1`)}" allow="autoplay; encrypted-media; fullscreen"></iframe>`;
+          setupLearnMoreButton(index, adInfo.url);
           return;
         }
 
+        // अगर इंस्टाग्राम वीडियो एड है
         if (adInfo.type === 'instagram') {
-          box.innerHTML = `<iframe class="ad-frame" id="igAdFrame_${index}" src="${escapeHtml(adInfo.url)}" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
-          // Instagram embeds frequently fail to autoplay/load inside an iframe. If it hasn't shown
-          // anything usable shortly after loading, fall back to the welcome banner instead of a blank screen.
-          setTimeout(() => {
-            const stillOnAd = document.getElementById(`igAdFrame_${index}`);
-            if (stillOnAd) loadWelcomeBanner(index);
-          }, 3500);
+          box.innerHTML = `<iframe class="ad-frame" src="${escapeHtml(adInfo.embedUrl)}" allow="autoplay; encrypted-media; fullscreen"></iframe>`;
+          setupLearnMoreButton(index, adInfo.url);
           return;
         }
 
-        if (adInfo.type === 'banner-script') {
-          const srcdocHtml = `<!DOCTYPE html><html><head><style>html,body{margin:0;height:100%;display:flex;align-items:center;justify-content:center;background:#0b0b0e;overflow:hidden;}</style></head><body>${adInfo.content}</body></html>`;
-          box.innerHTML = `
-            <div class="banner-ad-wrapper">
-              <div class="banner-ad-tag">Advertisement</div>
-              <iframe class="banner-ad-frame" style="width:${adInfo.width}px;height:${adInfo.height}px;" srcdoc="${escapeHtml(srcdocHtml)}" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox" scrolling="no"></iframe>
-            </div>`;
-          return;
-        }
-
-        if (adInfo.type === 'direct-link') {
-    box.innerHTML = `
-      <div class="direct-ad-card" style="position: relative; z-index: 25;">
-        <div class="direct-ad-badge">SPONSORED</div>
-        <div class="direct-ad-title">Watch sponsor to unlock this episode</div>
-        <div class="direct-ad-sub">Please click on the <b>'Learn More'</b> button below to view the sponsor's page and unlock your content.</div>
-      </div>`;
-    return;
-        }
-
-        // Invalid / unrecognised ad value.
-        loadWelcomeBanner(index);
+        loadSponsorBanner(index, idOrUrl);
         return;
-          }
- const videoId = getYouTubeVideoId(idOrUrl);
+      }
+
+      const videoId = getYouTubeVideoId(idOrUrl);
       if (!videoId) {
-        box.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100%;color:#aaa;font-size:14px;text-align:center;padding:20px">Invalid YouTube video ID.<br>Episode cell must contain only the 11-character YouTube ID.</div>';
+        box.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100%;color:#aaa;font-size:14px;text-align:center;padding:20px">Invalid YouTube video ID.</div>';
         return;
       }
 
@@ -826,12 +800,10 @@
           videoId,
           playerVars: {
             autoplay: 1, controls: 0, rel: 0, modestbranding: 1,
-            playsinline: 1, iv_load_policy: 3, fs: 0, disablekb: 1,
-            cc_load_policy: 0, showinfo: 0
+            playsinline: 1, iv_load_policy: 3, fs: 0, disablekb: 1
           },
           events: {
             onReady: (event) => {
-              try { event.target.setOption && event.target.setOption('captions', 'track', {}); } catch(e) {}
               try { event.target.playVideo(); } catch(e) {}
               startProgressTracking(index);
             },
@@ -842,6 +814,14 @@
         });
       };
       create();
+    }
+
+     function setupLearnMoreButton(index, linkUrl) {
+      const lmBtn = document.getElementById(`adLearnMore_${index}`);
+      if (lmBtn) {
+        lmBtn.href = (linkUrl && linkUrl !== "#") ? linkUrl : "#";
+        lmBtn.classList.add('active');
+      }
     }
 
     function startProgressTracking(index) {
@@ -860,13 +840,16 @@
       }, 250);
     }
 
-    function loadWelcomeBanner(index) {
+    function loadSponsorBanner(index, linkUrl = "#") {
       const box = document.getElementById(`playerBox_${index}`);
+      const validLink = (linkUrl && linkUrl.trim() !== "" && linkUrl !== "#") ? linkUrl : "#";
+      
       box.innerHTML = `
-        <div class="welcome-ad-banner">
-          <div class="welcome-logo-box"><img src="icon.png" alt="HRS"></div>
-          <div class="welcome-title">Welcome to HR STUDIO</div>
-          <div class="welcome-sub">Enjoy your premium episodes shortly</div>
+        <div class="direct-ad-card">
+          <div class="direct-ad-badge">SPONSORED</div>
+          <div class="direct-ad-title">Watch sponsor to unlock this episode</div>
+          <div class="direct-ad-sub">Please click on the button below to view the sponsor's page and unlock your content.</div>
+          <a class="direct-ad-btn" href="${escapeHtml(validLink)}" target="_blank" rel="noopener noreferrer">Tap Here</a>
         </div>
       `;
     }
@@ -874,18 +857,9 @@
     function startAdCountdown(index, actualEpisodeId) {
       const skipBox = document.getElementById(`adSkipBox_${index}`);
       const btnText = document.getElementById(`adBtnText_${index}`);
-      const learnMoreBtn = document.getElementById(`adLearnMore_${index}`);
 
       skipBox.classList.remove('hidden');
       skipBox.classList.add('disabled');
-      
-      const currentEpObj = currentShowEpisodes[index];
-      const adInfo = currentEpObj ? detectAdType(currentEpObj.ad_link) : { type: 'none' };
-      // Only show Learn More for ad types that actually have a clickable destination URL
-      // (a banner-script ad is clickable inside its own iframe, so no separate link is needed).
-      if (adInfo.type === 'youtube' || adInfo.type === 'instagram' || adInfo.type === 'direct-link') {
-        learnMoreBtn.classList.add('active');
-      }
       
       let count = 3;
       btnText.innerText = `${count}`;
@@ -908,7 +882,9 @@
       if (skipBox.classList.contains('disabled')) return;
 
       skipBox.classList.add('hidden');
-      document.getElementById(`adLearnMore_${index}`).classList.remove('active');
+      const lmBtn = document.getElementById(`adLearnMore_${index}`);
+      if (lmBtn) lmBtn.classList.remove('active');
+
       unlockedEpisodes.add(index);
       document.getElementById('shortsContainer').classList.remove('locked');
       loadPlayerContent(index, episodeId, false);
@@ -952,6 +928,17 @@
       }
     }
 
+    function showToast(message) {
+      const toast = document.getElementById('toastNotification');
+      const msgSpan = document.getElementById('toastMessage');
+      msgSpan.innerText = message;
+      
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
     function handleAppShareOrInstall() {
       const shareData = {
         title: 'HR STUDIO',
@@ -961,39 +948,51 @@
       if (navigator.share) {
         navigator.share(shareData).catch(() => {});
       } else {
-        alert("HR STUDIO App Link copied!");
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          showToast('Link copied to clipboard!');
+        }).catch(() => {
+          showToast('Failed to copy link');
+        });
       }
     }
 
-    function toggleLike(showName, epIndex, btn) {
+    function toggleLike(showName, epIndex) {
       const key = `like_${showName}_${epIndex}`;
       const current = localStorage.getItem(key) === 'true';
       localStorage.setItem(key, !current);
-      if(btn) btn.classList.toggle('active', !current);
+      const btn = document.getElementById(`likeBtn_${epIndex}`);
+      if(btn) btn.classList.toggle('liked', !current);
       updateHistoryStorageArray('likes', showName, epIndex, !current);
     }
 
-    function forceLike(showName, epIndex, btn) {
+    function forceLike(showName, epIndex) {
       const key = `like_${showName}_${epIndex}`;
       localStorage.setItem(key, 'true');
-      if(btn) btn.classList.add('active');
+      const btn = document.getElementById(`likeBtn_${epIndex}`);
+      if(btn) btn.classList.add('liked');
       updateHistoryStorageArray('likes', showName, epIndex, true);
     }
 
-    function toggleSave(showName, epIndex, btn) {
+    function toggleSave(showName, epIndex) {
       const key = `save_${showName}_${epIndex}`;
       const current = localStorage.getItem(key) === 'true';
       localStorage.setItem(key, !current);
-      if(btn) btn.classList.toggle('active', !current);
+      const btn = document.getElementById(`saveBtn_${epIndex}`);
+      if(btn) btn.classList.toggle('saved', !current);
       updateHistoryStorageArray('saves', showName, epIndex, !current);
     }
 
     function shareEpisode(showName, epIndex) {
+      const shareUrl = window.location.href;
       const shareText = `Check out ${showName} - Episode ${epIndex + 1} on HR STUDIO!`;
       if (navigator.share) {
-        navigator.share({ title: showName, text: shareText, url: window.location.href }).catch(() => {});
+        navigator.share({ title: showName, text: shareText, url: shareUrl }).catch(() => {});
       } else {
-        alert(shareText);
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          showToast('Link copied to clipboard!');
+        }).catch(() => {
+          showToast('Failed to copy link');
+        });
       }
     }
 
@@ -1085,4 +1084,3 @@
   </script>
 </body>
 </html>
-    
