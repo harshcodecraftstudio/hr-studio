@@ -15,9 +15,15 @@
   <!-- Open Graph / Social Media Sharing Tags -->
   <meta property="og:title" content="HR STUDIO - Official App">
   <meta property="og:description" content="Stream your favorite shows and trending episodes instantly on HR Studio.">
-  <meta property="og:image" content="icon.jpg">
+  <meta property="og:image" content="https://harshcodecraftstudio.github.io/hr-studio/icon.jpg">
   <meta property="og:url" content="https://harshcodecraftstudio.github.io/hr-studio/">
   <meta property="og:type" content="website">
+
+  <!-- Twitter Card tags bhi add kar dein taaki Twitter/X par bhi image dikhe -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="HR STUDIO - Official App">
+  <meta name="twitter:description" content="Stream your favorite shows and trending episodes instantly on HR Studio.">
+  <meta name="twitter:image" content="https://harshcodecraftstudio.github.io/hr-studio/icon.jpg">
 
   <!-- Icons & PWA Manifest -->
   <link rel="icon" type="image/jpeg" href="icon.jpg">
@@ -31,7 +37,6 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="HR STUDIO">
-  
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -310,6 +315,62 @@
     }
     #toastNotification.show { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(0); }
     #toastNotification svg { fill: #4cd964; flex-shrink: 0; }
+
+    /* Notification Bell & Badge */
+    .notif-btn-icon {
+      position: relative; background: #141419; border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #aaa; width: 38px; height: 38px; border-radius: 50%; display: flex;
+      justify-content: center; align-items: center; cursor: pointer; font-size: 16px;
+      transition: all 0.2s ease;
+    }
+    .notif-btn-icon:hover { border-color: #ff0055; color: #fff; }
+    
+    .notif-badge {
+      position: absolute; top: -4px; right: -4px; background: #ff0055; color: #fff;
+      font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 10px;
+      min-width: 18px; text-align: center; display: none; box-shadow: 0 2px 6px rgba(255,0,85,0.5);
+    }
+    .notif-badge.active { display: block; }
+
+    /* Notification Windows / Pages */
+    .notif-page-view, .notif-detail-view {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+      background: #0b0b0e; z-index: 1500; overflow-y: auto; padding: 20px 16px 80px 16px;
+    }
+    .notif-page-view.active, .notif-detail-view.active { display: block; }
+    .notif-detail-view { z-index: 1600; }
+    
+    .notif-header-bar {
+      display: flex; align-items: center; justify-content: space-between; max-width: 800px; margin: 0 auto 20px auto;
+      border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 12px; position: relative;
+    }
+    .notif-back-btn { font-size: 20px; font-weight: 700; color: #ff0055; cursor: pointer; }
+    .notif-page-title { font-size: 18px; font-weight: 900; color: #fff; position: absolute; left: 50%; transform: translateX(-50%); }
+    .notif-content-container { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+
+    /* Clickable Message Cards */
+    .msg-card-item {
+      background: #141419; border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3); position: relative; transition: border-color 0.2s;
+      cursor: pointer;
+    }
+    .msg-card-item:hover { border-color: rgba(255,0,85,0.5); }
+    .msg-card-item.unread { border-color: #ff0055; background: rgba(255,0,85,0.05); }
+    
+    .unread-dot {
+      position: absolute; top: 16px; right: 16px; width: 8px; height: 8px;
+      background: #ff0055; border-radius: 50%; box-shadow: 0 0 8px #ff0055;
+    }
+    .msg-card-header { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 600; }
+    .msg-card-text { font-size: 14px; color: #fff; line-height: 1.5; word-break: break-word; }
+    .msg-card-link { color: #00e5ff; font-size: 13px; font-weight: 700; text-decoration: none; margin-top: 4px; display: inline-block; }
+
+    .msg-detail-box {
+      background: #141419; border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px; padding: 20px; margin-top: 10px;
+    }
+    .msg-detail-text { font-size: 16px; color: #fff; line-height: 1.6; word-break: break-word; }
   </style>
 </head>
 <body>
@@ -335,7 +396,15 @@
         <div class="brand-logo-img"><img src="icon.png" alt="HRS"></div>
         <div class="brand-title">HR STUDIO</div>
       </div>
-      <button class="search-btn-icon" onclick="toggleSearch()">🔍</button>
+      <div class="header-right-actions" style="display: flex; align-items: center; gap: 10px;">
+
+          <!-- Notification Bell Icon (Search ke left mein) -->
+        <button class="notif-btn-icon" onclick="openNotificationWindow()">
+          🔔
+          <span class="notif-badge" id="notifBadge">0</span>
+        </button>
+        <button class="search-btn-icon" onclick="toggleSearch()">🔍</button>
+      </div>
     </div>
     <div class="search-container" id="search-bar">
       <div class="search-box-wrapper">
@@ -344,6 +413,29 @@
     </div>
   </header>
 
+  <!-- Notification List Window -->
+  <div class="notif-page-view" id="notifPageView">
+    <div class="notif-header-bar">
+      <div class="notif-back-btn" onclick="closeNotificationWindow()">←</div>
+      <div class="notif-page-title">Notification</div>
+      <div style="width: 20px;"></div>
+    </div>
+    <div class="notif-content-container" id="notifContentBody">
+      <div class="history-empty-msg">Loading notifications...</div>
+    </div>
+  </div>
+
+  <!-- Single Message Detail Window -->
+  <div class="notif-detail-view" id="notifDetailView">
+    <div class="notif-header-bar">
+      <div class="notif-back-btn" onclick="closeNotifDetailWindow()">←</div>
+      <div class="notif-page-title">Message Details</div>
+      <div style="width: 20px;"></div>
+    </div>
+    <div class="notif-content-container" id="notifDetailContentBody"></div>
+  </div>
+
+  
   <!-- Main Content Grid -->
   <div class="container">
     <div class="grid-layout" id="shows-container"></div>
@@ -371,22 +463,30 @@
     </div>
   </div>
 
-  <!-- Footer Navigation -->
+  
+<!-- Footer Navigation -->
   <div class="app-footer">
     <div class="footer-item active" id="footerHome" onclick="handleFooterClick('home')">
       <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
       Home
     </div>
+    
+    <!-- Install Button (Shuru me hidden rahega, jab install available hoga tab dikhega) -->
+    <div class="footer-item" id="footerInstall" onclick="handleFooterClick('install')" style="display: none;">
+      <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+      Install
+    </div>
+
     <div class="footer-item" id="footerShare" onclick="handleFooterClick('share')">
       <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z"/></svg>
       Share
     </div>
+
     <div class="footer-item" id="footerHistory" onclick="handleFooterClick('history')">
       <svg viewBox="0 0 24 24"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
       History
     </div>
   </div>
-
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTXtzbDoOjeXakc4hA_OS2wtQTSP3iS4TVfEDNsRM8lZUoVqnktOrjOxvjl02zSOba4R4Uehf9OaONb/pub?gid=0&single=true&output=csv";
@@ -693,7 +793,8 @@
       } catch(e) {}
     }
 
-    function setupScrollObserver() {
+
+   function setupScrollObserver() {
       const items = document.querySelectorAll('.short-item');
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -928,22 +1029,65 @@
       }
     };
 
-    function handleFooterClick(tab) {
-      document.querySelectorAll('.footer-item').forEach(el => el.classList.remove('active'));
 
-      if (tab === 'home') {
-        document.getElementById('footerHome').classList.add('active');
-        closeShortsPlayer();
-        closeHistoryWindow();
-        window.location.reload();
-      } else if (tab === 'share') {
-        document.getElementById('footerShare').classList.add('active');
-        handleAppShareOrInstall();
-      } else if (tab === 'history') {
-        document.getElementById('footerHistory').classList.add('active');
-        openHistoryWindow();
-      }
+let isInstallStarted = false; // Flag variable
+
+function handleFooterClick(tab) {
+  document.querySelectorAll('.footer-item').forEach(el => el.classList.remove('active'));
+
+  if (tab === 'home') {
+    document.getElementById('footerHome').classList.add('active');
+    closeShortsPlayer();
+    closeHistoryWindow();
+    window.location.reload();
+  } else if (tab === 'install') {
+    document.getElementById('footerInstall').classList.add('active');
+    if (deferredPrompt) {
+      // Pop-up open hoga
+      deferredPrompt.prompt();
+      
+      // User ki choice handle karein
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          // 0.01 second (10 milliseconds) ke delay ke baad start ka message aayega
+          setTimeout(() => {
+            if (!isInstallStarted) {
+              isInstallStarted = true;
+              showToast('App installation started...');
+            }
+          }, 10);
+        } else {
+          showToast('Installation failed / Cancelled.');
+        }
+        deferredPrompt = null;
+      }).catch(() => {
+        deferredPrompt = null;
+      });
+    } else {
+      showToast('App is already installed or not supported in this browser.');
     }
+  } else if (tab === 'share') {
+    document.getElementById('footerShare').classList.add('active');
+    handleAppShareOrInstall();
+  } else if (tab === 'history') {
+    document.getElementById('footerHistory').classList.add('active');
+    openHistoryWindow();
+  }
+}
+
+// Jab browser app install hone par event fire karega
+window.addEventListener('appinstalled', () => {
+  deferredPrompt = null;
+  const installBtn = document.getElementById('footerInstall');
+  if (installBtn) {
+    installBtn.style.display = 'none';
+  }
+  
+  // App install hone par successfully ka message aayega
+  showToast('App installed successfully!');
+});
+
+
 
     function showToast(message) {
       const toast = document.getElementById('toastNotification');
@@ -956,23 +1100,41 @@
       }, 3000);
     }
 
-    function handleAppShareOrInstall() {
-      const shareData = {
-        title: 'HR STUDIO',
-        text: 'Watch your favorite shows and episodes on HR STUDIO!',
-        url: window.location.href
-      };
-      if (navigator.share) {
-        navigator.share(shareData).catch(() => {});
-      } else {
-        navigator.clipboard.writeText(window.location.href).then(() => {
-          showToast('Link copied to clipboard!');
-        }).catch(() => {
-          showToast('Failed to copy link');
-        });
-      }
-    }
+function handleAppShareOrInstall() {
+  const shareTitle = 'HR STUDIO - Official App';
+  const shareText = '🎬 Watch Your Favorite Shows And Trending Episodes On:\n\n*HR STUDIO APP!* 🍿🔥\n\n💯% Free & No Subscription Required!\n\nTap to watch now:';
+  const shareUrl = 'https://harshcodecraftstudio.github.io/hr-studio/';
 
+  // Agar browser Web Share API support karta hai (Mobile devices)
+  if (navigator.share) {
+    // Agar aap image bhi sath me share karna chahte hain aur browser support karta hai
+    fetch('icon.png')
+      .then(response => response.blob())
+      .then(blob => {
+        const file = new File([blob], 'icon.png', { type: blob.type });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          navigator.share({
+            title: shareTitle,
+            text: shareText,
+            url: shareUrl,
+            files: [file]
+          }).catch(() => {});
+        } else {
+          // Fallback agar file sharing support nahi hai
+          navigator.share({ title: shareTitle, text: `${shareText}\n${shareUrl}` }).catch(() => {});
+        }
+      }).catch(() => {
+        navigator.share({ title: shareTitle, text: `${shareText}\n${shareUrl}` }).catch(() => {});
+      });
+  } else {
+    // Desktop ya PC ke liye clipboard copy fallback
+    navigator.clipboard.writeText(`${shareText}\n${shareUrl}`).then(() => {
+      showToast('Link copied to clipboard 📋');
+    }).catch(() => {
+      showToast('Failed to copy link');
+    });
+  }
+}
     function toggleLike(showName, epIndex) {
       const key = `like_${showName}_${epIndex}`;
       const current = localStorage.getItem(key) === 'true';
@@ -999,20 +1161,89 @@
       updateHistoryStorageArray('saves', showName, epIndex, !current);
     }
 
-    function shareEpisode(showName, epIndex) {
-      const shareUrl = window.location.href;
-      const shareText = `Check out ${showName} - Episode ${epIndex + 1} on HR STUDIO!`;
+
+    // --- URL Parameters Check for Direct Episode Opening ---
+    window.addEventListener('DOMContentLoaded', () => {
+      fetchShowsFromSheet().then(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const targetShow = urlParams.get('show');
+        const targetEp = urlParams.get('ep');
+
+        if (targetShow && targetEp !== null) {
+          const showIndex = allShowsData.findIndex(s => s.show_name.toLowerCase() === decodeURIComponent(targetShow).toLowerCase());
+          if (showIndex !== -1) {
+            openShortsPlayer(showIndex, parseInt(targetEp));
+          }
+        }
+      });
+    });
+
+function shareEpisode(showName, epIndex) {
+      const baseUrl = window.location.href.split('?')[0];
+      const shareUrl = `${baseUrl}?show=${encodeURIComponent(showName)}&ep=${epIndex}`;
+
+      const shareText = `Don’t Miss This Amazing Show! 🎬
+
+🍿 ${showName} — Episode ${epIndex + 1}
+
+💯 100% FREE
+🚫 No Subscription Required
+
+▶️ Tap to Watch Now:
+${shareUrl}
+
+🔥 Enjoy the Episode & Share with Friends!
+
+*HR STUDIO APP*`;
+    const showObj = allShowsData.find(s => s.show_name === showName);
+      const imageUrl = (showObj && showObj.thumbnail) ? showObj.thumbnail : 'icon.png';
+
       if (navigator.share) {
-        navigator.share({ title: showName, text: shareText, url: shareUrl }).catch(() => {});
+        // Safe sharing logic with CORS fallback
+        fetch(imageUrl, { mode: 'cors' })
+          .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.blob();
+          })
+          .then(blob => {
+            const fileExtension = imageUrl.split('.').pop().split('?')[0].split('#')[0] || 'jpg';
+            const file = new File([blob], `episode_thumbnail.${fileExtension}`, { type: blob.type || 'image/jpeg' });
+            
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+              navigator.share({
+                title: `${showName} - Episode ${epIndex + 1}`,
+                text: shareText,
+                files: [file]
+              }).catch(() => {
+                // Fallback agar file share cancel ya error de
+                fallbackShareOnly(shareName, epIndex, shareText);
+              });
+            } else {
+              fallbackShareOnly(showName, epIndex, shareText);
+            }
+          }).catch(() => {
+            // CORS ya fetch fail hone par bina image ke direct text/link share kar dega (kabhi Ruke ga nahi)
+            fallbackShareOnly(showName, epIndex, shareText);
+          });
       } else {
-        navigator.clipboard.writeText(shareUrl).then(() => {
-          showToast('Link copied to clipboard!');
+        navigator.clipboard.writeText(shareText).then(() => {
+          showToast('Episode link copied to clipboard!');
         }).catch(() => {
-          showToast('Failed to copy link');
+          showToast('Failed to copy Episode!');
         });
       }
     }
 
+    function fallbackShareOnly(showName, epIndex, shareText) {
+      if (navigator.share) {
+        navigator.share({
+          title: `${showName} - Episode ${epIndex + 1}`,
+          text: shareText
+        }).catch(() => {});
+      }
+                      }
+    
+    
     function saveHistory(showName, epIndex) {
       let historyList = JSON.parse(localStorage.getItem('hr_watch_history') || '[]');
       historyList = historyList.filter(item => !(item.showName === showName && item.epIndex === epIndex));
@@ -1098,6 +1329,196 @@
     }
 
     window.onload = fetchShowsFromSheet;
+
+
+    let deferredPrompt = null;
+
+    // Listen for PWA install prompt event
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      // Agar app install nahi hai, toh Share ki jagah ya alag se Install button dikhayein
+      const installBtn = document.getElementById('footerInstall');
+      if (installBtn) {
+        installBtn.style.display = 'flex';
+      }
+    });
+
+    // Register Service Worker for PWA
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js')
+        .then((reg) => console.log('Service Worker registered!', reg))
+        .catch((err) => console.log('Service Worker registration failed', err));
+    });
+  }
+
+        let globalNotifications = [];
+
+    // 1. Google Sheet ke Row 5 se data fetch karna
+    async function fetchNotificationsFromSheet() {
+      try {
+        const response = await fetch(GOOGLE_SHEET_CSV_URL + '&t=' + new Date().getTime());
+        if (!response.ok) return;
+        const data = await response.text();
+        const rows = data.split(/\r?\n/).map(r => r.trim()).filter(r => r.length > 0);
+        let parsedMatrix = rows.map(r => parseCSVLine(r));
+
+        if (parsedMatrix.length > 4) {
+          let row5Values = parsedMatrix[4]; // Row 5 (A5, B5, C5...)
+          let notifs = [];
+          
+          for (let col = 1; col < row5Values.length; col++) {
+            let val = row5Values[col] ? row5Values[col].trim() : "";
+            if (val) {
+              notifs.push({
+                id: `msg_col_${col}_${btoa(val.substring(0, 10)).replace(/=/g, '')}`,
+                text: val,
+                timestamp: Date.now()
+              });
+            }
+          }
+          globalNotifications = notifs.reverse(); // Latest notifications upar dikhane ke liye (Last to First)
+          checkUnreadNotifications();
+        }
+      } catch (e) {
+        console.log("Notification fetch error:", e);
+      }
+    }
+
+    // 2. Unread count check karke badge update karna
+    function checkUnreadNotifications() {
+      if (globalNotifications.length === 0) return;
+
+      let readIds = JSON.parse(localStorage.getItem('hr_read_notifications') || '[]');
+      let unreadCount = globalNotifications.filter(n => !readIds.includes(n.id)).length;
+
+      const badge = document.getElementById('notifBadge');
+      if (badge) {
+        if (unreadCount > 0) {
+          badge.innerText = unreadCount > 99 ? '99+' : unreadCount;
+          badge.classList.add('active');
+        } else {
+          badge.classList.remove('active');
+        }
+      }
+
+      // App icon ke upar PWA badge dikhane ke liye
+      if ('setAppBadge' in navigator) {
+        if (unreadCount > 0) {
+          navigator.setAppBadge(unreadCount).catch(() => {});
+        } else {
+          navigator.clearAppBadge().catch(() => {});
+        }
+      }
+    }
+
+    // 3. Notification List Window Open karna
+    function openNotificationWindow() {
+      renderNotificationList();
+      document.getElementById('notifPageView').classList.add('active');
+      history.pushState({ notifOpen: true }, "");
+    }
+
+    function renderNotificationList() {
+      const body = document.getElementById('notifContentBody');
+      if (globalNotifications.length === 0) {
+        body.innerHTML = `<div class="history-empty-msg">No notifications available right now.</div>`;
+        return;
+      }
+
+      let readIds = JSON.parse(localStorage.getItem('hr_read_notifications') || '[]');
+      let html = '';
+
+      globalNotifications.forEach(n => {
+        let isUnread = !readIds.includes(n.id);
+        
+        html += `
+          <div class="msg-card-item ${isUnread ? 'unread' : ''}" onclick="openSingleNotification('${n.id}')">
+            ${isUnread ? '<div class="unread-dot"></div>' : ''}
+            <div class="msg-card-header">
+              <span>HR Studio Update</span>
+              <span>${formatTimestamp(n.timestamp)}</span>
+            </div>
+            <div class="msg-card-text">${escapeHtml(n.text.length > 90 ? n.text.substring(0, 90) + '...' : n.text)}</div>
+          </div>
+        `;
+      });
+      body.innerHTML = html;
+    }
+
+    // 4. Specific Message Click karne par Detail Window kholna aur seen mark karna
+    function openSingleNotification(notifId) {
+      let notif = globalNotifications.find(n => n.id === notifId);
+      if (!notif) return;
+
+      // Sirf click kiye gaye message ko seen mark karna
+      let readIds = JSON.parse(localStorage.getItem('hr_read_notifications') || '[]');
+      if (!readIds.includes(notifId)) {
+        readIds.push(notifId);
+        localStorage.setItem('hr_read_notifications', JSON.stringify(readIds));
+        checkUnreadNotifications();
+      }
+
+      let urlRegex = /(https?:\/\/[^\s]+)/g;
+      let formattedText = notif.text.replace(urlRegex, (url) => {
+        return `<a class="msg-card-link" href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+      });
+
+      const detailBody = document.getElementById('notifDetailContentBody');
+      detailBody.innerHTML = `
+        <div class="msg-detail-box">
+          <div class="msg-card-header" style="margin-bottom: 12px;">
+            <span>HR Studio Official</span>
+            <span>${formatTimestamp(notif.timestamp)}</span>
+          </div>
+          <div class="msg-detail-text">${formattedText}</div>
+        </div>
+      `;
+
+      document.getElementById('notifDetailView').classList.add('active');
+      history.pushState({ notifDetailOpen: true }, "");
+    }
+
+    function closeNotificationWindow() {
+      document.getElementById('notifPageView').classList.remove('active');
+    }
+
+    function closeNotifDetailWindow() {
+      document.getElementById('notifDetailView').classList.remove('active');
+      renderNotificationList();
+    }
+
+    // 5. Back Button (onpopstate) handler update
+    window.onpopstate = function () {
+      if (document.getElementById('shortsModal').classList.contains('active')) {
+        closeShortsPlayer();
+      } else if (document.getElementById('historyPageView').classList.contains('active')) {
+        closeHistoryWindow();
+      } else if (document.getElementById('notifDetailView').classList.contains('active')) {
+        closeNotifDetailWindow();
+      } else if (document.getElementById('notifPageView').classList.contains('active')) {
+        closeNotificationWindow();
+      }
+    };
+
+    // 6. App load hone par notifications fetch karna
+    window.addEventListener('DOMContentLoaded', () => {
+      fetchShowsFromSheet().then(() => {
+        fetchNotificationsFromSheet(); // Yahan se notifications load hongi
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const targetShow = urlParams.get('show');
+        const targetEp = urlParams.get('ep');
+
+        if (targetShow && targetEp !== null) {
+          const showIndex = allShowsData.findIndex(s => s.show_name.toLowerCase() === decodeURIComponent(targetShow).toLowerCase());
+          if (showIndex !== -1) {
+            openShortsPlayer(showIndex, parseInt(targetEp));
+          }
+        }
+      });
+    });
   </script>
 </body>
 </html>
