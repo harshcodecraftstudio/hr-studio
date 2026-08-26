@@ -316,7 +316,287 @@
     #toastNotification.show { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(0); }
     #toastNotification svg { fill: #4cd964; flex-shrink: 0; }
 
-    /* Notification Bell & Badge */
+
+   * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #0b0b0e; color: #fff; overflow-x: hidden; padding-bottom: 70px; }
+
+    /* Splash Screen */
+    #splash-screen {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+      background: #000; display: flex; justify-content: center; align-items: center;
+      z-index: 9999; animation: fadeOut 0.8s ease 2.2s forwards;
+    }
+    .splash-logo-box {
+      width: 120px; height: 120px; border-radius: 24px; overflow: hidden;
+      box-shadow: 0 10px 35px rgba(255, 0, 85, 0.5);
+      animation: zoomPulse 1.5s ease-in-out infinite alternate;
+    }
+    .splash-logo-box img { width: 100%; height: 100%; object-fit: cover; }
+    @keyframes zoomPulse { 0% { transform: scale(0.85); } 100% { transform: scale(1.05); } }
+    @keyframes fadeOut { 100% { opacity: 0; visibility: hidden; } }
+
+    /* Header */
+    header {
+      position: sticky; top: 0; background: rgba(11, 11, 14, 0.95);
+      backdrop-filter: blur(16px); z-index: 100; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 12px 16px;
+    }
+    .nav-top { display: flex; align-items: center; justify-content: space-between; max-width: 800px; margin: 0 auto; }
+    .brand-left { display: flex; align-items: center; gap: 10px; }
+    .brand-logo-img { width: 36px; height: 36px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,0,85,0.4); }
+    .brand-logo-img img { width: 100%; height: 100%; object-fit: cover; }
+    .brand-title { font-size: 18px; font-weight: 900; background: linear-gradient(135deg, #ff0055, #00e5ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    
+    .search-btn-icon {
+      background: #141419; border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #aaa; width: 38px; height: 38px; border-radius: 50%; display: flex;
+      justify-content: center; align-items: center; cursor: pointer; font-size: 15px;
+      transition: all 0.2s ease;
+    }
+    .search-btn-icon:hover { border-color: #ff0055; color: #fff; }
+
+    .search-container { display: none; padding: 12px 0 0 0; max-width: 800px; margin: 0 auto; }
+    .search-container.active { display: block; }
+    .search-box-wrapper input {
+      width: 100%; padding: 12px 16px; background: #141419;
+      border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; color: #fff; outline: none;
+      font-size: 14px; transition: border-color 0.2s;
+    }
+    .search-box-wrapper input:focus { border-color: #ff0055; }
+
+    /* Fullscreen Reels Modal */
+    .shorts-modal {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+      background: #000; z-index: 1000;
+    }
+    .shorts-modal.active { display: block; }
+    
+    .shorts-container {
+      height: 100vh; width: 100%; overflow-y: scroll;
+      scroll-snap-type: y mandatory; -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+    }
+    .shorts-container.locked { overflow-y: hidden; }
+
+    .short-item {
+      height: 100vh; width: 100%; scroll-snap-align: start; scroll-snap-stop: always;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      position: relative; background: #000; padding: 0;
+    }
+
+    /* Video Player Area */
+    .video-wrapper {
+      position: relative; width: 100%; height: 75vh;
+      display: flex; justify-content: center; align-items: center;
+      overflow: hidden; background: #000;
+    }
+    .video-wrapper iframe {
+      width: 100%; height: 100%; border: none; object-fit: cover; pointer-events: none;
+    }
+    .swipe-overlay {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10;
+    }
+
+    /* Floating Heart Animation on Double Tap */
+ .floating-heart-anim {
+      position: absolute; font-size: 60px; color: #ff0055; z-index: 40;
+      animation: heartPop 0.8s ease-out forwards; pointer-events: none;
+      text-shadow: 0 0 20px rgba(255,0,85,0.8);
+    }
+    @keyframes heartPop {
+      0% { transform: scale(0.3); opacity: 0; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1) translateY(-60px); opacity: 0; }
+    }
+
+    /* Instagram Style Floating Action Buttons */
+    .insta-actions {
+      position: absolute; right: 15px; bottom: 120px;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 18px; z-index: 40;
+    }
+
+    .insta-action-btn {
+      background: none; border: none; color: #fff;
+      display: flex; flex-direction: column; align-items: center;
+      cursor: pointer; padding: 0;
+    }
+
+    .insta-action-btn .icon {
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+      transition: transform 0.2s ease, fill 0.2s, stroke 0.2s;
+    }
+
+    .action-count, .action-text {
+      font-size: 12px; font-weight: 600; margin-top: 4px;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+    }
+
+    .insta-action-btn.liked svg {
+      fill: #ff3040; stroke: #ff3040; transform: scale(1.15);
+    }
+
+    .insta-action-btn.saved svg {
+      fill: #fff; stroke: #fff; transform: scale(1.15);
+    }
+
+    /* Ad Overlay & Skip */
+    .ad-overlay-container {
+      position: absolute; bottom: 25px; right: 15px; z-index: 50;
+      display: flex; gap: 8px; align-items: center;
+    }
+    .ad-skip-box {
+      background: rgba(0, 0, 0, 0.85); border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 700;
+      color: #fff; backdrop-filter: blur(5px); cursor: pointer;
+      display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+    }
+    .ad-skip-box.hidden { display: none !important; }
+    .ad-skip-box.disabled { opacity: 0.8; cursor: not-allowed; border-color: rgba(255, 0, 85, 0.6); }
+    .ad-badge-tag { background: #ff0055; color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 800; }
+
+    .ad-learn-more-btn {
+      background: linear-gradient(135deg, #0070f3, #00c6ff); color: #fff; border: none; padding: 10px 16px;
+      border-radius: 8px; font-size: 13px; font-weight: 800; cursor: pointer;
+      text-decoration: none; box-shadow: 0 4px 15px rgba(0, 112, 243, 0.4);
+      display: none; align-items: center; gap: 4px; backdrop-filter: blur(5px);
+    }
+    .ad-learn-more-btn.active { display: flex; }
+
+    /* Custom video progress */
+    .custom-progress { width:100%; margin-top:9px; pointer-events:none; }
+    .progress-times { display:flex; justify-content:space-between; align-items:center; font-size:11px; font-weight:700; color:#fff; text-shadow:0 1px 4px #000; margin-bottom:5px; }
+    .progress-track { width:100%; height:3px; background:rgba(255,255,255,.28); border-radius:99px; overflow:hidden; }
+    .progress-fill { width:0%; height:100%; background:#fff; border-radius:99px; transition:width .15s linear; }
+
+    /* Sponsor Direct Link Card */
+    .direct-ad-card {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      z-index: 25; background: #111; padding: 30px 20px;
+      border-radius: 16px; text-align: center; max-width: 320px; width: 85%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.1);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .direct-ad-badge { 
+      background: #ff0055; color: #fff; padding: 4px 12px; font-size: 11px; 
+      font-weight: bold; border-radius: 20px; display: inline-block; margin-bottom: 12px; letter-spacing: 1px; 
+    }
+    .direct-ad-title { font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #fff; }
+    .direct-ad-sub { font-size: 13px; color: #aaa; line-height: 1.4; margin-bottom: 20px; }
+
+    .direct-ad-btn {
+      display: inline-block; background: linear-gradient(135deg, #0070f3, #00c6ff);
+      color: #fff; text-decoration: none; padding: 12px 24px; font-size: 14px;
+      font-weight: bold; border-radius: 30px; box-shadow: 0 4px 15px rgba(0, 112, 243, 0.4);
+      transition: transform 0.2s ease; text-align: center; width: 100%;
+    }
+    .direct-ad-btn:active { transform: scale(0.95); }
+
+    /* Video Info Section */
+    .video-info-box { 
+      width: 100%; padding: 12px 20px 16px; background: #0b0b0e;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .info-left { display: flex; flex-direction: column; width: 100%; }
+    .show-name-text { font-size: 16px; font-weight: 800; color: #fff; }
+    .episode-name-text { font-size: 13px; color: #ff0055; font-weight: 700; margin-top: 2px; }
+
+    /* Grid Layout */
+    .container { padding: 20px 16px; max-width: 800px; margin: 0 auto; }
+    .grid-layout { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .show-card { background: #141419; border-radius: 14px; overflow: hidden; cursor: pointer; border: 1px solid rgba(255,255,255,0.06); }
+    .show-card img { width: 100%; height: 220px; object-fit: cover; display: block; }
+    .show-details { padding: 12px; }
+    .show-title { font-size: 15px; font-weight: 700; color: #fff; }
+    .show-episodes { font-size: 12px; color: #ff0055; margin-top: 4px; font-weight: 600; }
+
+    /* History Separate Window */
+    .history-page-view {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+      background: #0b0b0e; z-index: 1500; overflow-y: auto; padding: 20px 16px 80px 16px;
+    }
+    .history-page-view.active { display: block; }
+    
+    .history-header-bar {
+      display: flex; align-items: center; justify-content: space-between; max-width: 800px; margin: 0 auto 20px auto;
+      border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 12px; position: relative;
+    }
+    .history-back-btn { font-size: 20px; font-weight: 700; color: #ff0055; cursor: pointer; }
+    .history-page-title { font-size: 18px; font-weight: 900; color: #fff; position: absolute; left: 50%; transform: translateX(-50%); }
+    .history-content-container { max-width: 800px; margin: 0 auto; }
+
+    .history-tabs-row {
+      display: flex; gap: 8px; background: #141419; border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px; padding: 5px; margin-bottom: 18px;
+    }
+    .history-tab-btn {
+      flex: 1; text-align: center; padding: 10px 8px; border-radius: 10px; cursor: pointer;
+      font-size: 13px; font-weight: 800; color: rgba(255,255,255,0.55); transition: all 0.2s ease;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .history-tab-btn.active { background: linear-gradient(135deg, #ff0055, #ff3377); color: #fff; box-shadow: 0 4px 14px rgba(255,0,85,0.35); }
+    .history-tab-panel { display: none; }
+    .history-tab-panel.active { display: block; }
+
+    .history-grid-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .h-card-item {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px; overflow: hidden; cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s; position: relative;
+    }
+    .h-card-item:hover { border-color: #ff0055; transform: translateY(-2px); }
+    .h-card-thumb-wrapper { position: relative; width: 100%; height: 130px; background: #000; }
+    .history-empty-msg { grid-column: 1 / -1; font-size: 12px; color: rgba(255,255,255,0.4); padding: 30px 0; text-align: center; }
+    .h-card-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .h-card-time-tag {
+      position: absolute; bottom: 6px; left: 6px; background: rgba(0, 0, 0, 0.75);
+      color: #00e5ff; font-size: 9px; font-weight: 700; padding: 2px 6px;
+      border-radius: 4px; backdrop-filter: blur(2px); border: 1px solid rgba(0,229,255,0.3);
+    }
+    .h-card-info { padding: 8px; }
+    .h-card-title { font-size: 13px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .h-card-subtitle { font-size: 11px; color: #ff0055; font-weight: 600; margin-top: 2px; }
+
+    /* Footer App Navigation */
+    .app-footer {
+      position: fixed; bottom: 0; left: 0; width: 100%; background: #111115;
+      border-top: 1px solid rgba(255, 255, 255, 0.08); display: flex;
+      justify-content: space-around; align-items: center; padding: 12px 0; z-index: 90;
+    }
+    .footer-item {
+      display: flex; flex-direction: column; align-items: center; color: rgba(255, 255, 255, 0.6);
+      font-size: 12px; cursor: pointer; text-decoration: none; gap: 4px; font-weight: 600;
+    }
+    .footer-item.active { color: #ff0055; }
+    .footer-item svg { width: 20px; height: 20px; fill: currentColor; }
+
+    .state-message {
+      grid-column: 1 / -1; text-align: center; color: rgba(255,255,255,0.6);
+      font-size: 14px; padding: 40px 10px;
+    }
+    .state-message.error-message { color: #ff0055; }
+    .retry-btn {
+      margin-top: 12px; background: rgba(255,0,85,0.15); border: 1px solid rgba(255,0,85,0.5);
+      color: #fff; padding: 8px 18px; border-radius: 20px; cursor: pointer; font-weight: 700; font-size: 13px;
+    }
+
+    /* Toast Notification */
+    #toastNotification {
+      visibility: hidden; min-width: 250px; background-color: rgba(28, 28, 30, 0.95);
+      color: #fff; text-align: center; border-radius: 30px; padding: 12px 20px;
+      position: fixed; z-index: 9999; left: 50%; top: 30px;
+      transform: translateX(-50%) translateY(-20px); font-size: 14px; font-weight: 500;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1); display: flex; align-items: center;
+      justify-content: center; gap: 10px; opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    }
+    #toastNotification.show { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(0); }
+    #toastNotification svg { fill: #4cd964; flex-shrink: 0; }
+
+
+                       
+    /* --- Notification System CSS --- */
     .notif-btn-icon {
       position: relative; background: #141419; border: 1px solid rgba(255, 255, 255, 0.1);
       color: #aaa; width: 38px; height: 38px; border-radius: 50%; display: flex;
@@ -332,10 +612,10 @@
     }
     .notif-badge.active { display: block; }
 
-    /* Notification Windows / Pages */
     .notif-page-view, .notif-detail-view {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
       background: #0b0b0e; z-index: 1500; overflow-y: auto; padding: 20px 16px 80px 16px;
+      box-sizing: border-box;
     }
     .notif-page-view.active, .notif-detail-view.active { display: block; }
     .notif-detail-view { z-index: 1600; }
@@ -348,7 +628,6 @@
     .notif-page-title { font-size: 18px; font-weight: 900; color: #fff; position: absolute; left: 50%; transform: translateX(-50%); }
     .notif-content-container { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
 
-    /* Clickable Message Cards */
     .msg-card-item {
       background: #141419; border: 1px solid rgba(255,255,255,0.08);
       border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 8px;
@@ -356,21 +635,34 @@
       cursor: pointer;
     }
     .msg-card-item:hover { border-color: rgba(255,0,85,0.5); }
-    .msg-card-item.unread { border-color: #ff0055; background: rgba(255,0,85,0.05); }
+    .msg-card-item.unread { border-color: #ff0055; background: rgba(255,0,85,0.04); }
     
-    .unread-dot {
-      position: absolute; top: 16px; right: 16px; width: 8px; height: 8px;
-      background: #ff0055; border-radius: 50%; box-shadow: 0 0 8px #ff0055;
+    .msg-new-badge {
+      position: absolute; top: 14px; right: 14px; background: linear-gradient(135deg, #ff0055, #ff5500);
+      color: #fff; font-size: 9px; font-weight: 900; padding: 3px 8px; border-radius: 6px;
+      letter-spacing: 0.5px; box-shadow: 0 0 10px rgba(255, 0, 85, 0.4);
     }
-    .msg-card-header { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 600; }
+
+    .msg-card-title { font-size: 12px; color: rgba(255,255,255,0.5); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
     .msg-card-text { font-size: 14px; color: #fff; line-height: 1.5; word-break: break-word; }
     .msg-card-link { color: #00e5ff; font-size: 13px; font-weight: 700; text-decoration: none; margin-top: 4px; display: inline-block; }
 
-    .msg-detail-box {
-      background: #141419; border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 16px; padding: 20px; margin-top: 10px;
+    .msg-detail-wrapper {
+      max-width: 800px; margin: 10px auto 0 auto; background: #141419;
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px;
+      display: flex; flex-direction: column; gap: 16px; min-height: calc(100vh - 120px);
+      box-sizing: border-box;
     }
-    .msg-detail-text { font-size: 16px; color: #fff; line-height: 1.6; word-break: break-word; }
+    .msg-detail-header-info {
+      font-size: 13px; color: rgba(255,255,255,0.4); font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 12px;
+    }
+    .msg-detail-text {
+      font-size: 16px; color: #fff; line-height: 1.8; word-break: break-word;
+      white-space: pre-wrap; flex: 1;
+                                                                    }
+    
   </style>
 </head>
 <body>
@@ -397,8 +689,7 @@
         <div class="brand-title">HR STUDIO</div>
       </div>
       <div class="header-right-actions" style="display: flex; align-items: center; gap: 10px;">
-
-          <!-- Notification Bell Icon (Search ke left mein) -->
+        <!-- Notification Bell Icon (Search ke left mein) -->
         <button class="notif-btn-icon" onclick="openNotificationWindow()">
           🔔
           <span class="notif-badge" id="notifBadge">0</span>
@@ -489,7 +780,8 @@
   </div>
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
-    const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTXtzbDoOjeXakc4hA_OS2wtQTSP3iS4TVfEDNsRM8lZUoVqnktOrjOxvjl02zSOba4R4Uehf9OaONb/pub?gid=0&single=true&output=csv";
+    const JM_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTXtzbDoOjeXakc4hA_OS2wtQTSP3iS4TVfEDNsRM8lZUoVqnktOrjOxvjl02zSOba4R4Uehf9OaONb/pub?gid=0&single=true&output=csv";
+    const MASSAGE_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTXtzbDoOjeXakc4hA_OS2wtQTSP3iS4TVfEDNsRM8lZUoVqnktOrjOxvjl02zSOba4R4Uehf9OaONb/pub?gid=304283440&single=true&output=csv";
 
     let allShowsData = [];
     let savedScrollPosition = 0;
@@ -511,7 +803,7 @@
         .replace(/'/g, "&#039;");
     }
 
-    function formatTimestamp(timestamp) {
+     function formatTimestamp(timestamp) {
       if (!timestamp) return "";
       const date = new Date(Number(timestamp));
       const hours = date.getHours();
@@ -574,7 +866,7 @@
       container.innerHTML = `<div class="state-message">Loading shows...</div>`;
 
       try {
-        const response = await fetch(GOOGLE_SHEET_CSV_URL + '&t=' + new Date().getTime());
+        const response = await fetch(JM_URL + '&t=' + new Date().getTime());
         if (!response.ok) throw new Error(`Sheet fetch failed`);
         const data = await response.text();
         const rows = data.split(/\r?\n/).map(r => r.trim()).filter(r => r.length > 0);
@@ -635,7 +927,7 @@
           <img src="${escapeHtml(show.thumbnail)}" alt="${escapeHtml(show.show_name)}" loading="lazy">
           <div class="show-details">
             <div class="show-title">${escapeHtml(show.show_name)}</div>
-            <div class="show-episodes">${show.episodes.length} Episode(s)</div>
+            <div class="show-episodes">${show.episodes.length} Episodes</div>
           </div>
         `;
         let realIndex = allShowsData.findIndex(s => s.show_name === show.show_name);
@@ -793,8 +1085,7 @@
       } catch(e) {}
     }
 
-
-   function setupScrollObserver() {
+    function setupScrollObserver() {
       const items = document.querySelectorAll('.short-item');
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -1057,7 +1348,7 @@ function handleFooterClick(tab) {
             }
           }, 10);
         } else {
-          showToast('Installation Failed❗');
+          showToast('Installation failed / Cancelled.');
         }
         deferredPrompt = null;
       }).catch(() => {
@@ -1195,7 +1486,8 @@ ${shareUrl}
 🔥 Enjoy the Episode & Share with Friends!
 
 *HR STUDIO APP*`;
-    const showObj = allShowsData.find(s => s.show_name === showName);
+
+      const showObj = allShowsData.find(s => s.show_name === showName);
       const imageUrl = (showObj && showObj.thumbnail) ? showObj.thumbnail : 'icon.png';
 
       if (navigator.share) {
@@ -1351,174 +1643,245 @@ ${shareUrl}
         .then((reg) => console.log('Service Worker registered!', reg))
         .catch((err) => console.log('Service Worker registration failed', err));
     });
+          }
+
+
+    // --- NOTIFICATION SYSTEM WITH APP BADGING (INSTAGRAM STYLE) ---
+
+let globalNotifications = [];
+
+// CSV Line Parser helper
+function parseCSVLine(text) {
+  let result = [];
+  let current = '';
+  let inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    let char = text[i];
+    if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === ',' && !inQuotes) {
+      result.push(current.trim());
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+  result.push(current.trim());
+  return result;
+}
+
+// HTML Escape helper
+function escapeHtml(str) {
+  return String(str ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+
+// Google Sheet se data fetch karna
+async function fetchNotificationsFromSheet() {
+  try {
+    const response = await fetch(MASSAGE_URL + '&t=' + new Date().getTime());
+    if (!response.ok) return;
+    const data = await response.text();
+    
+    const rows = data.split(/\r?\n/).map(r => r.trim());
+    let parsedMatrix = rows.map(r => parseCSVLine(r));
+
+    // Header (Row 1) ko hata dena
+    parsedMatrix.shift(); 
+
+    let validRows = [];
+    for (let i = 0; i < parsedMatrix.length; i++) {
+      let row = parsedMatrix[i];
+      if (!row || row.length === 0) break;
+
+      let rowHasData = row.some(cell => cell && cell.replace(/^"|"$/g, '').trim() !== "");
+      if (!rowHasData) {
+        break; 
+      }
+      validRows.push(row);
+    }
+    
+    let reversedRows = validRows.reverse();
+    let notifs = [];
+    
+    reversedRows.forEach((row, index) => {
+      let columnsData = [];
+      let firstVal = ""; 
+
+      let lastValidIndex = -1;
+      for (let c = 0; c < row.length; c++) {
+        let val = row[c] ? row[c].replace(/^"|"$/g, '').trim() : "";
+        if (val !== "") {
+          lastValidIndex = c;
+        }
+      }
+
+      if (lastValidIndex === -1) return;
+
+      let activeColumns = [];
+      for (let c = 0; c <= lastValidIndex; c++) {
+        let val = row[c] ? row[c].replace(/^"|"$/g, '').trim() : "";
+        if (val !== "") {
+          let cleanVal = escapeHtml(val);
+          activeColumns.push(cleanVal);
+          if (columnsData.length === 0) {
+            firstVal = cleanVal; 
+          }
+        }
+      }
+
+      let totalColumnCount = activeColumns.length;
+
+      if (activeColumns.length > 0) {
+        let combinedText = activeColumns.join("<br>");
+        let displayTitle = (firstVal === "") ? "Notification" : firstVal;
+
+        notifs.push({
+          id: `msg_${index}_${Date.now()}`,
+          msgCount: totalColumnCount,
+          displayTitle: displayTitle,
+          text: combinedText
+        });
+      }
+    });
+    
+    globalNotifications = notifs; 
+    checkUnreadNotifications();
+  } catch (e) {
+    console.log("Notification fetch error:", e);
+  }
+}
+
+// Unread count check karke App Icon aur In-App Badge dono update karna
+function checkUnreadNotifications() {
+  if (globalNotifications.length === 0) return;
+
+  let readIds = JSON.parse(localStorage.getItem('hr_read_notifications') || '[]');
+  let unreadCount = globalNotifications.filter(n => !readIds.includes(n.id)).length;
+
+  // 1. App ke andar header/bell icon ka badge update karna
+  const badge = document.getElementById('notifBadge');
+  if (badge) {
+    if (unreadCount > 0) {
+      badge.innerText = unreadCount > 99 ? '99+' : unreadCount;
+      badge.classList.add('active');
+    } else {
+      badge.classList.remove('active');
+    }
   }
 
-        let globalNotifications = [];
-
-    // 1. Google Sheet ke Row 5 se data fetch karna
-    async function fetchNotificationsFromSheet() {
-      try {
-        const response = await fetch(GOOGLE_SHEET_CSV_URL + '&t=' + new Date().getTime());
-        if (!response.ok) return;
-        const data = await response.text();
-        const rows = data.split(/\r?\n/).map(r => r.trim()).filter(r => r.length > 0);
-        let parsedMatrix = rows.map(r => parseCSVLine(r));
-
-        if (parsedMatrix.length > 4) {
-          let row5Values = parsedMatrix[4]; // Row 5 (A5, B5, C5...)
-          let notifs = [];
-          
-          for (let col = 1; col < row5Values.length; col++) {
-            let val = row5Values[col] ? row5Values[col].trim() : "";
-            if (val) {
-              notifs.push({
-                id: `msg_col_${col}_${btoa(val.substring(0, 10)).replace(/=/g, '')}`,
-                text: val,
-                timestamp: Date.now()
-              });
-            }
-          }
-          globalNotifications = notifs.reverse(); // Latest notifications upar dikhane ke liye (Last to First)
-          checkUnreadNotifications();
-        }
-      } catch (e) {
-        console.log("Notification fetch error:", e);
-      }
+  // 2. Phone ke Home Screen App Icon par Instagram style badge dikhane ke liye (PWA required)
+  if ('setAppBadge' in navigator) {
+    if (unreadCount > 0) {
+      navigator.setAppBadge(unreadCount).catch(err => console.log('App badge error:', err));
+    } else {
+      navigator.clearAppBadge().catch(err => console.log('Clear badge error:', err));
     }
+  }
+}
 
-    // 2. Unread count check karke badge update karna
-    function checkUnreadNotifications() {
-      if (globalNotifications.length === 0) return;
+// Notification List Window Open karna
+function openNotificationWindow() {
+  renderNotificationList();
+  document.getElementById('notifPageView').classList.add('active');
+  history.pushState({ page: 'notifList' }, "");
+}
 
-      let readIds = JSON.parse(localStorage.getItem('hr_read_notifications') || '[]');
-      let unreadCount = globalNotifications.filter(n => !readIds.includes(n.id)).length;
+function renderNotificationList() {
+  const body = document.getElementById('notifContentBody');
+  if (globalNotifications.length === 0) {
+    body.innerHTML = `<div class="history-empty-msg" style="text-align:center; padding:20px; color:#aaa;">No notifications available right now.</div>`;
+    return;
+  }
 
-      const badge = document.getElementById('notifBadge');
-      if (badge) {
-        if (unreadCount > 0) {
-          badge.innerText = unreadCount > 99 ? '99+' : unreadCount;
-          badge.classList.add('active');
-        } else {
-          badge.classList.remove('active');
-        }
-      }
+  let readIds = JSON.parse(localStorage.getItem('hr_read_notifications') || '[]');
+  let html = '';
 
-      // App icon ke upar PWA badge dikhane ke liye
-      if ('setAppBadge' in navigator) {
-        if (unreadCount > 0) {
-          navigator.setAppBadge(unreadCount).catch(() => {});
-        } else {
-          navigator.clearAppBadge().catch(() => {});
-        }
-      }
-    }
-
-    // 3. Notification List Window Open karna
-    function openNotificationWindow() {
-      renderNotificationList();
-      document.getElementById('notifPageView').classList.add('active');
-      history.pushState({ notifOpen: true }, "");
-    }
-
-    function renderNotificationList() {
-      const body = document.getElementById('notifContentBody');
-      if (globalNotifications.length === 0) {
-        body.innerHTML = `<div class="history-empty-msg">No notifications available right now.</div>`;
-        return;
-      }
-
-      let readIds = JSON.parse(localStorage.getItem('hr_read_notifications') || '[]');
-      let html = '';
-
-      globalNotifications.forEach(n => {
-        let isUnread = !readIds.includes(n.id);
-        
-        html += `
-          <div class="msg-card-item ${isUnread ? 'unread' : ''}" onclick="openSingleNotification('${n.id}')">
-            ${isUnread ? '<div class="unread-dot"></div>' : ''}
-            <div class="msg-card-header">
-              <span>HR Studio Update</span>
-              <span>${formatTimestamp(n.timestamp)}</span>
-            </div>
-            <div class="msg-card-text">${escapeHtml(n.text.length > 90 ? n.text.substring(0, 90) + '...' : n.text)}</div>
-          </div>
-        `;
-      });
-      body.innerHTML = html;
-    }
-
-    // 4. Specific Message Click karne par Detail Window kholna aur seen mark karna
-    function openSingleNotification(notifId) {
-      let notif = globalNotifications.find(n => n.id === notifId);
-      if (!notif) return;
-
-      // Sirf click kiye gaye message ko seen mark karna
-      let readIds = JSON.parse(localStorage.getItem('hr_read_notifications') || '[]');
-      if (!readIds.includes(notifId)) {
-        readIds.push(notifId);
-        localStorage.setItem('hr_read_notifications', JSON.stringify(readIds));
-        checkUnreadNotifications();
-      }
-
-      let urlRegex = /(https?:\/\/[^\s]+)/g;
-      let formattedText = notif.text.replace(urlRegex, (url) => {
-        return `<a class="msg-card-link" href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
-      });
-
-      const detailBody = document.getElementById('notifDetailContentBody');
-      detailBody.innerHTML = `
-        <div class="msg-detail-box">
-          <div class="msg-card-header" style="margin-bottom: 12px;">
-            <span>HR Studio Official</span>
-            <span>${formatTimestamp(notif.timestamp)}</span>
-          </div>
-          <div class="msg-detail-text">${formattedText}</div>
+  globalNotifications.forEach(n => {
+    let isUnread = !readIds.includes(n.id);
+    
+    html += `
+      <div class="msg-card-item ${isUnread ? 'unread' : ''}" onclick="openSingleNotification('${n.id}')" style="background: linear-gradient(145deg, #181818, #222222); border: 1px solid ${isUnread ? '#ff3366' : '#333'}; border-radius: 14px; padding: 16px; margin-bottom: 14px; box-shadow: 0 6px 20px rgba(0,0,0,0.4); position: relative; transition: all 0.3s ease;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-weight: 700; color: #ffffff; font-size: 16px; letter-spacing: 0.5px;">${n.displayTitle}</span>
+          <span style="background: ${isUnread ? '#ff3366' : '#333'}; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; box-shadow: 0 2px 8px rgba(255,51,102,0.4);">${n.msgCount}</span>
         </div>
-      `;
+      </div>
+    `;
+  });
+  body.innerHTML = html;
+}
 
-      document.getElementById('notifDetailView').classList.add('active');
-      history.pushState({ notifDetailOpen: true }, "");
-    }
+// Specific Message Click karne par message kholna aur read mark karna
+function openSingleNotification(notifId) {
+  let notif = globalNotifications.find(n => n.id === notifId);
+  if (!notif) return;
 
-    function closeNotificationWindow() {
-      document.getElementById('notifPageView').classList.remove('active');
-    }
+  let readIds = JSON.parse(localStorage.getItem('hr_read_notifications') || '[]');
+  if (!readIds.includes(notifId)) {
+    readIds.push(notifId);
+    localStorage.setItem('hr_read_notifications', JSON.stringify(readIds));
+    checkUnreadNotifications(); // Jaise hi message read hoga, badge count kam ho jayega
+  }
 
-    function closeNotifDetailWindow() {
-      document.getElementById('notifDetailView').classList.remove('active');
-      renderNotificationList();
-    }
+  let urlRegex = /(https?:\r\n[^\s]+|https?:\/\/[^\s]+)/g;
+  let formattedText = notif.text.replace(urlRegex, (url) => {
+    return `<a class="msg-card-link" href="${url}" target="_blank" rel="noopener noreferrer" style="color: #ff3366; text-decoration: underline;">${url}</a>`;
+  });
 
-    // 5. Back Button (onpopstate) handler update
-    window.onpopstate = function () {
-      if (document.getElementById('shortsModal').classList.contains('active')) {
-        closeShortsPlayer();
-      } else if (document.getElementById('historyPageView').classList.contains('active')) {
-        closeHistoryWindow();
-      } else if (document.getElementById('notifDetailView').classList.contains('active')) {
-        closeNotifDetailWindow();
-      } else if (document.getElementById('notifPageView').classList.contains('active')) {
-        closeNotificationWindow();
-      }
-    };
+  const detailBody = document.getElementById('notifDetailContentBody');
+  detailBody.innerHTML = `
+    <div style="padding: 16px; display: flex; flex-direction: column; align-items: flex-start;">
+      <div style="background: linear-gradient(135deg, #1f1f1f, #2a2a2a); border-left: 4px solid #ff3366; border-radius: 12px; padding: 20px; width: 100%; box-shadow: 0 8px 24px rgba(0,0,0,0.5); position: relative;">
+        <div style="font-size: 12px; font-weight: bold; color: #ff3366; margin-bottom: 12px; letter-spacing: 1px; text-transform: uppercase;">
+          HR Studio Official Message
+        </div>
+        <div style="font-size: 17px; line-height: 2.2; word-break: break-word; color: #f2f2f2;">
+          ${formattedText}
+        </div>
+      </div>
+    </div>
+  `;
 
-    // 6. App load hone par notifications fetch karna
-    window.addEventListener('DOMContentLoaded', () => {
-      fetchShowsFromSheet().then(() => {
-        fetchNotificationsFromSheet(); // Yahan se notifications load hongi
-        
-        const urlParams = new URLSearchParams(window.location.search);
-        const targetShow = urlParams.get('show');
-        const targetEp = urlParams.get('ep');
+  document.getElementById('notifDetailView').classList.add('active');
+  history.pushState({ page: 'notifDetail' }, "");
+}
 
-        if (targetShow && targetEp !== null) {
-          const showIndex = allShowsData.findIndex(s => s.show_name.toLowerCase() === decodeURIComponent(targetShow).toLowerCase());
-          if (showIndex !== -1) {
-            openShortsPlayer(showIndex, parseInt(targetEp));
-          }
-        }
-      });
-    });
+// Window Close karne ke functions
+function closeNotificationWindow() {
+  document.getElementById('notifPageView').classList.remove('active');
+}
+
+function closeNotifDetailWindow() {
+  document.getElementById('notifDetailView').classList.remove('active');
+  renderNotificationList();
+}
+
+// App load hote hi notifications fetch karne ke liye
+window.addEventListener('DOMContentLoaded', () => {
+  fetchNotificationsFromSheet();
+});
+
+// Proper Back Button Handler
+window.onpopstate = function (event) {
+  const detailView = document.getElementById('notifDetailView');
+  const notifPageView = document.getElementById('notifPageView');
+  const shortsModal = document.getElementById('shortsModal');
+  const historyPageView = document.getElementById('historyPageView');
+
+  if (shortsModal && shortsModal.classList.contains('active')) {
+    closeShortsPlayer();
+  } else if (historyPageView && historyPageView.classList.contains('active')) {
+    closeHistoryWindow();
+  } else if (detailView && detailView.classList.contains('active')) {
+    detailView.classList.remove('active');
+    renderNotificationList();
+  } else if (notifPageView && notifPageView.classList.contains('active')) {
+    notifPageView.classList.remove('active');
+  }
+};
+    
+
+    
   </script>
 </body>
 </html>
