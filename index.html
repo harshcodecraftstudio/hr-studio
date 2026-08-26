@@ -1733,7 +1733,8 @@ async function fetchNotificationsFromSheet() {
 
       if (activeColumns.length > 0) {
         let combinedText = activeColumns.join("<br>");
-        let displayTitle = (firstVal === "") ? "Notification" : firstVal;
+        let colAValue = row[0] ? row[0].replace(/^"|"$/g, '').trim() : "";
+let displayTitle = (colAValue !== "") ? escapeHtml(colAValue) : "Notification";
 
         notifs.push({
           id: `msg_${index}_${Date.now()}`,
