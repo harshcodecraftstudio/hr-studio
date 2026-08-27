@@ -1901,23 +1901,26 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // Proper Back Button Handler
-window.onpopstate = function (event) {
-  const detailView = document.getElementById('notifDetailView');
-  const notifPageView = document.getElementById('notifPageView');
+window.onpopstate = function () {
+  const episodesDrawer = document.getElementById('episodesDrawer');
   const shortsModal = document.getElementById('shortsModal');
   const historyPageView = document.getElementById('historyPageView');
+  const notifPageView = document.getElementById('notifPageView');
+  const notifDetailView = document.getElementById('notifDetailView');
 
-  if (shortsModal && shortsModal.classList.contains('active')) {
+  if (episodesDrawer && episodesDrawer.style.display === 'block') {
+    closeEpisodesDrawer();
+  } else if (shortsModal && shortsModal.classList.contains('active')) {
     closeShortsPlayer();
   } else if (historyPageView && historyPageView.classList.contains('active')) {
     closeHistoryWindow();
-  } else if (detailView && detailView.classList.contains('active')) {
-    detailView.classList.remove('active');
-    renderNotificationList();
+  } else if (notifDetailView && notifDetailView.classList.contains('active')) {
+    closeNotifDetailWindow();
   } else if (notifPageView && notifPageView.classList.contains('active')) {
-    notifPageView.classList.remove('active');
+    closeNotificationWindow();
   }
-};
+};    
+    
     
 
 
