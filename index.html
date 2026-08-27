@@ -7,15 +7,14 @@
   <!-- SEO Title & Description -->
   <title>HR STUDIO - Official App | Watch Shows & Trending Episodes</title>
   <meta name="description" content="Stream your favorite shows, explore trending episodes, and track your watch history instantly on the official HR Studio app.">
-  <meta name="keywords" content="HR Studio, HR Studio App, HR Studio Official Website, watch shows online, trending web episodes, streaming app, entertainment app, mobile web app">
-  
+  <meta name="keywords" content="HR Studio, HR Studio App, HR Studio Official Website, HR Studio shows, SP HARSH SAINI, HARSH SAINI, HARSH DHAIYA, HR Studio episodes, watch shows online, watch episodes online, trending shows, trending episodes, latest episodes, popular shows, online show streaming, show discovery app, episode discovery, find new shows, search shows online, favorite shows, save favorite shows, liked shows, viewing history, show history, episode search, trending entertainment, entertainment app, online entertainment platform, web entertainment app, shows and episodes, discover trending shows, watch latest shows, personalized show discovery, HR Studio entertainment, trending web episodes, streaming app, mobile web app">  
   <!-- Google Search Verification -->
   <meta name="google-site-verification" content="sQlaksnqISJq0XWm63TflF46Pl7ZHESnFrexhu5nN1U" />
   
   <!-- Open Graph / Social Media Sharing Tags -->
   <meta property="og:title" content="HR STUDIO - Official App">
   <meta property="og:description" content="Stream your favorite shows and trending episodes instantly on HR Studio.">
-  <meta property="og:image" content="https://harshcodecraftstudio.github.io/hr-studio/icon.jpg">
+  <meta property="og:image" content="https://harshcodecraftstudio.github.io/hr-studio/icon.png">
   <meta property="og:url" content="https://harshcodecraftstudio.github.io/hr-studio/">
   <meta property="og:type" content="website">
 
@@ -23,13 +22,30 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="HR STUDIO - Official App">
   <meta name="twitter:description" content="Stream your favorite shows and trending episodes instantly on HR Studio.">
-  <meta name="twitter:image" content="https://harshcodecraftstudio.github.io/hr-studio/icon.jpg">
+  <meta name="twitter:image" content="https://harshcodecraftstudio.github.io/hr-studio/icon.png">
 
   <!-- Icons & PWA Manifest -->
-  <link rel="icon" type="image/jpeg" href="icon.jpg">
   <link rel="icon" type="image/png" href="icon.png">
   <link rel="apple-touch-icon" href="icon.png">
   <link rel="manifest" href="manifest.json">
+
+
+  <!-- Favicon: local first, external fallback -->
+<link rel="icon"
+      type="image/png"
+      href="icon.png"
+      onerror="this.href='https://i.ibb.co/YB8ghK0H/file-0000000046b082118e0baf3192318c84.png';">
+
+<link rel="apple-touch-icon"
+      href="icon.png"
+      onerror="this.href='https://i.ibb.co/YB8ghK0H/file-0000000046b082118e0baf3192318c84.png';">
+
+<link rel="manifest" href="manifest.json">
+
+
+  <!-- Favicon & Icons with Absolute Path -->
+<link rel="icon" type="image/png" href="https://harshcodecraftstudio.github.io/hr-studio/icon.png" onerror="this.href='https://i.ibb.co/YB8ghK0H/file-0000000046b082118e0baf3192318c84.png';">
+<link rel="apple-touch-icon" href="https://harshcodecraftstudio.github.io/hr-studio/icon.png" onerror="this.href='https://i.ibb.co/YB8ghK0H/file-0000000046b082118e0baf3192318c84.png';">
   
   <!-- Mobile Theme Styling -->
   <meta name="theme-color" content="#ff0055">
@@ -360,7 +376,7 @@
     .search-box-wrapper input {
       width: 100%; padding: 12px 16px; background: #141419;
       border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; color: #fff; outline: none;
-      font-size: 14px; transition: border-color 0.2s;
+       font-size: 14px; transition: border-color 0.2s;
     }
     .search-box-wrapper input:focus { border-color: #ff0055; }
 
@@ -1010,7 +1026,7 @@
             </div>
 
             <div class="ad-overlay-container">
-              <a class="ad-learn-more-btn" id="adLearnMore_${i}" href="#" target="_blank" rel="noopener noreferrer">Learn More</a>
+              <a class="ad-learn-more-btn" id="adLearnMore_${i}" href="#" target="_blank" rel="noopener noreferrer">Learn More ➡︎</a>
               <div class="ad-skip-box hidden" id="adSkipBox_${i}" data-index="${i}" data-epid="${escapeHtml(ep.episode_id)}">
                 <span class="ad-badge-tag">AD</span>
                 <span id="adBtnText_${i}">3</span>
@@ -1128,7 +1144,7 @@
       } else {
         container.classList.add('locked');
         loadPlayerContent(index, epData.ad_link, true);
-        startAdCountdown(index, epData.episode_id);
+        triggerSkipTimerAfterClick(index, epData.episode_id);
       }
     }
 
@@ -1271,7 +1287,7 @@
       skipBox.classList.add('disabled');
       
       let count = 3;
-      btnText.innerText = `${count}`;
+       btnText.innerText = `${count}`;
 
       activeAdCountdown = setInterval(() => {
         count--;
@@ -1809,7 +1825,7 @@ function renderNotificationList() {
       </div>
     `;
   });
-  body.innerHTML = html;
+    body.innerHTML = html;
 }
 
 // Specific Message Click karne par message kholna aur read mark karna
@@ -1881,6 +1897,57 @@ window.onpopstate = function (event) {
   }
 };
     
+
+
+    // Ad skip button timer //
+
+function triggerSkipTimerAfterClick(index, actualEpisodeId) {
+  const lmBtn = document.getElementById(`adLearnMore_${index}`);
+  const directBtn = document.querySelector(`#playerBox_${index} .direct-ad-btn`);
+  
+  let isTimerStarted = false;
+
+  const startTimer = () => {
+    if (isTimerStarted) return; // Agar timer pehle hi chal pada hai toh dobara na chale
+    isTimerStarted = true;
+
+    const skipBox = document.getElementById(`adSkipBox_${index}`);
+    if (!skipBox) return;
+
+    // Skip box ko ab screen par dikha do (jo pehle hidden tha)
+    skipBox.classList.remove('hidden');
+    skipBox.classList.add('disabled');
+    
+    const btnText = document.getElementById(`adBtnText_${index}`);
+    
+    let timeLeft = 3; // Yahan se timer shuru hoga (3 seconds)
+    
+    // Har 1 second me timer ko update karne ke liye interval chalayein
+    const countdownInterval = setInterval(() => {
+      if (timeLeft > 0) {
+        if (btnText) btnText.innerText = `Skip in ${timeLeft}s`;
+        timeLeft--;
+      } else {
+        clearInterval(countdownInterval);
+        // Timer khatam hone par arrow ke sath Skip Ad dikhayein
+        if (btnText) btnText.innerText = "Skip Ad ➡︎";
+        skipBox.classList.remove('disabled');
+        document.getElementById('shortsContainer').classList.remove('locked');
+        
+        // Skip button par click karne ka action
+        skipBox.onclick = () => handleSkipClick(index, actualEpisodeId);
+      }
+    }, 1000);
+  };
+
+  if (lmBtn) {
+    lmBtn.addEventListener('click', startTimer);
+  }
+  if (directBtn) {
+    directBtn.addEventListener('click', startTimer);
+  }
+    }
+
 
     
   </script>
