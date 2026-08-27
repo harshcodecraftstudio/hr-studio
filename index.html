@@ -753,6 +753,16 @@
     <div class="shorts-container" id="shortsContainer"></div>
   </div>
 
+
+  <!-- Episodes Bottom Drawer -->
+<div class="episodes-drawer" id="episodesDrawer" style="display:none; position:fixed; bottom:0; left:0; width:100%; height:60vh; background:#141419; z-index:2000; border-top-left-radius:20px; border-top-right-radius:20px; padding:20px; overflow-y:auto; box-shadow: 0 -10px 30px rgba(0,0,0,0.8);">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px;">
+    <div style="font-size:16px; font-weight:bold; color:#fff;">Select Episode</div>
+    <div onclick="closeEpisodesDrawer()" style="font-size:20px; color:#ff0055; cursor:pointer; font-weight:bold;">✕</div>
+  </div>
+  <div id="episodesDrawerList" style="display:grid; grid-template-columns: repeat(4, 1fr); gap:10px;"></div>
+</div>
+
   <!-- History Separate Window -->
   <div class="history-page-view" id="historyPageView">
     <div class="history-header-bar">
@@ -1023,6 +1033,18 @@
                 </svg>
                 <span class="action-text">Share</span>
               </button>
+
+              <button class="insta-action-btn" onclick="openEpisodesDrawer()">
+  <svg class="icon" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+    <line x1="8" y1="6" x2="21" y2="6"></line>
+    <line x1="8" y1="12" x2="21" y2="12"></line>
+    <line x1="8" y1="18" x2="21" y2="18"></line>
+    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+  </svg>
+  <span class="action-text">Episodes</span>
+</button>
             </div>
 
             <div class="ad-overlay-container">
@@ -1948,7 +1970,50 @@ function triggerSkipTimerAfterClick(index, actualEpisodeId) {
   }
     }
 
+    // Episode Jump //
+    
+function openEpisodesDrawer() {
+  const drawer = document.getElementById('episodesDrawer');
+  const listContainer = document.getElementById('episodesDrawerList');
+  listContainer.innerHTML = "";
 
+  if (!currentShowEpisodes || currentShowEpisodes.length === 0) return;
+
+  currentShowEpisodes.forEach((ep, index) => {
+    const btn = document.createElement('div');
+    btn.style.cssText = "background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:12px; text-align:center; border-radius:10px; cursor:pointer; font-weight:bold; font-size:14px; color:#fff;";
+    btn.innerText = `Ep ${index + 1}`;
+    
+    btn.onclick = () => {
+      closeEpisodesDrawer();
+      jumpToEpisode(index);
+    };
+    listContainer.appendChild(btn);
+  });
+
+  drawer.style.display = 'block';
+  history.pushState({ drawerOpen: true }, ""); // Yahan history state add ki
+}
+
+function closeEpisodesDrawer() {
+  document.getElementById('episodesDrawer').style.display = 'none';
+}
+
+    function jumpToEpisode(index) {
+  const container = document.getElementById('shortsContainer');
+  const targetItem = container.querySelector(`[data-index="${index}"]`);
+  
+  if (targetItem) {
+    // 1. Pehle smooth scroll karein taaki user ko wahan tak ka transition dikhe
+    targetItem.scrollIntoView({ behavior: 'smooth' });
+    
+    // 2. Thode delay ke baad us episode ke index ko active set karke playEpisode function call karein
+    setTimeout(() => {
+      currentObservedIndex = index;
+      playEpisode(index);
+    }, 200);
+  }
+    }
     
   </script>
 </body>
