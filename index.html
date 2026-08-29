@@ -51,7 +51,7 @@
   <!-- Favicon & Icons with Absolute Path -->
 <link rel="icon" type="image/png" href="https://harshcodecraftstudio.github.io/hr-studio/icon.png" onerror="this.href='https://i.ibb.co/YB8ghK0H/file-0000000046b082118e0baf3192318c84.png';">
 <link rel="apple-touch-icon" href="https://harshcodecraftstudio.github.io/hr-studio/icon.png" onerror="this.href='https://i.ibb.co/YB8ghK0H/file-0000000046b082118e0baf3192318c84.png';">
-  
+ <link rel="preconnect" href="https://pl31084592.profitableratecpmnetwork.com"> 
   <!-- Mobile Theme Styling -->
   <meta name="theme-color" content="#ff0055">
   <meta name="mobile-web-app-capable" content="yes">
@@ -375,8 +375,7 @@
       transition: all 0.2s ease;
     }
     .search-btn-icon:hover { border-color: #ff0055; color: #fff; }
-
-    .search-container { display: none; padding: 12px 0 0 0; max-width: 800px; margin: 0 auto; }
+     .search-container { display: none; padding: 12px 0 0 0; max-width: 800px; margin: 0 auto; }
     .search-container.active { display: block; }
     .search-box-wrapper input {
       width: 100%; padding: 12px 16px; background: #141419;
@@ -681,10 +680,9 @@
     }
     .msg-detail-text {
       font-size: 16px; color: #fff; line-height: 1.8; word-break: break-word;
-      white-space: pre-wrap; flex: 1;}
-
-
-       .speed-btn {
+      white-space: pre-wrap; flex: 1;
+                                                                    }
+    .speed-btn {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.18);
   color: #fff;
@@ -710,6 +708,18 @@
 }
 
 
+    .ad-loading-overlay {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      background: #000; z-index: 5; gap: 12px;
+    }
+    .ad-loading-spinner {
+      width: 36px; height: 36px; border: 3px solid rgba(255,255,255,0.2);
+      border-top-color: #ff0055; border-radius: 50%;
+      animation: adSpin 0.8s linear infinite;
+    }
+    @keyframes adSpin { to { transform: rotate(360deg); } }
+    .ad-loading-text { color: #ccc; font-size: 13px; }
     
   </style>
 </head>
@@ -795,7 +805,7 @@
   <div id="episodesDrawerList" style="display:grid; grid-template-columns: repeat(4, 1fr); gap:10px;"></div>
 </div>
 
-  <!-- History Separate Window -->
+ <!-- History Separate Window -->
   <div class="history-page-view" id="historyPageView">
     <div class="history-header-bar">
       <div class="history-back-btn" onclick="closeHistoryWindow()">←</div>
@@ -1082,7 +1092,6 @@
   <span class="speed-icon">⚡</span>
   <span id="speedBtnText_${i}">1.0x</span>
 </button>
-
             </div>
 
             <div class="ad-overlay-container">
@@ -1234,6 +1243,8 @@
       const ig = val.match(/^https?:\/\/(?:www\.)?instagram\.com\/(reel|p|tv)\/([^/?#]+)/i);
       if (ig) return { type: 'instagram', url: val, embedUrl: `https://www.instagram.com/${ig[1]}/${ig[2]}/embed/` };
 
+      if (/^\s*</.test(val)) return { type: 'banner-code', code: val };
+
       if (/^https?:\/\//i.test(val)) return { type: 'direct-link', url: val };
 
       return { type: 'sponsor-card', url: "#" };
@@ -1243,11 +1254,16 @@
       const box = document.getElementById(`playerBox_${index}`);
       if (!box) return;
 
-      if (window.resetSpeedForIndex) window.resetSpeedForIndex(index);
+      if (window.resetSpeedForIndex) window.resetSpeedForIndex(index);   // 👈 ye line add ki
 
       if (isAd) {
         const adInfo = detectAdType(idOrUrl);
 
+      if (adInfo.type === 'banner-code') {
+          loadBannerAdCard(index, adInfo.code);
+          return;
+          }
+        
         // अगर स्पॉन्सर कार्ड है या डायरेक्ट लिंक है (जो वीडियो नहीं है)
         if (adInfo.type === 'direct-link' || adInfo.type === 'sponsor-card') {
           loadSponsorBanner(index, adInfo.url);
@@ -1256,18 +1272,30 @@
 
         // अगर यूट्यूब वीडियो एड है
         if (adInfo.type === 'youtube') {
-          box.innerHTML = `<iframe class="ad-frame" src="${escapeHtml(`https://www.youtube.com/embed/${adInfo.id}?autoplay=1&mute=1&controls=0&rel=0&playsinline=1`)}" allow="autoplay; encrypted-media; fullscreen"></iframe>`;
+          box.innerHTML = `
+            <div class="ad-loading-overlay" id="adLoading_${index}">
+              <div class="ad-loading-spinner"></div>
+              <div class="ad-loading-text">Ad load ho raha hai...</div>
+            </div>
+            <iframe class="ad-frame" src="${escapeHtml(`https://www.youtube.com/embed/${adInfo.id}?autoplay=1&mute=1&controls=0&rel=0&playsinline=1`)}" allow="autoplay; encrypted-media; fullscreen" onload="const l=document.getElementById('adLoading_${index}'); if(l) l.remove();"></iframe>
+          `;
           setupLearnMoreButton(index, adInfo.url);
           return;
         }
-
-        // अगर इंस्टाग्राम वीडियो एड है
+        
+           // अगर इंस्टाग्राम वीडियो एड है
         if (adInfo.type === 'instagram') {
-          box.innerHTML = `<iframe class="ad-frame" src="${escapeHtml(adInfo.embedUrl)}" allow="autoplay; encrypted-media; fullscreen"></iframe>`;
+          box.innerHTML = `
+            <div class="ad-loading-overlay" id="adLoading_${index}">
+              <div class="ad-loading-spinner"></div>
+              <div class="ad-loading-text">Ad load ho raha hai...</div>
+            </div>
+            <iframe class="ad-frame" src="${escapeHtml(adInfo.embedUrl)}" allow="autoplay; encrypted-media; fullscreen" onload="const l=document.getElementById('adLoading_${index}'); if(l) l.remove();"></iframe>
+          `;
           setupLearnMoreButton(index, adInfo.url);
           return;
         }
-
+        
         loadSponsorBanner(index, idOrUrl);
         return;
       }
@@ -1341,6 +1369,36 @@
       `;
     }
 
+function loadBannerAdCard(index, code) {
+      const box = document.getElementById(`playerBox_${index}`);
+      box.innerHTML = `
+        <div class="direct-ad-card banner-ad-mode">
+          <div class="ad-loading-overlay" id="adLoading_${index}">
+            <div class="ad-loading-spinner"></div>
+            <div class="ad-loading-text">Ad load ho raha hai...</div>
+          </div>
+          <div class="direct-ad-badge">SPONSORED</div>
+          <div class="direct-ad-title">Advertisement</div>
+          <div class="banner-ad-slot" id="bannerAdSlot_${index}"></div>
+        </div>
+      `;
+      const slot = document.getElementById(`bannerAdSlot_${index}`);
+      if (slot) {
+        slot.innerHTML = code;
+        slot.querySelectorAll('script').forEach(oldScript => {
+          const newScript = document.createElement('script');
+          Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+          newScript.textContent = oldScript.textContent;
+          oldScript.parentNode.replaceChild(newScript, oldScript);
+        });
+      }
+      // Banner script ka load-complete detect nahi ho sakta, isliye 1.2 second baad loader hata do
+      setTimeout(() => {
+        const l = document.getElementById(`adLoading_${index}`);
+        if (l) l.remove();
+      }, 1200);
+}
+    
     function startAdCountdown(index, actualEpisodeId) {
       const skipBox = document.getElementById(`adSkipBox_${index}`);
       const btnText = document.getElementById(`adBtnText_${index}`);
@@ -1962,7 +2020,7 @@ window.onpopstate = function () {
   } else if (notifPageView && notifPageView.classList.contains('active')) {
     closeNotificationWindow();
   }
-};
+};    
     
 
 
@@ -1971,50 +2029,51 @@ window.onpopstate = function () {
 function triggerSkipTimerAfterClick(index, actualEpisodeId) {
   const lmBtn = document.getElementById(`adLearnMore_${index}`);
   const directBtn = document.querySelector(`#playerBox_${index} .direct-ad-btn`);
-  
+  const isBannerAd = !!document.querySelector(`#playerBox_${index} .banner-ad-mode`);
+
   let isTimerStarted = false;
 
-  const startTimer = () => {
-    if (isTimerStarted) return; // Agar timer pehle hi chal pada hai toh dobara na chale
+  const startTimer = (seconds) => {
+    if (isTimerStarted) return;
     isTimerStarted = true;
 
     const skipBox = document.getElementById(`adSkipBox_${index}`);
     if (!skipBox) return;
 
-    // Skip box ko ab screen par dikha do (jo pehle hidden tha)
     skipBox.classList.remove('hidden');
     skipBox.classList.add('disabled');
-    
+
     const btnText = document.getElementById(`adBtnText_${index}`);
-    
-    let timeLeft = 3; // Yahan se timer shuru hoga (3 seconds)
-    
-    // Har 1 second me timer ko update karne ke liye interval chalayein
+    let timeLeft = seconds;
+
     const countdownInterval = setInterval(() => {
       if (timeLeft > 0) {
         if (btnText) btnText.innerText = `Skip in ${timeLeft}s`;
         timeLeft--;
       } else {
         clearInterval(countdownInterval);
-        // Timer khatam hone par arrow ke sath Skip Ad dikhayein
         if (btnText) btnText.innerText = "Skip Ad ➡︎";
         skipBox.classList.remove('disabled');
         document.getElementById('shortsContainer').classList.remove('locked');
-        
-        // Skip button par click karne ka action
         skipBox.onclick = () => handleSkipClick(index, actualEpisodeId);
       }
     }, 1000);
   };
 
+  // Banner ad ho to bina click kiye apne aap 5 second ka timer chalu
+  if (isBannerAd) {
+    startTimer(5);
+    return;
+  }
+
+  // Direct link / sponsor card / youtube / instagram — jaisa pehle tha waisa hi (3 sec, click ke baad)
   if (lmBtn) {
-    lmBtn.addEventListener('click', startTimer);
+    lmBtn.addEventListener('click', () => startTimer(3));
   }
   if (directBtn) {
-    directBtn.addEventListener('click', startTimer);
+    directBtn.addEventListener('click', () => startTimer(3));
   }
-    }
-
+}
     // Episode Jump //
     
 function openEpisodesDrawer() {
@@ -2061,8 +2120,7 @@ function closeEpisodesDrawer() {
     }
 
 
-
-    /**
+/**
  * YouTube-style Playback Speed Control Popup
  * Episode-list style history handling (Back button / Close closes popup only)
  */
@@ -2195,14 +2253,13 @@ function closeEpisodesDrawer() {
     setPlaybackSpeed(val);
   });
 
-  document.getElementById('speedIncBtn').addEventListener('click', () => {
+document.getElementById('speedIncBtn').addEventListener('click', () => {
     let slider = document.getElementById('speedRangeSlider');
     let val = Math.min(2.0, parseFloat(slider.value) + 0.25);
     setPlaybackSpeed(val);
   });
 
-  // Naya episode/ad load hote hi speed ko 1x pe reset karta hai
-  // (list ke chips aur button label dono)
+  // 👇 yahan naya function paste karo
   window.resetSpeedForIndex = function(index) {
     localStorage.setItem('hr_preferred_speed', '1.0');
 
