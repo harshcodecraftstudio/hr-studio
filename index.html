@@ -1243,6 +1243,8 @@
       const box = document.getElementById(`playerBox_${index}`);
       if (!box) return;
 
+      if (window.resetSpeedForIndex) window.resetSpeedForIndex(index);
+
       if (isAd) {
         const adInfo = detectAdType(idOrUrl);
 
@@ -2198,6 +2200,19 @@ function closeEpisodesDrawer() {
     let val = Math.min(2.0, parseFloat(slider.value) + 0.25);
     setPlaybackSpeed(val);
   });
+
+  // Naya episode/ad load hote hi speed ko 1x pe reset karta hai
+  // (list ke chips aur button label dono)
+  window.resetSpeedForIndex = function(index) {
+    localStorage.setItem('hr_preferred_speed', '1.0');
+
+    const speedBtnText = document.getElementById(`speedBtnText_${index}`);
+    if (speedBtnText) speedBtnText.innerText = '1.00x';
+
+    if (currentObservedIndex === index) {
+      updateSpeedUI(1.0);
+    }
+  };
 
 })();
     
