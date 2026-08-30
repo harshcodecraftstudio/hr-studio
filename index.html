@@ -1126,12 +1126,17 @@
 
       setupScrollObserver();
 
-      if (startEpisodeIndex > 0) {
-        setTimeout(() => {
-          const targetItem = container.querySelector(`[data-index="${startEpisodeIndex}"]`);
-          if (targetItem) targetItem.scrollIntoView({ behavior: 'auto' });
-        }, 50);
-      }
+setTimeout(() => {
+  const targetIndex = Number(startEpisodeIndex) || 0;
+  const targetItem = container.querySelector(`[data-index="${targetIndex}"]`);
+
+  if (targetItem) {
+    container.scrollTop = targetItem.offsetTop;
+  }
+
+  currentObservedIndex = targetIndex;
+  playEpisode(targetIndex);
+}, 100);
     }
 
     function handleVideoTap(index) {
