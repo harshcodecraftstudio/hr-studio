@@ -1207,7 +1207,9 @@
       const container = document.getElementById('shortsContainer');
       saveHistory(currentShowName, index);
 
-      if (index === 0 || unlockedEpisodes.has(index)) {
+      const hasAd = epData.ad_link && epData.ad_link.trim() !== "";
+
+      if (index === 0 || unlockedEpisodes.has(index) || !hasAd) {
         container.classList.remove('locked');
         loadPlayerContent(index, epData.episode_id, false);
       } else {
@@ -1398,7 +1400,7 @@ function loadBannerAdCard(index, code) {
         if (l) l.remove();
       }, 1200);
 }
-    
+       
     function startAdCountdown(index, actualEpisodeId) {
       const skipBox = document.getElementById(`adSkipBox_${index}`);
       const btnText = document.getElementById(`adBtnText_${index}`);
