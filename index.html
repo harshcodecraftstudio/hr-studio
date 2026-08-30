@@ -822,6 +822,7 @@
     </div>
   </div>
 
+  <div id="custom-toast" style="display:none; opacity:0; transition: opacity 0.3s ease; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #ff0055; color: white; padding: 12px 24px; border-radius: 8px; z-index: 9999; font-family: sans-serif; font-weight: 500; box-shadow: 0 4px 12px rgba(0,0,0,0.3);"></div>
   
 <!-- Footer Navigation -->
   <div class="app-footer">
@@ -1695,7 +1696,27 @@ ${shareUrl}
       if (showIdx !== -1) {
         openShortsPlayer(showIdx, epIndex);
       } else {
-        alert("Show not found.");
+        // Website style smooth toast notification
+        let toast = document.getElementById("custom-toast");
+        if (toast) {
+          toast.innerText = "Show not found.";
+          toast.style.display = "block";
+          
+          // Smooth fade-in
+          setTimeout(function() {
+              toast.style.opacity = "1";
+          }, 10);
+
+          // 3 second baad smooth fade-out aur hide
+          setTimeout(function() {
+              toast.style.opacity = "0";
+              setTimeout(function() {
+                  toast.style.display = "none";
+              }, 300); // Transition time match karne ke liye
+          }, 3000);
+        } else {
+          console.log("Show not found.");
+        }
       }
     }
 
