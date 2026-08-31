@@ -376,7 +376,7 @@
       transition: all 0.2s ease;
     }
     .search-btn-icon:hover { border-color: #ff0055; color: #fff; }
-     .search-container { display: none; padding: 12px 0 0 0; max-width: 800px; margin: 0 auto; }
+    .search-container { display: none; padding: 12px 0 0 0; max-width: 800px; margin: 0 auto; }
     .search-container.active { display: block; }
     .search-box-wrapper input {
       width: 100%; padding: 12px 16px; background: #141419;
@@ -721,7 +721,80 @@
     }
     @keyframes adSpin { to { transform: rotate(360deg); } }
     .ad-loading-text { color: #ccc; font-size: 13px; }
-    
+
+
+    .ad-container {
+    width: 100%;
+    min-height: 250px; /* Ad ke standard size ke hisab se min-height set karein */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+    .sponsor-card {
+    transition: all 0.3s ease;
+}
+
+/* ---- Banner Ad Fix (FINAL) ---- */
+.direct-ad-card.banner-ad-mode {
+    width: auto;
+    height: auto;
+    max-width: 92%;
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(17,17,17,0.85);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.08);
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.direct-ad-card.banner-ad-mode .direct-ad-badge,
+.direct-ad-card.banner-ad-mode .direct-ad-title {
+    position: static;
+    transform: none;
+    margin: 0 0 8px 0;
+    padding: 0;
+}
+.direct-ad-card.banner-ad-mode .direct-ad-badge {
+    background: #ff0055;
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+.direct-ad-card.banner-ad-mode.ad-loaded .direct-ad-badge,
+.direct-ad-card.banner-ad-mode.ad-loaded .direct-ad-title {
+    display: none;
+}
+
+.banner-ad-slot {
+    width: 95%;
+    max-width: 95%;
+    max-height: 95%;
+    height: auto;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: visible;
+    border: 1px dashed rgba(255,255,255,0.35);
+    border-radius: 10px;
+    padding: 6px;
+    background: rgba(255,255,255,0.02);
+    contain: layout;
+    transform: translateZ(0);
+      }
+.banner-ad-slot iframe,
+.banner-ad-slot ins,
+.banner-ad-slot > div,
+.banner-ad-slot img {
+    display: block;
+    border: none;
+    transform-origin: top left;
+}
+
   </style>
 </head>
 <body>
@@ -1236,7 +1309,7 @@ setTimeout(() => {
       ];
       for (const re of patterns) {
         const m = v.match(re);
-        if (m) return m[1];
+          if (m) return m[1];
       }
       return "";
     }
@@ -1381,13 +1454,13 @@ setTimeout(() => {
 function loadBannerAdCard(index, code) {
       const box = document.getElementById(`playerBox_${index}`);
       box.innerHTML = `
-        <div class="direct-ad-card banner-ad-mode">
+        <div class="direct-ad-card banner-ad-mode" id="bannerAdCard_${index}">
           <div class="ad-loading-overlay" id="adLoading_${index}">
             <div class="ad-loading-spinner"></div>
             <div class="ad-loading-text">Ad load ho raha hai...</div>
           </div>
-          <div class="direct-ad-badge">SPONSORED</div>
-          <div class="direct-ad-title">Advertisement</div>
+          <div class="direct-ad-badge" id="bannerAdBadge_${index}">SPONSORED</div>
+          <div class="direct-ad-title" id="bannerAdTitle_${index}">Advertisement</div>
           <div class="banner-ad-slot" id="bannerAdSlot_${index}"></div>
         </div>
       `;
@@ -1401,13 +1474,66 @@ function loadBannerAdCard(index, code) {
           oldScript.parentNode.replaceChild(newScript, oldScript);
         });
       }
-      // Banner script ka load-complete detect nahi ho sakta, isliye 1.2 second baad loader hata do
-      setTimeout(() => {
+
+const fitAdToBox = () => {
+        const el = slot.querySelector('iframe, ins, img, div');
+        if (!el) return;
+
+        // Reset any leftover inline sizing before measuring
+        el.style.transform = 'none';
+
+        // Priority: ad-network ka diya hua asli width/height attribute
+        // (offsetWidth/offsetHeight kabhi CSS se galat ho sakta hai)
+        const naturalW = parseInt(el.getAttribute('width')) || el.offsetWidth || 300;
+        const naturalH = parseInt(el.getAttribute('height')) || el.offsetHeight || 250;
+
+const maxW = window.innerWidth * 0.95;
+const maxH = window.innerHeight * 0.95;
+
+const finalW = Math.min(naturalW, maxW);
+const finalH = Math.min(naturalH, maxH);
+
+el.style.width = finalW + 'px';
+el.style.height = finalH + 'px';
+el.style.transform = 'none';
+
+slot.style.width = finalW + 'px';
+slot.style.height = finalH + 'px';
+  
+        el.style.width = naturalW + 'px';
+        el.style.height = naturalH + 'px';
+        el.style.transform = `scale(${scale})`;
+
+        slot.style.width = (naturalW * scale) + 'px';
+        slot.style.height = (naturalH * scale) + 'px';
+      };
+  
+      const markAdLoaded = () => {
         const l = document.getElementById(`adLoading_${index}`);
         if (l) l.remove();
-      }, 1200);
+        const card = document.getElementById(`bannerAdCard_${index}`);
+        if (card) card.classList.add('ad-loaded');
+        fitAdToBox();
+      };
+
+      if (slot && window.MutationObserver) {
+        const observer = new MutationObserver((mutations, obs) => {
+          if (slot.querySelector('iframe, ins, img') || slot.children.length > 0) {
+            markAdLoaded();
+            obs.disconnect();
+          }
+        });
+        observer.observe(slot, { childList: true, subtree: true });
+
+        setTimeout(() => {
+          observer.disconnect();
+          markAdLoaded();
+        }, 3000);
+      } else {
+        setTimeout(markAdLoaded, 1200);
+      }
 }
-       
+    
     function startAdCountdown(index, actualEpisodeId) {
       const skipBox = document.getElementById(`adSkipBox_${index}`);
       const btnText = document.getElementById(`adBtnText_${index}`);
@@ -1700,7 +1826,7 @@ ${shareUrl}
       closeHistoryWindow();
       let showIdx = allShowsData.findIndex(s => s.show_name === showName);
       if (showIdx !== -1) {
-        openShortsPlayer(showIdx, epIndex);
+         openShortsPlayer(showIdx, epIndex);
       } else {
         // Website style smooth toast notification
         let toast = document.getElementById("custom-toast");
@@ -2204,7 +2330,7 @@ function closeEpisodesDrawer() {
         <span id="currentSpeedLabel" class="speed-main-text">1.00x</span>
         <button class="speed-adj-btn" id="speedIncBtn" aria-label="Increase speed">+</button>
       </div>
-      <div class="speed-slider-container">
+    <div class="speed-slider-container">
         <input type="range" id="speedRangeSlider" min="0.25" max="2.0" step="0.25" value="1.0" aria-label="Playback speed slider">
       </div>
       <div class="speed-options-row">
@@ -2301,7 +2427,31 @@ document.getElementById('speedIncBtn').addEventListener('click', () => {
   };
 
 })();
-    
+
+
+    // Function to hide sponsor card when ad loads
+function handleAdLoaded(adContainerId, sponsorCardId) {
+    const adContainer = document.getElementById(adContainerId);
+    const sponsorCard = document.getElementById(sponsorCardId);
+
+    if (!adContainer || !sponsorCard) return;
+
+    // MutationObserver to watch if ad content (like iframe or ins element) is loaded/injected
+    const observer = new MutationObserver((mutations, obs) => {
+        // Check if ad has children (like iframe or loaded ad elements)
+        if (adContainer.innerHTML.trim() !== "" && adContainer.querySelector('iframe, ins, div')) {
+            // Ad load ho gaya, ab sponsor card ko hide kar do
+            sponsorCard.style.display = 'none';
+            obs.disconnect(); // Ek baar hide hone ke baad observer rokh dein
+        }
+    });
+
+    observer.observe(adContainer, {
+        childList: true,
+        subtree: true
+    });
+}
+
   </script>
 </body>
 </html>
