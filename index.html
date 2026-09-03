@@ -859,8 +859,7 @@
   top: 88%;
   left: 50%;
   transform: translate(-50%, -50%);
-  
-  display: flex;
+  display: none;   /* 10 sec buttons hidden — later change none to flex */ 
   align-items: center;
   justify-content: center;
   gap: 50px;
@@ -1071,8 +1070,8 @@
 <script src="https://www.youtube.com/iframe_api"></script>
   <script>
  
-    const JM_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTXtzbDoOjeXakc4hA_OS2wtQTSP3iS4TVfEDNsRM8lZUoVqnktOrjOxvjl02zSOba4R4Uehf9OaONb/pub?gid=0&single=true&output=csv";
-    const MASSAGE_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTXtzbDoOjeXakc4hA_OS2wtQTSP3iS4TVfEDNsRM8lZUoVqnktOrjOxvjl02zSOba4R4Uehf9OaONb/pub?gid=304283440&single=true&output=csv";
+    const JM_URL = "https://jai-shree-ram.harshcodecraftstudio.workers.dev/jm";
+    const MASSAGE_URL = "https://jai-shree-ram.harshcodecraftstudio.workers.dev/message";
     let allShowsData = [];
     let savedScrollPosition = 0;
     let activeAdCountdown = null;
