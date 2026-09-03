@@ -24,9 +24,9 @@
 </script>
 
 <!-- Open Graph / Social Media & Search Engine Favicon (Red Circle ki jagah logo ke liye) -->
-<link rel="icon" type="image/png" href="https://i.ibb.co/NgjhpxNZ/file-000000006bb482119f05f441f014a47f.png">
-<link rel="apple-touch-icon" href="https://i.ibb.co/NgjhpxNZ/file-000000006bb482119f05f441f014a47f.png">
-<meta property="og:image" content="https://i.ibb.co/NgjhpxNZ/file-000000006bb482119f05f441f014a47f.png">
+<link rel="icon" type="image/png" href="https://i.ibb.co/C5Ht6qzH/icon.png">
+<link rel="apple-touch-icon" href="https://i.ibb.co/C5Ht6qzH/icon.png">
+<meta property="og:image" content="https://i.ibb.co/C5Ht6qzH/icon.png">
 
   
   <!-- Open Graph / Social Media Sharing Tags -->
@@ -48,8 +48,8 @@
   <link rel="manifest" href="manifest.json">
 
   <!-- Favicon & Icons with Absolute Path -->
- <link rel="icon" type="image/png" href="https://harshcodecraftstudio.github.io/hr-studio/icon.png" onerror="this.href='https://i.ibb.co/NgjhpxNZ/file-000000006bb482119f05f441f014a47f.png';">
-<link rel="apple-touch-icon" href="https://harshcodecraftstudio.github.io/hr-studio/icon.png" onerror="this.href='https://i.ibb.co/NgjhpxNZ/file-000000006bb482119f05f441f014a47f.png';">
+ <link rel="icon" type="image/png" href="https://harshcodecraftstudio.github.io/hr-studio/icon.png" onerror="this.href='https://i.ibb.co/C5Ht6qzH/icon.png';">
+<link rel="apple-touch-icon" href="https://harshcodecraftstudio.github.io/hr-studio/icon.png" onerror="this.href='https://i.ibb.co/C5Ht6qzH/icon.png';">
  <link rel="preconnect" href="https://pl31084592.profitableratecpmnetwork.com"> 
   
  
@@ -325,19 +325,74 @@
     }
 
     /* Toast Notification */
-    #toastNotification {
-      visibility: hidden; min-width: 250px; background-color: rgba(28, 28, 30, 0.95);
-      color: #fff; text-align: center; border-radius: 30px; padding: 12px 20px;
-      position: fixed; z-index: 9999; left: 50%; top: 30px;
-      transform: translateX(-50%) translateY(-20px); font-size: 14px; font-weight: 500;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1); display: flex; align-items: center;
-      justify-content: center; gap: 10px; opacity: 0;
-      transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
-    }
-    #toastNotification.show { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(0); }
-    #toastNotification svg { fill: #4cd964; flex-shrink: 0; }
+ /* Premium Toast Notification */
+#toastNotification {
+  visibility: hidden;
+  position: fixed;
+  z-index: 9999;
+  left: 50%;
+  top: 22px;
+  transform: translateX(-50%) translateY(-25px) scale(.96);
 
+  width: max-content;
+  max-width: calc(100vw - 30px);
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 12px 17px;
+  border-radius: 16px;
+
+  background: rgba(24, 24, 28, .88);
+  color: #fff;
+
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow:
+    0 12px 35px rgba(0,0,0,.45),
+    0 0 25px rgba(255,0,85,.08);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  opacity: 0;
+
+  transition:
+    opacity .28s ease,
+    transform .32s cubic-bezier(.2,.8,.2,1),
+    visibility .28s ease;
+}
+
+#toastNotification.show {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+
+#toastNotification svg {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4cd964;
+  fill: none;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 6px rgba(76,217,100,.6));
+}
+/* Mobile */
+@media (max-width: 480px) {
+  #toastNotification {
+    top: 16px;
+    max-width: calc(100vw - 24px);
+    padding: 11px 15px;
+    border-radius: 15px;
+    font-size: 12.5px;
+  }
+                     }
 
    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background-color: #0b0b0e; color: #fff; overflow-x: hidden; padding-bottom: 70px; }
@@ -795,9 +850,96 @@
     transform-origin: top left;
 }
 
+  
+/* ===== HR STUDIO PROFESSIONAL UI UPGRADE ===== */
+.home-hero{margin:4px 0 22px;padding:22px 18px;border:1px solid rgba(255,255,255,.08);border-radius:22px;background:radial-gradient(circle at 85% 15%,rgba(0,229,255,.13),transparent 35%),linear-gradient(145deg,#15151c,#0f1015);display:flex;align-items:flex-end;justify-content:space-between;gap:14px;box-shadow:0 14px 35px rgba(0,0,0,.22)}.home-kicker{font-size:10px;font-weight:900;letter-spacing:1.5px;color:#00e5ff;margin-bottom:7px}.home-hero h1{font-size:26px;line-height:1.08;font-weight:950;margin:0}.home-hero p{font-size:12px;color:rgba(255,255,255,.58);margin-top:8px;line-height:1.5;max-width:430px}.hero-search-btn{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.07);color:#fff;border-radius:13px;padding:10px 13px;font-size:12px;font-weight:800;white-space:nowrap;cursor:pointer}.home-section{margin:0 0 24px}.section-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 11px}.section-heading h2{font-size:17px;font-weight:900}.section-heading span{display:block;font-size:10px;color:rgba(255,255,255,.42);margin-top:3px}.section-heading button{border:0;background:transparent;color:#ff4b86;font-size:11px;font-weight:800;cursor:pointer}.horizontal-row{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 7px;scrollbar-width:none}.horizontal-row::-webkit-scrollbar{display:none}.mini-card{min-width:145px;width:145px;background:#141419;border:1px solid rgba(255,255,255,.07);border-radius:13px;overflow:hidden;cursor:pointer;position:relative;box-shadow:0 7px 18px rgba(0,0,0,.18)}.mini-thumb{width:100%;height:180px;object-fit:cover;display:block;background:#09090b}.mini-info{padding:9px}.mini-title{font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mini-sub{font-size:10px;color:#ff4b86;margin-top:3px;font-weight:700}.mini-badge{position:absolute;top:7px;left:7px;background:#ff0055;color:#fff;font-size:8px;font-weight:900;padding:3px 6px;border-radius:5px}.mini-progress{height:3px;background:rgba(255,255,255,.12);margin:0 9px 9px;border-radius:99px;overflow:hidden}.mini-progress i{display:block;height:100%;background:#ff0055}.show-card{position:relative;transition:transform .2s ease}.show-card:active{transform:scale(.985)}.show-card .new-badge{position:absolute;top:8px;left:8px;background:#ff0055;color:#fff;font-size:8px;font-weight:900;padding:4px 7px;border-radius:6px;z-index:2}.search-page-view{display:none;position:fixed;inset:0;background:#0b0b0e;z-index:2600;overflow-y:auto;padding:18px 16px 90px}.search-page-view.active{display:block}.search-page-header{max-width:800px;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;position:relative}.search-back-btn{position:absolute;left:0;background:none;border:0;color:#ff0055;font-size:25px;cursor:pointer}.search-page-title{font-size:19px;font-weight:900}.search-page-box{max-width:800px;margin:0 auto 12px;display:flex;align-items:center;gap:9px;padding:11px 14px;background:#141419;border:1px solid rgba(255,255,255,.1);border-radius:14px}.search-page-box input{flex:1;background:none;border:0;outline:0;color:#fff;font-size:14px}.search-group{max-width:800px;margin:18px auto}.search-group h3{font-size:13px;margin-bottom:10px}.search-result{display:flex;gap:11px;padding:10px;background:#141419;border:1px solid rgba(255,255,255,.07);border-radius:12px;margin-bottom:8px;cursor:pointer}.search-result img{width:54px;height:72px;object-fit:cover;border-radius:8px}.search-result-title{font-size:13px;font-weight:800}.search-result-sub{font-size:11px;color:#ff4b86;margin-top:5px}.search-history-chip{display:inline-flex;padding:7px 10px;border-radius:99px;background:#141419;border:1px solid rgba(255,255,255,.08);color:#aaa;font-size:10px;margin:3px;cursor:pointer}.search-empty{max-width:800px;margin:50px auto;text-align:center;color:rgba(255,255,255,.45);font-size:13px}
+    
+    .player-nav-controls {
+  position: absolute;
+  top: 87%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+  z-index: 20;
+    }
+    
+.player-nav-btn{width:38px;height:38px;border:1px solid rgba(255,255,255,.18);border-radius:50%;background:rgba(0,0,0,.65);backdrop-filter:blur(10px);color:#fff;font-size:14px;cursor:pointer}.player-nav-btn:disabled{opacity:.3}.auto-next-banner{position:absolute;left:50%;bottom:24px;transform:translateX(-50%) translateY(8px);z-index:70;background:rgba(15,15,19,.92);border:1px solid rgba(255,255,255,.12);border-radius:13px;padding:9px 12px;display:flex;align-items:center;gap:9px;opacity:0;pointer-events:none;transition:.25s}.auto-next-banner.show{opacity:1;transform:translateX(-50%) translateY(0)}.auto-next-banner strong{font-size:11px}.auto-next-banner button{border:0;background:#ff0055;color:#fff;border-radius:8px;padding:6px 9px;font-size:10px;font-weight:800}.resume-chip{position:absolute;left:12px;bottom:76px;z-index:52;background:rgba(0,0,0,.68);border:1px solid rgba(255,255,255,.1);padding:6px 9px;border-radius:9px;font-size:9px;color:#fff;opacity:0;transition:.2s}.resume-chip.show{opacity:1}.history-toolbar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}.history-toolbar button{border:1px solid rgba(255,255,255,.09);background:#141419;color:#ff4b86;border-radius:9px;padding:7px 10px;font-size:10px;font-weight:800}.h-progress{height:3px;background:rgba(255,255,255,.12);margin:0 8px 8px;border-radius:99px;overflow:hidden}.h-progress i{display:block;height:100%;background:#ff0055}.footer-icon-wrap{position:relative;display:flex}.footer-notif-dot{position:absolute;right:-3px;top:-2px;width:7px;height:7px;border-radius:50%;background:#ff0055;display:none;box-shadow:0 0 7px rgba(255,0,85,.8)}.footer-notif-dot.active{display:block}.more-sheet-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:2700}.more-sheet-backdrop.active{display:block}.more-sheet{position:fixed;left:0;right:0;bottom:0;z-index:2750;background:#15151b;border-top:1px solid rgba(255,255,255,.1);border-radius:22px 22px 0 0;padding:10px 16px 26px;transform:translateY(110%);transition:transform .3s ease}.more-sheet.active{transform:translateY(0)}.more-sheet-handle{width:38px;height:4px;border-radius:99px;background:rgba(255,255,255,.2);margin:0 auto 15px}.more-sheet-title{font-size:17px;font-weight:900;margin-bottom:10px}.more-sheet button{width:100%;display:grid;grid-template-columns:32px 1fr;grid-template-rows:auto auto;text-align:left;gap:2px 8px;padding:13px 4px;background:none;border:0;color:#fff;border-bottom:1px solid rgba(255,255,255,.06);font-size:14px}.more-sheet button span{font-weight:800}.more-sheet button small{grid-column:2;color:rgba(255,255,255,.45);font-size:10px}.offline-banner{display:none;position:fixed;bottom:78px;left:50%;transform:translateX(-50%);z-index:2500;background:#18181d;border:1px solid rgba(255,255,255,.1);padding:8px 12px;border-radius:99px;font-size:10px;color:#ddd;white-space:nowrap}.offline-banner.show{display:block}.skeleton-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.skeleton-card{background:#141419;border-radius:14px;padding-bottom:12px;overflow:hidden}.sk-img,.sk-line{background:linear-gradient(90deg,#17171d,#24242c,#17171d);background-size:200% 100%;animation:sk 1.2s infinite}.sk-img{height:220px}.sk-line{height:10px;border-radius:5px;margin:12px 12px 0}.sk-line.short{width:45%;margin-top:8px}@keyframes sk{to{background-position:-200% 0}}@media(max-width:480px){.home-hero{padding:18px 14px}.home-hero h1{font-size:22px}.hero-search-btn{padding:9px 10px}.mini-card{min-width:132px;width:132px}.mini-thumb{height:165px}.app-footer{padding:9px 0 10px}.footer-item{font-size:10px}.footer-item svg{width:19px;height:19px}.player-nav-controls{bottom:20px}.auto-next-banner{bottom:72px;max-width:90vw}.search-result img{width:48px;height:64px}}
+
+/* ===== PWA UPDATE UI ===== */
+#appUpdateBanner{position:fixed;left:50%;top:16px;transform:translateX(-50%) translateY(-18px);width:min(94vw,520px);z-index:10050;display:flex;align-items:center;gap:10px;padding:10px 11px;background:rgba(20,20,25,.94);border:1px solid rgba(255,255,255,.12);border-radius:16px;box-shadow:0 14px 40px rgba(0,0,0,.5);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .25s ease,transform .3s cubic-bezier(.2,.8,.2,1),visibility .25s ease}.show-update{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);pointer-events:auto}.app-update-icon{width:38px;height:38px;flex:0 0 38px;border-radius:10px;object-fit:cover}.app-update-copy{min-width:0;flex:1}.app-update-title{font-size:13px;font-weight:900;color:#fff;line-height:1.2}.app-update-subtitle{font-size:11px;color:rgba(255,255,255,.58);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.app-update-btn{border:0;color:#fff;background:linear-gradient(135deg,#ff0055,#ff3377);padding:9px 12px;border-radius:10px;font-size:11px;font-weight:900;cursor:pointer;white-space:nowrap}.app-update-btn:disabled{opacity:.7;cursor:wait}.app-update-close{border:0;background:transparent;color:rgba(255,255,255,.55);font-size:20px;line-height:1;padding:4px 5px;cursor:pointer}@media(max-width:480px){#appUpdateBanner{top:10px;width:calc(100vw - 20px);padding:9px}.app-update-icon{width:34px;height:34px;flex-basis:34px}.app-update-btn{padding:8px 10px;font-size:10px}}
+
+    .clear-history-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.65);
+  backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  padding: 20px;
+}
+
+.clear-history-popup.active {
+  display: flex;
+}
+
+.clear-history-box {
+  width: min(360px, 100%);
+  background: #1c1c1c;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 15px 50px rgba(0,0,0,.5);
+}
+
+.clear-history-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.clear-history-text {
+  font-size: 14px;
+  color: #aaa;
+  line-height: 1.5;
+}
+
+.clear-history-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.clear-history-actions button {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.clear-history-actions button:first-child {
+  background: #333;
+  color: #fff;
+}
+
+.clear-history-actions button:last-child {
+  background: #ff3366;
+  color: #fff;
+}
+    
   </style>
 </head>
 <body>
+<div id="appUpdateBanner" role="status" aria-live="polite"><img class="app-update-icon" src="icon.png" alt="HR STUDIO"><div class="app-update-copy"><div class="app-update-title">New Update Available</div><div class="app-update-subtitle">New features &amp; improvements are ready</div></div><button id="appUpdateBtn" class="app-update-btn" type="button" onclick="applyAppUpdate()">Update App</button><button class="app-update-close" type="button" aria-label="Close update" onclick="closeAppUpdate()">×</button></div>
+
 
   <div id="toastNotification">
     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none">
@@ -826,7 +968,7 @@
           🔔
           <span class="notif-badge" id="notifBadge">0</span>
         </button>
-        <button class="search-btn-icon" onclick="toggleSearch()">🔍</button>
+        <button class="search-btn-icon" onclick="openSearchPage()">🔍</button>
       </div>
     </div>
     <div class="search-container" id="search-bar">
@@ -859,10 +1001,15 @@
   </div>
 
   
-  <!-- Main Content Grid -->
-  <div class="container">
-    <div class="grid-layout" id="shows-container"></div>
-  </div>
+  <!-- Main Content / Home -->
+  <main class="container" id="homeView">
+    <section class="home-hero" id="homeHero"><div><div class="home-kicker">HR STUDIO • OFFICIAL</div><h1 style="white-space: nowrap;">Watch what you love.</h1><p>Continue your episodes, discover new releases and explore trending shows.</p></div><button class="hero-search-btn" onclick="openSearchPage()">🔍 Search</button></section>
+    <section class="home-section" id="continueSection" style="display:none;"><div class="section-heading"><div><h2>Continue Watching</h2><span>Pick up where you left off</span></div><button onclick="openHistoryWindow()">See all</button></div><div class="horizontal-row" id="continueRow"></div></section>
+    <section class="home-section" id="recentSection" style="display:none;"><div class="section-heading"><div><h2>Recently Added</h2><span>Latest episodes from the sheet</span></div></div><div class="horizontal-row" id="recentRow"></div></section>
+    <section class="home-section" id="trendingSection" style="display:none;"><div class="section-heading"><div><h2>🔥 Trending</h2><span>Popular on your device</span></div></div><div class="horizontal-row" id="trendingRow"></div></section>
+    <section class="home-section"><div class="section-heading"><div><h2>All Shows</h2><span id="allShowsSubtitle">Explore every show</span></div></div><div class="grid-layout" id="shows-container"></div></section>
+  </main>
+  <div class="search-page-view" id="searchPageView"><div class="search-page-header"><button class="search-back-btn" onclick="closeSearchPage()">←</button><div class="search-page-title">Search</div></div><div class="search-page-box"><span>🔍</span><input type="search" id="search-page-input" autocomplete="off" placeholder="Search shows or episodes..." oninput="searchAllContent()" onkeydown="if(event.key==='Enter')saveSearchTerm(this.value.trim())"></div><div id="searchHistoryChips"></div><div id="searchResultsBody"></div></div>
 
   <!-- Fullscreen Reels Modal -->
   <div class="shorts-modal" id="shortsModal">
@@ -888,7 +1035,7 @@
     </div>
     <div class="history-content-container">
       <div class="history-tabs-row" id="historyTabsRow">
-        <div class="history-tab-btn active" data-tab="watch" onclick="switchHistoryTab('watch')">&#128337; History</div>
+        <div class="history-tab-btn active" data-tab="watch" onclick="switchHistoryTab('watch')">&#128337; Watch</div>
         <div class="history-tab-btn" data-tab="saved" onclick="switchHistoryTab('saved')">&#128190; Saved</div>
         <div class="history-tab-btn" data-tab="liked" onclick="switchHistoryTab('liked')">&#10084;&#65039; Liked</div>
       </div>
@@ -897,35 +1044,35 @@
   </div>
 
   <div id="custom-toast" style="display:none; opacity:0; transition: opacity 0.3s ease; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #ff0055; color: white; padding: 12px 24px; border-radius: 8px; z-index: 9999; font-family: sans-serif; font-weight: 500; box-shadow: 0 4px 12px rgba(0,0,0,0.3);"></div>
-  
-<!-- Footer Navigation -->
-  <div class="app-footer">
-    <div class="footer-item active" id="footerHome" onclick="handleFooterClick('home')">
-      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-      Home
-    </div>
-    
-    <!-- Install Button (Shuru me hidden rahega, jab install available hoga tab dikhega) -->
-    <div class="footer-item" id="footerInstall" onclick="handleFooterClick('install')" style="display: none;">
-      <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-      Install
+
+  <div id="clearHistoryPopup" class="clear-history-popup">
+  <div class="clear-history-box">
+    <div class="clear-history-title">Clear Watch History?</div>
+    <div class="clear-history-text">
+      Are you sure you want to clear all watch history?
     </div>
 
-    <div class="footer-item" id="footerShare" onclick="handleFooterClick('share')">
-      <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z"/></svg>
-      Share
-    </div>
-
-    <div class="footer-item" id="footerHistory" onclick="handleFooterClick('history')">
-      <svg viewBox="0 0 24 24"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
-      History
+    <div class="clear-history-actions">
+      <button onclick="cancelClearHistory()">Cancel</button>
+      <button onclick="confirmClearHistory()">Clear</button>
     </div>
   </div>
-  <script src="https://www.youtube.com/iframe_api"></script>
+  </div>
+<!-- Footer Navigation -->
+  <nav class="app-footer" aria-label="Main navigation">
+    <div class="footer-item active" id="footerHome" onclick="handleFooterClick('home')"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Home</div>
+    <div class="footer-item" id="footerSearch" onclick="handleFooterClick('search')"><svg viewBox="0 0 24 24"><path d="M9.5 3a6.5 6.5 0 1 0 4.03 11.6l4.44 4.44 1.41-1.41-4.44-4.44A6.5 6.5 0 0 0 9.5 3zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9z"/></svg>Search</div>
+    <div class="footer-item" id="footerNotifications" onclick="handleFooterClick('notifications')"><span class="footer-icon-wrap"><svg viewBox="0 0 24 24"><path d="M12 22a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 22zm7-6v-5a7 7 0 0 0-5.5-6.84V3a1.5 1.5 0 0 0-3 0v1.16A7 7 0 0 0 5 11v5l-2 2v1h18v-1l-2-2z"/></svg><span class="footer-notif-dot" id="footerNotifDot"></span></span>Notifications</div>
+    <div class="footer-item" id="footerHistory" onclick="handleFooterClick('history')"><svg viewBox="0 0 24 24"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>History</div>
+    <div class="footer-item" id="footerMore" onclick="handleFooterClick('more')"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>More</div>
+  </nav>
+  <div class="more-sheet-backdrop" id="moreSheetBackdrop" onclick="closeMoreSheet()"></div><div class="more-sheet" id="moreSheet"><div class="more-sheet-handle"></div><div class="more-sheet-title">More</div><button onclick="handleMoreInstall()">📲 <span>Install App</span><small>Install HR STUDIO on your device</small></button><button onclick="handleAppShareOrInstall();closeMoreSheet();">↗️ <span>Share App</span><small>Share HR STUDIO with friends</small></button></div>
+  <div class="offline-banner" id="offlineBanner">You are offline • Showing saved app content</div>
+<script src="https://www.youtube.com/iframe_api"></script>
   <script>
+ 
     const JM_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTXtzbDoOjeXakc4hA_OS2wtQTSP3iS4TVfEDNsRM8lZUoVqnktOrjOxvjl02zSOba4R4Uehf9OaONb/pub?gid=0&single=true&output=csv";
     const MASSAGE_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTXtzbDoOjeXakc4hA_OS2wtQTSP3iS4TVfEDNsRM8lZUoVqnktOrjOxvjl02zSOba4R4Uehf9OaONb/pub?gid=304283440&single=true&output=csv";
-
     let allShowsData = [];
     let savedScrollPosition = 0;
     let activeAdCountdown = null;
@@ -1006,7 +1153,7 @@
 
     async function fetchShowsFromSheet() {
       const container = document.getElementById('shows-container');
-      container.innerHTML = `<div class="state-message">Loading shows...</div>`;
+      container.innerHTML = `<div class="skeleton-grid">${Array.from({length:6},()=>'<div class="skeleton-card"><div class="sk-img"></div><div class="sk-line"></div><div class="sk-line short"></div></div>').join('')}</div>`;
 
       try {
         const response = await fetch(JM_URL + '&t=' + new Date().getTime());
@@ -1044,7 +1191,7 @@
           return;
         }
 
-        renderShows(allShowsData);
+        renderShows(allShowsData); renderHomeSections();
       } catch (error) {
         container.innerHTML = `
           <div class="state-message error-message">
@@ -1054,30 +1201,7 @@
       }
     }
 
-    function renderShows(shows) {
-      const container = document.getElementById('shows-container');
-      container.innerHTML = "";
-
-      if (shows.length === 0) {
-        container.innerHTML = `<div class="state-message">No shows match your search.</div>`;
-        return;
-      }
-
-      shows.forEach((show) => {
-        const card = document.createElement('div');
-        card.className = 'show-card';
-        card.innerHTML = `
-          <img src="${escapeHtml(show.thumbnail)}" alt="${escapeHtml(show.show_name)}" loading="lazy">
-          <div class="show-details">
-            <div class="show-title">${escapeHtml(show.show_name)}</div>
-            <div class="show-episodes">${show.episodes.length} Episodes</div>
-          </div>
-        `;
-        let realIndex = allShowsData.findIndex(s => s.show_name === show.show_name);
-        card.onclick = () => openShortsPlayer(realIndex, 0);
-        container.appendChild(card);
-      });
-    }
+    function renderShows(shows){const container=document.getElementById('shows-container');container.innerHTML='';if(!shows.length){container.innerHTML=`<div class="state-message">No shows match your search.</div>`;return;}shows.forEach((show,position)=>{const card=document.createElement('div');card.className='show-card';const isNew=position<3&&show.episodes.length>0;card.innerHTML=`${isNew?'<span class="new-badge">NEW</span>':''}<img src="${escapeHtml(show.thumbnail)}" alt="${escapeHtml(show.show_name)}" loading="lazy" onerror="this.src='icon.png'"><div class="show-details"><div class="show-title">${escapeHtml(show.show_name)}</div><div class="show-episodes">${show.episodes.length?show.episodes.length+' Episodes':'Coming Soon'}</div></div>`;const realIndex=allShowsData.findIndex(s=>s.show_name===show.show_name);card.onclick=()=>openShortsPlayer(realIndex,0);container.appendChild(card);});}
 
     function getEpisodeLikesCount(showName, epIndex) {
       let hash = 0;
@@ -1094,10 +1218,31 @@
       }
     }
 
-    function openShortsPlayer(showIndex, startEpisodeIndex = 0) {
-      const show = allShowsData[showIndex];
-      if (!show || show.episodes.length === 0) return;
+    function getHistoryList(){try{return JSON.parse(localStorage.getItem('hr_watch_history')||'[]')}catch(e){return[]}}
+    function getWatchKey(showName,epIndex){return `hr_watch_pos_${showName}_${epIndex}`;}
+    function getWatchProgress(item){try{const p=JSON.parse(localStorage.getItem(getWatchKey(item.showName,item.epIndex))||'{}');return{current:Number(p.current||0),duration:Number(p.duration||0),percent:Number(p.percent||0)}}catch(e){return{current:0,duration:0,percent:0}}}
+    function makeMiniCard(item,options={}){const showObj=allShowsData.find(s=>s.show_name===item.showName);if(!showObj)return'';const p=getWatchProgress(item),pct=Math.max(0,Math.min(100,p.percent||0));return `<div class="mini-card" onclick="playFromHistory('${escapeHtml(item.showName)}',${item.epIndex})">${options.badge?`<span class="mini-badge">${escapeHtml(options.badge)}</span>`:''}<img class="mini-thumb" src="${escapeHtml(showObj.thumbnail||'icon.png')}" alt="" loading="lazy" onerror="this.src='icon.png'"><div class="mini-info"><div class="mini-title">${escapeHtml(item.showName)}</div><div class="mini-sub">Episode ${item.epIndex+1}${options.sub?' • '+escapeHtml(options.sub):''}</div></div>${pct>0?`<div class="mini-progress"><i style="width:${pct}%"></i></div>`:''}</div>`;}
+function renderHomeSections(){const historyList=getHistoryList(),cs=document.getElementById('continueSection'),cr=document.getElementById('continueRow');if(cr&&historyList.length){cr.innerHTML=historyList.slice(0,8).map(i=>{const s=allShowsData.find(x=>x.show_name===i.showName),total=s?.episodes?.length||0;return makeMiniCard(i,{badge:'CONTINUE',sub:`Total ${total}`});}).join('');cs.style.display='block';}else if(cs)cs.style.display='none';const recent=allShowsData.filter(s=>s.episodes.length).map(s=>({showName:s.show_name,epIndex:0})),rs=document.getElementById('recentSection'),rr=document.getElementById('recentRow');if(rr&&recent.length){rr.innerHTML=recent.slice(0,10).map(i=>{const s=allShowsData.find(x=>x.show_name===i.showName),total=s?.episodes?.length||0;return makeMiniCard(i,{badge:'NEW',sub:`Total ${total}`});}).join('');rs.style.display='block';}const score=s=>historyList.filter(i=>i.showName===s.show_name).length*10+s.episodes.length,
+trend=[...allShowsData].filter(s=>s.episodes.length).sort((a,b)=>score(b)-score(a)).slice(0,10),
+ts=document.getElementById('trendingSection'),tr=document.getElementById('trendingRow');
+if(tr&&trend.length){
+  tr.innerHTML=trend.map(s=>makeMiniCard({showName:s.show_name,epIndex:0},{badge:'TRENDING',sub:`Total ${s.episodes.length}`})).join('');
+  ts.style.display='block';
+}
+                             }    function openSearchPage(){document.getElementById('searchPageView').classList.add('active');document.querySelectorAll('.footer-item').forEach(e=>e.classList.remove('active'));document.getElementById('footerSearch').classList.add('active');renderSearchHistory();setTimeout(()=>document.getElementById('search-page-input')?.focus(),80);history.pushState({searchOpen:true},'');}
+    function closeSearchPage(){document.getElementById('searchPageView').classList.remove('active');document.getElementById('footerHome').classList.add('active');}
+    function saveSearchTerm(q){if(!q)return;let a=[];try{a=JSON.parse(localStorage.getItem('hr_search_history')||'[]')}catch(e){}a=[q,...a.filter(x=>x!==q)].slice(0,8);localStorage.setItem('hr_search_history',JSON.stringify(a));}
+    function renderSearchHistory(){const box=document.getElementById('searchHistoryChips');if(!box)return;let a=[];try{a=JSON.parse(localStorage.getItem('hr_search_history')||'[]')}catch(e){}box.innerHTML=a.length?'<div style="font-size:10px;color:#666;margin:10px 2px 5px">Recent searches</div>'+a.map(q=>`<button class="search-history-chip" onclick="document.getElementById('search-page-input').value='${escapeHtml(q)}';searchAllContent()">↗ ${escapeHtml(q)}</button>`).join(''):'';}
+    function searchAllContent(){const input=document.getElementById('search-page-input'),body=document.getElementById('searchResultsBody');if(!input||!body)return;const q=input.value.toLowerCase().trim();if(!q){body.innerHTML='<div class="search-empty">Search for a show or episode.</div>';renderSearchHistory();return;}const shows=allShowsData.filter(s=>s.show_name.toLowerCase().includes(q)),eps=[];allShowsData.forEach(s=>s.episodes.forEach((ep,i)=>{if((`episode ${i+1}`).includes(q)||s.show_name.toLowerCase().includes(q))eps.push({showName:s.show_name,epIndex:i})}));let html='';if(shows.length)html+=`<section class="search-group"><h3>Shows (${shows.length})</h3>${shows.slice(0,20).map(s=>{const idx=allShowsData.findIndex(x=>x.show_name===s.show_name);return `<div class="search-result" onclick="closeSearchPage();openShortsPlayer(${idx},0)"><img src="${escapeHtml(s.thumbnail||'icon.png')}" onerror="this.src='icon.png'"><div><div class="search-result-title">${escapeHtml(s.show_name)}</div><div class="search-result-sub">${s.episodes.length?s.episodes.length+' Episodes':'Coming Soon'}</div></div></div>`}).join('')}</section>`;if(eps.length)html+=`<section class="search-group"><h3>Episodes (${eps.length})</h3>${eps.slice(0,30).map(e=>{const sh=allShowsData.find(s=>s.show_name===e.showName)||{},idx=allShowsData.findIndex(s=>s.show_name===e.showName);return `<div class="search-result" onclick="closeSearchPage();openShortsPlayer(${idx},${e.epIndex})"><img src="${escapeHtml(sh.thumbnail||'icon.png')}" onerror="this.src='icon.png'"><div><div class="search-result-title">${escapeHtml(e.showName)}</div><div class="search-result-sub">Episode ${e.epIndex+1}</div></div></div>`}).join('')}</section>`;body.innerHTML=html||'<div class="search-empty">No results found.<br><span style="font-size:10px">Try another show or episode number.</span></div>';renderSearchHistory();}
 
+    function openShortsPlayer(showIndex, startEpisodeIndex = 0) {
+const show = allShowsData[showIndex];
+if (!show) return;
+if (show.episodes.length === 0) {
+  showToast(`"${show.show_name}" is Coming Soon 🚀`);
+  return;
+}
+      
       currentShowEpisodes = show.episodes;
       currentShowName = show.show_name;
       savedScrollPosition = window.scrollY;
@@ -1110,9 +1255,6 @@
       currentObservedIndex = -1;
       
       unlockedEpisodes = new Set();
-      for(let i=0; i<=startEpisodeIndex; i++) {
-        unlockedEpisodes.add(i);
-      }
 
       show.episodes.forEach((ep, i) => {
         const item = document.createElement('div');
@@ -1173,11 +1315,12 @@
               <a class="ad-learn-more-btn" id="adLearnMore_${i}" href="#" target="_blank" rel="noopener noreferrer">Learn More ➡︎</a>
               <div class="ad-skip-box hidden" id="adSkipBox_${i}" data-index="${i}" data-epid="${escapeHtml(ep.episode_id)}">
                 <span class="ad-badge-tag">AD</span>
-                <span id="adBtnText_${i}">3</span>
+                <span id="adBtnText_${i}">Skip in 5s</span>
               </div>
             </div>
           </div>
 
+          <div class="player-nav-controls"><button class="player-nav-btn" onclick="seekVideo(${i}, -10)" aria-label="Rewind 10 seconds">⏮</button><button class="player-nav-btn" onclick="seekVideo(${i}, 10)" aria-label="Forward 10 seconds">⏭</button></div><div class="auto-next-banner" id="autoNextBanner_${i}"><strong>Next episode in <span id="autoNextCount_${i}">5</span>s</strong><button onclick="cancelAutoNext(${i})">Cancel</button></div><div class="resume-chip" id="resumeChip_${i}"></div>
           <div class="video-info-box">
             <div class="info-left">
               <div class="show-name-text">${escapeHtml(show.show_name)}</div>
@@ -1299,6 +1442,23 @@ setTimeout(() => {
       }
     }
 
+    function seekVideo(index, seconds){
+  const player = ytPlayers[index];
+  if(!player || typeof player.getCurrentTime !== 'function' || typeof player.seekTo !== 'function') return;
+  try{
+    const duration = player.getDuration ? player.getDuration() : Infinity;
+    let newTime = player.getCurrentTime() + seconds;
+    if(newTime < 0) newTime = 0;
+    if(duration && newTime > duration) newTime = duration;
+    player.seekTo(newTime, true);
+  }catch(e){}
+    }
+    function goToEpisode(targetIndex){const index=Number(targetIndex);if(!Number.isInteger(index)||index<0||index>=currentShowEpisodes.length)return;const item=document.getElementById('shortsContainer').querySelector(`[data-index="${index}"]`);if(item)document.getElementById('shortsContainer').scrollTo({top:item.offsetTop,behavior:'smooth'});cancelAllAutoNext();}
+    function handleEpisodeEnded(index){if(index!==currentObservedIndex||index>=currentShowEpisodes.length-1)return;startAutoNext(index);}
+    function startAutoNext(index){cancelAllAutoNext();const b=document.getElementById(`autoNextBanner_${index}`),c=document.getElementById(`autoNextCount_${index}`);if(!b||!c)return;let n=5;c.textContent=n;b.classList.add('show');window._autoNextTimer=setInterval(()=>{n--;c.textContent=n;if(n<=0){cancelAllAutoNext();goToEpisode(index+1)}},1000);}
+    function cancelAutoNext(index){const b=document.getElementById(`autoNextBanner_${index}`);if(b)b.classList.remove('show');cancelAllAutoNext();}
+    function cancelAllAutoNext(){if(window._autoNextTimer){clearInterval(window._autoNextTimer);window._autoNextTimer=null;}document.querySelectorAll('.auto-next-banner.show').forEach(e=>e.classList.remove('show'));}
+
     function getYouTubeIdFromUrl(value) {
       if (!value) return "";
       const v = value.trim();
@@ -1400,13 +1560,8 @@ setTimeout(() => {
             playsinline: 1, iv_load_policy: 3, fs: 0, disablekb: 1
           },
           events: {
-            onReady: (event) => {
-              try { event.target.playVideo(); } catch(e) {}
-              startProgressTracking(index);
-            },
-            onStateChange: (event) => {
-              if (event.data === YT.PlayerState.PLAYING) startProgressTracking(index);
-            }
+            onReady:(event)=>{try{const saved=getWatchProgress({showName:currentShowName,epIndex:index});if(saved.current>5&&saved.duration>saved.current+3){event.target.seekTo(saved.current,true);const chip=document.getElementById(`resumeChip_${index}`);if(chip){chip.textContent=`↻ Resume ${formatVideoTime(saved.current)}`;chip.classList.add('show');setTimeout(()=>chip.classList.remove('show'),2500);}}event.target.playVideo();}catch(e){}startProgressTracking(index);},
+            onStateChange:(event)=>{if(event.data===YT.PlayerState.PLAYING)startProgressTracking(index);if(event.data===YT.PlayerState.ENDED)handleEpisodeEnded(index);}
           }
         });
       };
@@ -1421,6 +1576,8 @@ setTimeout(() => {
       }
     }
 
+    function updateHistoryProgressCard(showName,epIndex,percent){const el=document.querySelector(`[data-history-progress="${CSS.escape(showName+'_'+epIndex)}"]`);if(el)el.style.width=Math.max(0,Math.min(100,percent))+'%';}
+
     function startProgressTracking(index) {
       if (progressTimers[index]) clearInterval(progressTimers[index]);
       progressTimers[index] = setInterval(() => {
@@ -1433,8 +1590,8 @@ setTimeout(() => {
         const fillEl = document.getElementById(`progressFill_${index}`);
         if (curEl) curEl.textContent = formatVideoTime(current);
         if (totalEl) totalEl.textContent = total > 0 ? formatVideoTime(total) : 'LIVE';
-        if (fillEl) fillEl.style.width = total > 0 ? `${Math.min(100, (current / total) * 100)}%` : '0%';
-      }, 250);
+        const percent=total>0?Math.min(100,(current/total)*100):0;if(fillEl)fillEl.style.width=`${percent}%`;if(current>0||total>0){localStorage.setItem(getWatchKey(currentShowName,index),JSON.stringify({current,duration:total,percent,updated:Date.now()}));updateHistoryProgressCard(currentShowName,index,percent);}
+      },500);
     }
 
     function loadSponsorBanner(index, linkUrl = "#") {
@@ -1541,7 +1698,7 @@ slot.style.height = finalH + 'px';
       skipBox.classList.remove('hidden');
       skipBox.classList.add('disabled');
       
-      let count = 3;
+      let count = 5;
        btnText.innerText = `${count}`;
 
       activeAdCountdown = setInterval(() => {
@@ -1571,7 +1728,7 @@ slot.style.height = finalH + 'px';
       saveHistory(currentShowName, index);
     }
 
-    function closeShortsPlayer() {
+    function closeShortsPlayer(){cancelAllAutoNext();
       if (activeAdCountdown) clearInterval(activeAdCountdown);
       document.getElementById('shortsModal').classList.remove('active');
       Object.keys(ytPlayers).forEach(i => { if (ytPlayers[i] && ytPlayers[i].destroy) { try { ytPlayers[i].destroy(); } catch(e) {} } });
@@ -1594,57 +1751,39 @@ slot.style.height = finalH + 'px';
 
 let isInstallStarted = false; // Flag variable
 
-function handleFooterClick(tab) {
-  document.querySelectorAll('.footer-item').forEach(el => el.classList.remove('active'));
+function handleFooterClick(tab){document.querySelectorAll('.footer-item').forEach(el=>el.classList.remove('active'));if(tab==='home'){document.getElementById('footerHome').classList.add('active');closeMoreSheet();closeSearchPage();closeShortsPlayer();closeHistoryWindow();window.scrollTo({top:0,behavior:'smooth'});}else if(tab==='search'){document.getElementById('footerSearch').classList.add('active');openSearchPage();}else if(tab==='notifications'){document.getElementById('footerNotifications').classList.add('active');openNotificationWindow();}else if(tab==='history'){document.getElementById('footerHistory').classList.add('active');openHistoryWindow();}else if(tab==='more'){document.getElementById('footerMore').classList.add('active');openMoreSheet();}}
+function openMoreSheet(){document.getElementById('moreSheetBackdrop').classList.add('active');document.getElementById('moreSheet').classList.add('active');history.pushState({moreOpen:true},'');}
+function closeMoreSheet(){document.getElementById('moreSheetBackdrop')?.classList.remove('active');document.getElementById('moreSheet')?.classList.remove('active');}
+function handleMoreInstall(){
+  closeMoreSheet();
 
-  if (tab === 'home') {
-    document.getElementById('footerHome').classList.add('active');
-    closeShortsPlayer();
-    closeHistoryWindow();
-    window.location.reload();
-  } else if (tab === 'install') {
-    document.getElementById('footerInstall').classList.add('active');
-    if (deferredPrompt) {
-      // Pop-up open hoga
-      deferredPrompt.prompt();
-      
-      // User ki choice handle karein
-      deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          // 0.01 second (10 milliseconds) ke delay ke baad start ka message aayega
-          setTimeout(() => {
-            if (!isInstallStarted) {
-              isInstallStarted = true;
-              showToast('App installation started...');
-            }
-          }, 10);
-        } else {
-          showToast('Installation failed❗');
-        }
-        deferredPrompt = null;
-      }).catch(() => {
-        deferredPrompt = null;
-      });
-    } else {
-      showToast('App is already installed or not supported in this browser.');
-    }
-  } else if (tab === 'share') {
-    document.getElementById('footerShare').classList.add('active');
-    handleAppShareOrInstall();
-  } else if (tab === 'history') {
-    document.getElementById('footerHistory').classList.add('active');
-    openHistoryWindow();
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+
+    deferredPrompt.userChoice.then((choiceResult)=>{
+      if(choiceResult.outcome === 'accepted'){
+        setTimeout(()=>{
+          if(!isInstallStarted){
+            isInstallStarted = true;
+            showToast('App installation started...');
+          }
+        },1);
+      }else{
+        showToast('Installation failed❗');
+      }
+
+      deferredPrompt=null;
+    }).catch(()=>{
+      deferredPrompt=null;
+    });
+
+  }else{
+    showToast('Install option is not available right now.');
   }
 }
-
 // Jab browser app install hone par event fire karega
 window.addEventListener('appinstalled', () => {
   deferredPrompt = null;
-  const installBtn = document.getElementById('footerInstall');
-  if (installBtn) {
-    installBtn.style.display = 'none';
-  }
-  
   // App install hone par successfully ka message aayega
   showToast('App installed successfully!');
 });
@@ -1807,13 +1946,84 @@ ${shareUrl}
                       }
     
     
-    function saveHistory(showName, epIndex) {
-      let historyList = JSON.parse(localStorage.getItem('hr_watch_history') || '[]');
-      historyList = historyList.filter(item => !(item.showName === showName && item.epIndex === epIndex));
-      historyList.unshift({ showName, epIndex, timestamp: Date.now() });
-      localStorage.setItem('hr_watch_history', JSON.stringify(historyList));
-    }
+    function saveHistory(showName,epIndex){let historyList=getHistoryList();historyList=historyList.filter(item=>!(item.showName===showName&&item.epIndex===epIndex));historyList.unshift({showName,epIndex,timestamp:Date.now()});localStorage.setItem('hr_watch_history',JSON.stringify(historyList.slice(0,50)));renderHomeSections();}
+function openClearHistoryPopup() {
+  const popup = document.getElementById('clearHistoryPopup');
+  if (popup) popup.classList.add('active');
 
+  history.pushState({ clearHistoryPopup: true }, "");
+}
+
+function closeClearHistoryPopup(message = '') {
+  const popup = document.getElementById('clearHistoryPopup');
+  if (popup) popup.classList.remove('active');
+
+  if (message) showToast(message);
+}
+
+function confirmClearHistory() {
+  localStorage.removeItem('hr_watch_history');
+
+  // Popup तुरंत बंद करो
+  const popup = document.getElementById('clearHistoryPopup');
+  if (popup) {
+    popup.classList.remove('active');
+    popup.style.display = 'none';
+  }
+
+  // History window को तुरंत refresh करो
+  const body = document.getElementById('historyContentBody');
+
+  if (body) {
+    body.innerHTML = `
+      <div class="history-tab-panel active" data-panel="watch">
+        <div class="history-grid-row">
+          <div class="history-empty-msg">No watch history yet.</div>
+        </div>
+      </div>
+
+      <div class="history-tab-panel" data-panel="saved">
+        <div class="history-grid-row">
+          ${
+            JSON.parse(localStorage.getItem('hr_saved_items') || '[]')
+              .map(buildHCard).join('')
+            || '<div class="history-empty-msg">No saved episodes found.</div>'
+          }
+        </div>
+      </div>
+
+      <div class="history-tab-panel" data-panel="liked">
+        <div class="history-grid-row">
+          ${
+            JSON.parse(localStorage.getItem('hr_liked_items') || '[]')
+              .map(buildHCard).join('')
+            || '<div class="history-empty-msg">No liked episodes found.</div>'
+          }
+        </div>
+      </div>
+    `;
+
+    document.querySelectorAll('.history-tab-btn')
+      .forEach(btn => btn.classList.remove('active'));
+
+    document.querySelector(
+      '.history-tab-btn[data-tab="watch"]'
+    )?.classList.add('active');
+  }
+
+  // Home sections भी update
+  renderHomeSections();
+
+  // Success message
+  showToast('✓ Watch history cleared');
+}
+    
+function cancelClearHistory() {
+  const popup = document.getElementById('clearHistoryPopup');
+  if (popup) popup.classList.remove('active');
+
+  showToast('Clear history cancelled');
+}
     function updateHistoryStorageArray(type, showName, epIndex, add) {
       let key = type === 'likes' ? 'hr_liked_items' : 'hr_saved_items';
       let list = JSON.parse(localStorage.getItem(key) || '[]');
@@ -1852,22 +2062,7 @@ ${shareUrl}
       }
     }
 
-    function buildHCard(item) {
-      let showObj = allShowsData.find(s => s.show_name === item.showName);
-      let thumb = showObj ? showObj.thumbnail : 'icon.png';
-      let formattedTime = formatTimestamp(item.timestamp);
-      return `
-        <div class="h-card-item" onclick="playFromHistory('${escapeHtml(item.showName)}', ${item.epIndex})">
-          <div class="h-card-thumb-wrapper">
-            <img class="h-card-thumb" src="${escapeHtml(thumb)}" alt="" loading="lazy">
-            ${formattedTime ? `<div class="h-card-time-tag">${escapeHtml(formattedTime)}</div>` : ''}
-          </div>
-          <div class="h-card-info">
-            <div class="h-card-title">${escapeHtml(item.showName)}</div>
-            <div class="h-card-subtitle">Ep ${item.epIndex + 1}</div>
-          </div>
-        </div>`;
-    }
+    function buildHCard(item){let showObj=allShowsData.find(s=>s.show_name===item.showName),thumb=showObj?showObj.thumbnail:'icon.png',formattedTime=formatTimestamp(item.timestamp),progress=getWatchProgress(item).percent||0;return `<div class="h-card-item" onclick="playFromHistory('${escapeHtml(item.showName)}',${item.epIndex})"><div class="h-card-thumb-wrapper"><img class="h-card-thumb" src="${escapeHtml(thumb)}" alt="" loading="lazy" onerror="this.src='icon.png'">${formattedTime?`<div class="h-card-time-tag">${escapeHtml(formattedTime)}</div>`:''}</div><div class="h-progress"><i data-history-progress="${escapeHtml(item.showName+'_'+item.epIndex)}" style="width:${Math.max(0,Math.min(100,progress))}%"></i></div><div class="h-card-info"><div class="h-card-title">${escapeHtml(item.showName)}</div><div class="h-card-subtitle">Ep ${item.epIndex+1} • ${Math.round(progress)}%</div></div></div>`;}
 
     function openHistoryWindow() {
       const pageView = document.getElementById('historyPageView');
@@ -1881,17 +2076,35 @@ ${shareUrl}
       const savedHTML = savedList.map(buildHCard).join('') || '<div class="history-empty-msg">No saved episodes found.</div>';
       const likedHTML = likedList.map(buildHCard).join('') || '<div class="history-empty-msg">No liked episodes found.</div>';
 
-      body.innerHTML = `
-        <div class="history-tab-panel active" data-panel="watch">
-          <div class="history-grid-row">${watchHTML}</div>
-        </div>
-        <div class="history-tab-panel" data-panel="saved">
-          <div class="history-grid-row">${savedHTML}</div>
-        </div>
-        <div class="history-tab-panel" data-panel="liked">
-          <div class="history-grid-row">${likedHTML}</div>
-        </div>
-      `;
+body.innerHTML = `
+  <div class="history-tab-panel active" data-panel="watch">
+
+    <div class="history-toolbar">
+      <span class="history-count">${historyList.length} watched</span>
+
+      <button class="clear-history-btn" onclick="openClearHistoryPopup()">
+        Clear History
+      </button>
+    </div>
+
+    <div class="history-grid-row">
+      ${watchHTML}
+    </div>
+
+  </div>
+
+  <div class="history-tab-panel" data-panel="saved">
+    <div class="history-grid-row">
+      ${savedHTML}
+    </div>
+  </div>
+
+  <div class="history-tab-panel" data-panel="liked">
+    <div class="history-grid-row">
+      ${likedHTML}
+    </div>
+  </div>
+`;
 
       document.querySelectorAll('.history-tab-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelector('.history-tab-btn[data-tab="watch"]').classList.add('active');
@@ -1911,7 +2124,7 @@ ${shareUrl}
       document.getElementById('footerHistory').classList.remove('active');
     }
 
-    window.onload = fetchShowsFromSheet;
+    window.onload=()=>{fetchShowsFromSheet().then(renderHomeSections);};
 
 
     let deferredPrompt = null;
@@ -1921,20 +2134,22 @@ ${shareUrl}
       e.preventDefault();
       deferredPrompt = e;
       // Agar app install nahi hai, toh Share ki jagah ya alag se Install button dikhayein
-      const installBtn = document.getElementById('footerInstall');
-      if (installBtn) {
-        installBtn.style.display = 'flex';
-      }
+      const moreBtn=document.getElementById('footerMore'); if(moreBtn)moreBtn.classList.add('has-install');
     });
 
-    // Register Service Worker for PWA
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js')
-        .then((reg) => console.log('Service Worker registered!', reg))
-        .catch((err) => console.log('Service Worker registration failed', err));
-    });
-          }
+
+
+    // ===== HR STUDIO AUTO UPDATE SYSTEM =====
+    let hrWaitingWorker=null, hrReloading=false;
+    const HR_VERSION_URL='./version.json', HR_VERSION_KEY='hr_studio_version';
+    function showAppUpdate(){document.getElementById('appUpdateBanner')?.classList.add('show-update');}
+    function closeAppUpdate(){document.getElementById('appUpdateBanner')?.classList.remove('show-update');}
+    function watchServiceWorkerUpdate(reg){if(!reg)return;if(reg.waiting&&navigator.serviceWorker.controller){hrWaitingWorker=reg.waiting;showAppUpdate();}reg.addEventListener('updatefound',()=>{const worker=reg.installing;if(!worker)return;worker.addEventListener('statechange',()=>{if(worker.state==='installed'&&navigator.serviceWorker.controller){hrWaitingWorker=worker;showAppUpdate();}});});}
+    async function checkGitHubVersion(){try{const response=await fetch(HR_VERSION_URL+'?t='+Date.now(),{cache:'no-store',headers:{'Cache-Control':'no-cache'}});if(!response.ok)return;const data=await response.json(),remoteVersion=String(data.version||'').trim();if(!remoteVersion)return;const localVersion=localStorage.getItem(HR_VERSION_KEY);if(!localVersion)localStorage.setItem(HR_VERSION_KEY,remoteVersion);else if(localVersion!==remoteVersion)showAppUpdate();}catch(e){console.log('Version check failed:',e);}}
+    async function clearHRStudioCaches(){try{const keys=await caches.keys();await Promise.all(keys.filter(k=>k.startsWith('hr-studio-')).map(k=>caches.delete(k)));}catch(e){console.log('Cache clear failed:',e);}}
+    async function applyAppUpdate(){const btn=document.getElementById('appUpdateBtn');if(btn){btn.disabled=true;btn.textContent='Updating…';}try{if(hrWaitingWorker){hrWaitingWorker.postMessage({type:'SKIP_WAITING'});return;}await clearHRStudioCaches();try{const response=await fetch(HR_VERSION_URL+'?t='+Date.now(),{cache:'no-store'});if(response.ok){const data=await response.json();if(data.version)localStorage.setItem(HR_VERSION_KEY,String(data.version));}}catch(e){}if('serviceWorker' in navigator){const regs=await navigator.serviceWorker.getRegistrations();await Promise.all(regs.map(r=>r.unregister()));}location.reload();}catch(e){location.reload();}}
+    if('serviceWorker' in navigator){navigator.serviceWorker.addEventListener('controllerchange',()=>{if(hrReloading)return;hrReloading=true;location.reload();});window.addEventListener('load',async()=>{try{const reg=await navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'});watchServiceWorkerUpdate(reg);await reg.update();}catch(e){console.log('Service Worker update check failed:',e);}});}
+    window.addEventListener('load',()=>{checkGitHubVersion();setInterval(checkGitHubVersion,30*60*1000);if('serviceWorker' in navigator)setInterval(async()=>{try{const regs=await navigator.serviceWorker.getRegistrations();for(const reg of regs)await reg.update();}catch(e){}},60*60*1000);});
 
 
     // --- NOTIFICATION SYSTEM WITH APP BADGING (INSTAGRAM STYLE) ---
@@ -2028,10 +2243,10 @@ async function fetchNotificationsFromSheet() {
 let displayTitle = (colAValue !== "") ? escapeHtml(colAValue) : "Notification";
 
         notifs.push({
-          id: `msg_${index}_${Date.now()}`,
+          id: 'msg_' + btoa(unescape(encodeURIComponent((displayTitle+'|'+combinedText).slice(0,500)))).replace(/[^a-zA-Z0-9]/g,'').slice(0,80),
           msgCount: totalColumnCount,
           displayTitle: displayTitle,
-          text: combinedText
+          text: combinedText, receivedAt: Date.now(), type: /update|version|upgrade/i.test((displayTitle+' '+combinedText)) ? 'Update' : (/episode|new|release/i.test((displayTitle+' '+combinedText)) ? 'New' : 'Important')
         });
       }
     });
@@ -2051,6 +2266,7 @@ function checkUnreadNotifications() {
   let unreadCount = globalNotifications.filter(n => !readIds.includes(n.id)).length;
 
   // 1. App ke andar header/bell icon ka badge update karna
+  const footerDot=document.getElementById('footerNotifDot'); if(footerDot)footerDot.classList.toggle('active',unreadCount>0);
   const badge = document.getElementById('notifBadge');
   if (badge) {
     if (unreadCount > 0) {
@@ -2078,30 +2294,8 @@ function openNotificationWindow() {
   history.pushState({ page: 'notifList' }, "");
 }
 
-function renderNotificationList() {
-  const body = document.getElementById('notifContentBody');
-  if (globalNotifications.length === 0) {
-    body.innerHTML = `<div class="history-empty-msg" style="text-align:center; padding:20px; color:#aaa;">No notifications available right now.</div>`;
-    return;
-  }
-
-  let readIds = JSON.parse(localStorage.getItem('hr_read_notifications') || '[]');
-  let html = '';
-
-  globalNotifications.forEach(n => {
-    let isUnread = !readIds.includes(n.id);
-    
-    html += `
-      <div class="msg-card-item ${isUnread ? 'unread' : ''}" onclick="openSingleNotification('${n.id}')" style="background: linear-gradient(145deg, #181818, #222222); border: 1px solid ${isUnread ? '#ff3366' : '#333'}; border-radius: 14px; padding: 16px; margin-bottom: 14px; box-shadow: 0 6px 20px rgba(0,0,0,0.4); position: relative; transition: all 0.3s ease;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-weight: 700; color: #ffffff; font-size: 16px; letter-spacing: 0.5px;">${n.displayTitle}</span>
-          <span style="background: ${isUnread ? '#ff3366' : '#333'}; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; box-shadow: 0 2px 8px rgba(255,51,102,0.4);">${n.msgCount}</span>
-        </div>
-      </div>
-    `;
-  });
-    body.innerHTML = html;
-}
+function markAllNotificationsRead(){const ids=globalNotifications.map(n=>n.id);localStorage.setItem('hr_read_notifications',JSON.stringify(ids));checkUnreadNotifications();renderNotificationList();showToast('All notifications marked as read');}
+function renderNotificationList(){const body=document.getElementById('notifContentBody');if(!globalNotifications.length){body.innerHTML=`<div class="history-empty-msg">No notifications available right now.</div>`;return;}let readIds=JSON.parse(localStorage.getItem('hr_read_notifications')||'[]'),unread=globalNotifications.filter(n=>!readIds.includes(n.id)).length;let html=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px"><span style="font-size:11px;color:#777">${unread} unread</span><button onclick="markAllNotificationsRead()" style="border:1px solid rgba(255,255,255,.1);background:#141419;color:#ff4b86;border-radius:9px;padding:7px 10px;font-size:10px;font-weight:800">Mark all as read</button></div>`;globalNotifications.forEach(n=>{const isUnread=!readIds.includes(n.id),date=n.receivedAt?formatTimestamp(n.receivedAt):'';html+=`<div class="msg-card-item ${isUnread?'unread':''}" onclick="openSingleNotification('${n.id}')"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span style="font-weight:800;color:#fff;font-size:14px">${n.displayTitle}</span><span style="background:${isUnread?'#ff3366':'#333'};color:#fff;padding:3px 8px;border-radius:99px;font-size:9px;font-weight:900">${escapeHtml(n.type||'Important')}</span></div><div style="font-size:10px;color:#666;margin-top:4px">${escapeHtml(date)}${isUnread?' • NEW':''}</div></div>`});body.innerHTML=html;}
 
 // Specific Message Click karne par message kholna aur read mark karna
 function openSingleNotification(notifId) {
@@ -2124,9 +2318,7 @@ function openSingleNotification(notifId) {
   detailBody.innerHTML = `
     <div style="padding: 16px; display: flex; flex-direction: column; align-items: flex-start;">
       <div style="background: linear-gradient(135deg, #1f1f1f, #2a2a2a); border-left: 4px solid #ff3366; border-radius: 12px; padding: 20px; width: 100%; box-shadow: 0 8px 24px rgba(0,0,0,0.5); position: relative;">
-        <div style="font-size: 12px; font-weight: bold; color: #ff3366; margin-bottom: 12px; letter-spacing: 1px; text-transform: uppercase;">
-          HR Studio Official Message
-        </div>
+        <div style="font-size: 12px; font-weight: bold; color: #ff3366; margin-bottom: 6px; letter-spacing: 1px; text-transform: uppercase;">HR Studio Official Message • ${escapeHtml(notif.type || 'Important')}</div><div style="font-size:10px;color:#666;margin-bottom:12px">${escapeHtml(formatTimestamp(notif.receivedAt || Date.now()))}</div>
         <div style="font-size: 17px; line-height: 2.2; word-break: break-word; color: #f2f2f2;">
           ${formattedText}
         </div>
@@ -2149,9 +2341,7 @@ function closeNotifDetailWindow() {
 }
 
 // App load hote hi notifications fetch karne ke liye
-window.addEventListener('DOMContentLoaded', () => {
-  fetchNotificationsFromSheet();
-});
+window.addEventListener('DOMContentLoaded',()=>{fetchNotificationsFromSheet();renderHomeSections();const updateOffline=()=>document.getElementById('offlineBanner')?.classList.toggle('show',!navigator.onLine);window.addEventListener('online',updateOffline);window.addEventListener('offline',updateOffline);updateOffline();});
 
 // Proper Back Button Handler
 window.onpopstate = function () {
@@ -2161,7 +2351,13 @@ window.onpopstate = function () {
   const historyPageView = document.getElementById('historyPageView');
   const notifPageView = document.getElementById('notifPageView');
   const notifDetailView = document.getElementById('notifDetailView');
+const clearHistoryPopup = document.getElementById('clearHistoryPopup');
 
+if (clearHistoryPopup && clearHistoryPopup.classList.contains('active')) {
+  clearHistoryPopup.classList.remove('active');
+  return;
+}
+  const searchPageView=document.getElementById('searchPageView'); const moreSheet=document.getElementById('moreSheet'); if(moreSheet&&moreSheet.classList.contains('active')){closeMoreSheet();return;} if(searchPageView&&searchPageView.classList.contains('active')){closeSearchPage();return;}
   if (episodesDrawer && episodesDrawer.style.display === 'block') {
     closeEpisodesDrawer();
   } else if (speedPopup && speedPopup.classList.contains('active')) {
@@ -2221,12 +2417,12 @@ function triggerSkipTimerAfterClick(index, actualEpisodeId) {
     return;
   }
 
-  // Direct link / sponsor card / youtube / instagram — jaisa pehle tha waisa hi (3 sec, click ke baad)
+  // Direct link / sponsor card / youtube / instagram — jaisa pehle tha waisa hi (5 sec, click ke baad)
   if (lmBtn) {
-    lmBtn.addEventListener('click', () => startTimer(3));
+    lmBtn.addEventListener('click', () => startTimer(5));
   }
   if (directBtn) {
-    directBtn.addEventListener('click', () => startTimer(3));
+    directBtn.addEventListener('click', () => startTimer(5));
   }
 }
     // Episode Jump //
