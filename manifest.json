@@ -1,7 +1,7 @@
 {
   "name": "HR STUDIO",
   "short_name": "HR STUDIO",
-  "start_url": "./index.html",
+  "start_url": "./index.html?v=2026.09.03.1",
   "display": "standalone",
   "background_color": "#0d0d12",
   "theme_color": "#ff0055",
