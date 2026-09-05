@@ -1,6 +1,6 @@
-const CACHE_VERSION = 'hr-studio-v3';
+const CACHE_VERSION = 'hr-studio-v4';
 const CACHE_NAME = `${CACHE_VERSION}-shell`;
-const APP_SHELL = ['./', './index.html', './manifest.json', './icon.png'];
+const APP_SHELL = ['./', './index.html', './offline.html', './manifest.json', './icon.png'];
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL)));
@@ -24,11 +24,12 @@ self.addEventListener('fetch', event => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
-  const isAppShell = request.mode === 'navigate' ||
+ const isAppShell = request.mode === 'navigate' ||
     url.pathname.endsWith('/index.html') ||
+    url.pathname.endsWith('/offline.html') ||
     url.pathname.endsWith('/manifest.json') ||
     url.pathname.endsWith('/icon.png');
-
+  
   if (isAppShell) {
     event.respondWith(
       fetch(new Request(request, { cache: 'no-cache' }))
@@ -36,7 +37,7 @@ self.addEventListener('fetch', event => {
           if (response.ok) caches.open(CACHE_NAME).then(cache => cache.put(request, response.clone()));
           return response;
         })
-        .catch(() => caches.match(request).then(cached => cached || caches.match('./index.html')))
+        .catch(() => caches.match(request).then(cached => cached || caches.match('./offline.html') || caches.match('./index.html')))
     );
     return;
   }
