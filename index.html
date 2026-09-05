@@ -1153,90 +1153,140 @@ function searchShows() {
       return result;
     }
 
-    async function fetchShowsFromSheet() {
-      const container = document.getElementById('shows-container');
-      container.innerHTML = `<div class="skeleton-grid">${Array.from({length:6},()=>'<div class="skeleton-card"><div class="sk-img"></div><div class="sk-line"></div><div class="sk-line short"></div></div>').join('')}</div>`;
+const SHOWS_CACHE_KEY = 'hr_shows_cache_data';
+const SHOWS_CACHE_TIME_KEY = 'hr_shows_cache_time';
+const SHOWS_CACHE_DURATION = 60 * 60 * 1000; // 60 minutes
+let showsRefreshTimer = null;
 
-      try {
-        const response = await fetch(JM_URL + '&t=' + new Date().getTime());
-        if (!response.ok) throw new Error(`Sheet fetch failed`);
-        const data = await response.text();
-        const rows = data.split(/\r?\n/).map(r => r.trim()).filter(r => r.length > 0);
+async function fetchShowsFromSheet() {
+  const container = document.getElementById('shows-container');
+  container.innerHTML = `<div class="skeleton-grid">${Array.from({length:6},()=>'<div class="skeleton-card"><div class="sk-img"></div><div class="sk-line"></div><div class="sk-line short"></div></div>').join('')}</div>`;
 
-        let parsedMatrix = rows.map(r => parseCSVLine(r));
-        let numCols = Math.max(...parsedMatrix.map(r => r.length));
-        let showsMap = new Map();
+  const cachedData = localStorage.getItem(SHOWS_CACHE_KEY);
+  const cachedTime = parseInt(localStorage.getItem(SHOWS_CACHE_TIME_KEY) || '0', 10);
+  const now = Date.now();
+  const isExpired = (now - cachedTime) >= SHOWS_CACHE_DURATION;
+
+  // Offline -> hamesha cache use karo
+  if (!navigator.onLine) {
+    if (cachedData) {
+      parseSheetDataAndRender(cachedData);
+    } else {
+      container.innerHTML = `
+        <div class="state-message error-message">
+          You're offline. Please check your internet connection.<br>
+          <button class="retry-btn" onclick="fetchShowsFromSheet()">Retry</button>
+        </div>`;
+    }
+    return;
+  }
+
+  // Online + cache abhi valid (60 min nahi hue) -> cache use karo
+  if (cachedData && !isExpired) {
+    parseSheetDataAndRender(cachedData);
+    scheduleShowsRefresh(SHOWS_CACHE_DURATION - (now - cachedTime));
+    return;
+  }
+
+  // Online + expired ya cache nahi -> fresh data laao
+  try {
+    const response = await fetch(JM_URL + '&t=' + new Date().getTime());
+    if (!response.ok) throw new Error(`Sheet fetch failed`);
+    const data = await response.text();
+
+    localStorage.setItem(SHOWS_CACHE_KEY, data);
+    localStorage.setItem(SHOWS_CACHE_TIME_KEY, String(now));
+
+    parseSheetDataAndRender(data);
+    scheduleShowsRefresh(SHOWS_CACHE_DURATION);
+  } catch (error) {
+    if (cachedData) {
+      parseSheetDataAndRender(cachedData);
+    } else {
+      container.innerHTML = `
+        <div class="state-message error-message">
+          Couldn't load shows. Please check your connection.<br>
+          <button class="retry-btn" onclick="fetchShowsFromSheet()">Retry</button>
+        </div>`;
+    }
+  }
+}
+
+function scheduleShowsRefresh(ms) {
+  if (showsRefreshTimer) clearTimeout(showsRefreshTimer);
+  showsRefreshTimer = setTimeout(() => { fetchShowsFromSheet(); }, Math.max(ms, 1000));
+}
+
+function parseSheetDataAndRender(data) {
+  const container = document.getElementById('shows-container');
+  const rows = data.split(/\r?\n/).map(r => r.trim()).filter(r => r.length > 0);
+
+  let parsedMatrix = rows.map(r => parseCSVLine(r));
+  let numCols = Math.max(...parsedMatrix.map(r => r.length));
+  let showsMap = new Map();
 
 
-        for (let col = 1; col < numCols; col++) {
-          const showNoRaw = parsedMatrix[0] && parsedMatrix[0][col] ? parsedMatrix[0][col].trim() : "";
-          let showName = parsedMatrix[1] && parsedMatrix[1][col] ? parsedMatrix[1][col].trim() : "";
-          if (!showName) continue;
+  for (let col = 1; col < numCols; col++) {
+    const showNoRaw = parsedMatrix[0] && parsedMatrix[0][col] ? parsedMatrix[0][col].trim() : "";
+    let showName = parsedMatrix[1] && parsedMatrix[1][col] ? parsedMatrix[1][col].trim() : "";
+    if (!showName) continue;
 
-          let thumbnail = parsedMatrix[2] && parsedMatrix[2][col] ? parsedMatrix[2][col].trim() : "";
-          let episodesList = [];
+    let thumbnail = parsedMatrix[2] && parsedMatrix[2][col] ? parsedMatrix[2][col].trim() : "";
+    let episodesList = [];
 
-          for (let row = 3; row < parsedMatrix.length; row += 2) {
-            const epVal = parsedMatrix[row] && parsedMatrix[row][col] ? parsedMatrix[row][col].trim() : "";
-            const adVal = parsedMatrix[row + 1] && parsedMatrix[row + 1][col] ? parsedMatrix[row + 1][col].trim() : "";
-            if (!epVal) continue;
-            episodesList.push({ episode_id: epVal, ad_link: adVal });
-          }
-
-          // "1.1"/"1" -> Show 1 Session 1 | "1.2" -> Show 1 Session 2 | "3.9" -> Show 3 Session 9
-          let showKey = showName;
-          let sessionNo = 1;
-          if (showNoRaw) {
-            const parts = showNoRaw.split('.');
-            showKey = parts[0].trim() || showName;
-            sessionNo = parts[1] ? parseInt(parts[1], 10) : 1;
-            if (!Number.isFinite(sessionNo)) sessionNo = 1;
-          }
-
-
-if (!showsMap.has(showKey)) {
-            showsMap.set(showKey, { show_name: showName, thumbnail: thumbnail, sessions: [] });
-          }
-          if (sessionNo === 1) {
-            showsMap.get(showKey).show_name = showName;
-            showsMap.get(showKey).thumbnail = thumbnail;
-          }
-          showsMap.get(showKey).sessions.push({ session_no: sessionNo, episodes: episodesList, thumbnail: thumbnail });        }
-        
-allShowsData = Array.from(showsMap.values()).map(show => {          show.sessions.sort((a, b) => a.session_no - b.session_no);
-          show.episodes = show.sessions[0] ? show.sessions[0].episodes : [];
-          return show;
-        });
-
-       allShowCards = [];
-allShowsData.forEach((show, showIdx) => {
-  const totalEp = show.sessions.reduce((sum, s) => sum + (s.episodes ? s.episodes.length : 0), 0);
-  allShowCards.push({
-    showIndex: showIdx,
-    sessionIndex: 0,
-    show_name: show.show_name,
-    thumbnail: show.thumbnail,
-    totalSessions: show.sessions.length,
-    totalEpisodes: totalEp
-  });
-});
-        
-        
-        if (allShowsData.length === 0) {
-          container.innerHTML = `<div class="state-message">No shows found right now.</div>`;
-          return;
-        }
-
-        renderShows(allShowCards); renderHomeSections();
-      } catch (error) {
-        container.innerHTML = `
-          <div class="state-message error-message">
-            Couldn't load shows. Please check your connection.<br>
-            <button class="retry-btn" onclick="fetchShowsFromSheet()">Retry</button>
-          </div>`;
-      }
+    for (let row = 3; row < parsedMatrix.length; row += 2) {
+      const epVal = parsedMatrix[row] && parsedMatrix[row][col] ? parsedMatrix[row][col].trim() : "";
+      const adVal = parsedMatrix[row + 1] && parsedMatrix[row + 1][col] ? parsedMatrix[row + 1][col].trim() : "";
+      if (!epVal) continue;
+      episodesList.push({ episode_id: epVal, ad_link: adVal });
     }
 
+    let showKey = showName;
+    let sessionNo = 1;
+    if (showNoRaw) {
+      const parts = showNoRaw.split('.');
+      showKey = parts[0].trim() || showName;
+      sessionNo = parts[1] ? parseInt(parts[1], 10) : 1;
+      if (!Number.isFinite(sessionNo)) sessionNo = 1;
+    }
+
+    if (!showsMap.has(showKey)) {
+      showsMap.set(showKey, { show_name: showName, thumbnail: thumbnail, sessions: [] });
+    }
+    if (sessionNo === 1) {
+      showsMap.get(showKey).show_name = showName;
+      showsMap.get(showKey).thumbnail = thumbnail;
+    }
+    showsMap.get(showKey).sessions.push({ session_no: sessionNo, episodes: episodesList, thumbnail: thumbnail });
+  }
+
+  allShowsData = Array.from(showsMap.values()).map(show => {
+    show.sessions.sort((a, b) => a.session_no - b.session_no);
+    show.episodes = show.sessions[0] ? show.sessions[0].episodes : [];
+    return show;
+  });
+
+  allShowCards = [];
+  allShowsData.forEach((show, showIdx) => {
+    const totalEp = show.sessions.reduce((sum, s) => sum + (s.episodes ? s.episodes.length : 0), 0);
+    allShowCards.push({
+      showIndex: showIdx,
+      sessionIndex: 0,
+      show_name: show.show_name,
+      thumbnail: show.thumbnail,
+      totalSessions: show.sessions.length,
+      totalEpisodes: totalEp
+    });
+  });
+
+  if (allShowsData.length === 0) {
+    container.innerHTML = `<div class="state-message">No shows found right now.</div>`;
+    return;
+  }
+
+  renderShows(allShowCards); renderHomeSections();
+}
+    
 
    function renderShows(cards){const container=document.getElementById('shows-container');container.innerHTML='';if(!cards.length){container.innerHTML=`<div class="state-message">No shows match your search.</div>`;return;}cards.forEach((card,position)=>{const cardEl=document.createElement('div');cardEl.className='show-card';const totalEpisodes=card.totalEpisodes||0;const isNew=position<3&&totalEpisodes>0;const episodeText=totalEpisodes?`${card.totalSessions}S • ${totalEpisodes} Episodes`:`${card.totalSessions}S • Coming Soon`;cardEl.innerHTML=`${isNew?'<span class="new-badge">NEW</span>':''}<img src="${escapeHtml(card.thumbnail)}" alt="${escapeHtml(card.show_name)}" loading="lazy" onerror="this.src='https://i.ibb.co/C5Ht6qzH/icon.png'"><div class="show-details"><div class="show-title">${escapeHtml(card.show_name)}</div><div class="show-episodes">${episodeText}</div></div>`;cardEl.onclick=()=>openShortsPlayer(card.showIndex,0,card.sessionIndex);container.appendChild(cardEl);});} 
     function getEpisodeLikesCount(showName, epIndex) {
@@ -1289,11 +1339,17 @@ if(tr&&trend.length){
     function renderSearchHistory(){const box=document.getElementById('searchHistoryChips');if(!box)return;let a=[];try{a=JSON.parse(localStorage.getItem('hr_search_history')||'[]')}catch(e){}box.innerHTML=a.length?'<div style="font-size:10px;color:#666;margin:10px 2px 5px">Recent searches</div>'+a.map(q=>`<button class="search-history-chip" onclick="document.getElementById('search-page-input').value='${escapeHtml(q)}';searchAllContent()">↗ ${escapeHtml(q)}</button>`).join(''):'';}
     function searchAllContent(){const input=document.getElementById('search-page-input'),body=document.getElementById('searchResultsBody');if(!input||!body)return;const q=input.value.toLowerCase().trim();if(!q){body.innerHTML='<div class="search-empty">Search for a show or episode.</div>';renderSearchHistory();return;}const shows=allShowsData.filter(s=>s.show_name.toLowerCase().includes(q)),eps=[];allShowsData.forEach(s=>{(s.sessions||[]).forEach((session,sIdx)=>{(session.episodes||[]).forEach((ep,i)=>{if((`episode ${i+1}`).includes(q)||s.show_name.toLowerCase().includes(q))eps.push({showName:s.show_name,epIndex:i,sessionIndex:sIdx,session_no:session.session_no});});});});let html='';if(shows.length)html+=`<section class="search-group"><h3>Shows (${shows.length})</h3>${shows.slice(0,20).map(s=>{const idx=allShowsData.findIndex(x=>x.show_name===s.show_name);return `<div class="search-result" onclick="closeSearchPage();openShortsPlayer(${idx},0)"><img src="${escapeHtml(s.thumbnail||'https://i.ibb.co/C5Ht6qzH/icon.png')}" onerror="this.src='https://i.ibb.co/C5Ht6qzH/icon.png'"><div><div class="search-result-title">${escapeHtml(s.show_name)}</div><div class="search-result-sub">${s.episodes.length?s.episodes.length+' Episodes':'Coming Soon'}</div></div></div>`}).join('')}</section>`;if(eps.length)html+=`<section class="search-group"><h3>Episodes (${eps.length})</h3>${eps.slice(0,30).map(e=>{const sh=allShowsData.find(s=>s.show_name===e.showName)||{},idx=allShowsData.findIndex(s=>s.show_name===e.showName);return `<div class="search-result" onclick="closeSearchPage();openShortsPlayer(${idx},${e.epIndex},${e.sessionIndex})"><img src="${escapeHtml(sh.thumbnail||'https://i.ibb.co/C5Ht6qzH/icon.png')}" onerror="this.src='https://i.ibb.co/C5Ht6qzH/icon.png'"><div><div class="search-result-title">${escapeHtml(e.showName)}</div><div class="search-result-sub">S${e.session_no} • Episode ${e.epIndex+1}</div></div></div>`}).join('')}</section>`;body.innerHTML=html||'<div class="search-empty">No results found.<br><span style="font-size:10px">Try another show or episode number.</span></div>';renderSearchHistory();}
 
-   function openShortsPlayer(showIndex, startEpisodeIndex = 0, sessionIndex = null) {
+
+function openShortsPlayer(showIndex, startEpisodeIndex = 0, sessionIndex = null) {
+
+      if (!navigator.onLine) {
+        showToast(`⚠️ Please check your internet connection.`);
+        return;
+      }
 
       const show = allShowsData[showIndex];
 if (!show) return;
-
+  
 if (sessionIndex !== null && show.sessions && show.sessions[sessionIndex]) {
   currentSessionIndex = sessionIndex;
   show.episodes = show.sessions[sessionIndex].episodes;
@@ -1304,10 +1360,11 @@ if (sessionIndex !== null && show.sessions && show.sessions[sessionIndex]) {
 currentShowIndex = showIndex;
 
 if (show.episodes.length === 0) {
-  showToast(`"${show.show_name}" is Coming Soon 🚀`);
+  const sNo = (show.sessions && show.sessions[currentSessionIndex]) ? show.sessions[currentSessionIndex].session_no : 1;
+  showToast(`${show.show_name} • Season ${sNo} is Coming Soon 🚀`);
   return;
 }
-      
+     
       currentShowEpisodes = show.episodes;
       currentShowName = show.show_name;
       savedScrollPosition = window.scrollY;
